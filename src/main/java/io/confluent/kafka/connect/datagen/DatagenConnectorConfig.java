@@ -29,7 +29,15 @@ import java.util.Map;
 public class DatagenConnectorConfig extends AbstractConfig {
 
   public static final String KAFKA_TOPIC_CONF = "kafka.topic";
-  private static final String KAFKA_TOPIC_DOC = "Topic to write to.";
+  private static final String KAFKA_TOPIC_DOC = "Topic to write to";
+  public static final String INTERVAL_CONF = "interval";
+  private static final String INTERVAL_DOC = "Interval between messages (ms)";
+  public static final String ITERATIONS_CONF = "iterations";
+  private static final String ITERATIONS_DOC = "number of messages to send";
+  public static final String SCHEMA_FILENAME_CONF = "schema.filename";
+  private static final String SCHEMA_FILENAME_DOC = "Filename of schema to use";
+  public static final String SCHEMA_KEYFIELD_CONF = "schema.keyfield";
+  private static final String SCHEMA_KEYFIELD_DOC = "Name of field to use as the message key";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
@@ -41,10 +49,22 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public static ConfigDef conf() {
     return new ConfigDef()
-        .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC);
+        .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC)
+        .define(INTERVAL_CONF, Type.LONG, 500L, Importance.HIGH, INTERVAL_DOC)
+        .define(ITERATIONS_CONF, Type.INT, 1000000, Importance.HIGH, ITERATIONS_DOC)
+        .define(SCHEMA_FILENAME_CONF, Type.STRING, Importance.HIGH, SCHEMA_FILENAME_DOC)
+        .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC);
   }
 
   public String getKafkaTopic() { return this.getString(KAFKA_TOPIC_CONF); }
+
+  public Long getInterval() { return this.getLong(INTERVAL_CONF); }
+
+  public Integer getIterations() { return this.getInt(ITERATIONS_CONF); }
+
+  public String getSchemaFilename() { return this.getString(SCHEMA_FILENAME_CONF); }
+
+  public String getSchemaKeyfield() { return this.getString(SCHEMA_KEYFIELD_CONF); }
 
 }
 

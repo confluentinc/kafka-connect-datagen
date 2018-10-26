@@ -52,7 +52,14 @@ public class DatagenTask extends SourceTask {
 
   private static final Schema KEY_SCHEMA = Schema.STRING_SCHEMA;
   private DatagenConnectorConfig config;
+
   private String topic;
+  private Long interval;
+  private Integer iterations;
+  private String schemaFilename;
+  private String schemaKeyfield;
+
+  private Integer count = 0;
 
   private BlockingQueue<SourceRecord> queue = null;
 
@@ -65,13 +72,17 @@ public class DatagenTask extends SourceTask {
   public void start(Map<String, String> props) {
     config = new DatagenConnectorConfig(props);
     topic = config.getKafkaTopic();
+    interval = config.getInterval();
+    iterations = config.getIterations();
+    schemaFilename = config.getSchemaFilename();
+    schemaKeyfield = config.getSchemaKeyfield();
   }
 
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
 
     try {
-      Thread.sleep((long) (1000 * Math.random()));
+      Thread.sleep((long) (interval * Math.random()));
     } catch (InterruptedException e) {
       // Ignore the exception.
     }
@@ -82,15 +93,12 @@ public class DatagenTask extends SourceTask {
 
     //String schemaString = "{\"type\":\"record\",\"name\":\"Payment\",\"namespace\":\"io.confluent.examples.clients.basicavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"amount\",\"type\":\"double\"}]}";
     //generator = new Generator(schemaString, new Random());
-    final String schemaFilename = "/Users/yeva/git/ksql/ksql-examples/src/main/resources/users_schema.avro";
     final File schemaFile = new File(schemaFilename);
     try {
       generator = new Generator(schemaFile, new Random());
     } catch (IOException e) {
       e.printStackTrace();
     }
-
-    final String keyFieldName = "userid";
 
     // Value
     org.apache.avro.Schema avroSchema = generator.schema();
@@ -128,8 +136,8 @@ public class DatagenTask extends SourceTask {
 
     // Key
     final String keyString = avroData.toConnectData(
-        randomAvroMessage.getSchema().getField(keyFieldName).schema(),
-        randomAvroMessage.get(keyFieldName)).value().toString();
+        randomAvroMessage.getSchema().getField(schemaKeyfield).schema(),
+        randomAvroMessage.get(schemaKeyfield)).value().toString();
 
     // Value
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
@@ -145,6 +153,11 @@ public class DatagenTask extends SourceTask {
                   messageSchema,
                   messageValue
               ));
+
+    count = count + 1;
+    if (count > iterations) {
+      this.stop();
+    }
 
     return records;
 

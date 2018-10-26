@@ -9,5 +9,6 @@ sleep 10
 confluent config datagen -d ./connector_datagen.config
 sleep 5
 confluent status connectors
+confluent consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
 
 ```
