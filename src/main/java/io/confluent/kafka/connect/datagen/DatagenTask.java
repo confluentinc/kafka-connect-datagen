@@ -133,7 +133,7 @@ public class DatagenTask extends SourceTask {
 
     // Value
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
-    final Object messageValue = avroData.toConnectData(avroSchema, new GenericRow(genericRowValues));
+    final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
     records.add(
               new SourceRecord(
