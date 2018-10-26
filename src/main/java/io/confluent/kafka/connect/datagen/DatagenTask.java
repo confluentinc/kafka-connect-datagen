@@ -135,9 +135,12 @@ public class DatagenTask extends SourceTask {
     }
 
     // Key
-    final String keyString = avroData.toConnectData(
-        randomAvroMessage.getSchema().getField(schemaKeyfield).schema(),
-        randomAvroMessage.get(schemaKeyfield)).value().toString();
+    String keyString = "";
+    if (!schemaKeyfield.isEmpty()) {
+      keyString = avroData.toConnectData(
+                  randomAvroMessage.getSchema().getField(schemaKeyfield).schema(),
+                  randomAvroMessage.get(schemaKeyfield)).value().toString();
+    }
 
     // Value
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
