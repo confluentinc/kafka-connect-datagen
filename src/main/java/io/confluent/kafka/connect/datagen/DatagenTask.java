@@ -38,6 +38,7 @@ import org.apache.avro.generic.GenericRecord;
 import io.confluent.kafka.connect.datagen.GenericRow;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -71,10 +72,20 @@ public class DatagenTask extends SourceTask {
 
     final List<SourceRecord> records = new ArrayList<>();
 
-    final String key = "1";
+    Generator generator = null;
 
-    String schemaString = "{\"type\":\"record\",\"name\":\"Payment\",\"namespace\":\"io.confluent.examples.clients.basicavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"amount\",\"type\":\"double\"}]}";
-    final Generator generator = new Generator(schemaString, new Random());
+    //String schemaString = "{\"type\":\"record\",\"name\":\"Payment\",\"namespace\":\"io.confluent.examples.clients.basicavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"amount\",\"type\":\"double\"}]}";
+    //generator = new Generator(schemaString, new Random());
+    final String schemaFilename = "/Users/yeva/git/ksql/ksql-examples/src/main/resources/users_schema.avro";
+    final File schemaFile = new File(schemaFilename);
+    try {
+      generator = new Generator(schemaFile, new Random());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    final String keyFieldName = "userid";
+
     org.apache.avro.Schema avroSchema = generator.schema();
     final AvroData avroData = new AvroData(1);
     org.apache.kafka.connect.data.Schema ksqlSchema = avroData.toConnectSchema(avroSchema);
@@ -112,8 +123,8 @@ public class DatagenTask extends SourceTask {
     final GenericRow messageValue = new GenericRow(genericRowValues); 
 
     final String keyString = avroData.toConnectData(
-        randomAvroMessage.getSchema().getField(key).schema(),
-        randomAvroMessage.get(key)).value().toString();
+        randomAvroMessage.getSchema().getField(keyFieldName).schema(),
+        randomAvroMessage.get(keyFieldName)).value().toString();
 
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
 

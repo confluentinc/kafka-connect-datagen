@@ -3,9 +3,11 @@
 ```bash
 confluent destroy
 mvn clean compile package
-mkdir $CONFLUENT_HOME/share/java/kafka-connect-datagen
-yes | cp -f target/kafka-connect-datagen-5.0.0.jar $CONFLUENT_HOME/share/java/kafka-connect-datagen/.
+confluent-hub install --no-prompt target/components/packages/ybyzek-kafka-connect-datagen-5.0.0.zip
 confluent start connect
+sleep 10
 confluent config datagen -d ./connector_datagen.config
+sleep 5
+confluent status connectors
 
 ```
