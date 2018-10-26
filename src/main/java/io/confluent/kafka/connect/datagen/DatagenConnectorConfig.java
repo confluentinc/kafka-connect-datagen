@@ -28,8 +28,8 @@ import java.util.Map;
 
 public class DatagenConnectorConfig extends AbstractConfig {
 
-  public static final String IRC_SERVER_CONF = "irc.server";
-  private static final String IRC_SERVER_DOC = "The IRC Server to connect to.";
+  public static final String KAFKA_TOPIC_CONF = "kafka.topic";
+  private static final String KAFKA_TOPIC_DOC = "Topic to write to.";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
@@ -41,10 +41,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public static ConfigDef conf() {
     return new ConfigDef()
-        .define(IRC_SERVER_CONF, Type.STRING, Importance.HIGH, IRC_SERVER_DOC);
+        .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC);
   }
 
-  public String getIrcServer() { return this.getString(IRC_SERVER_CONF); }
+  public String getKafkaTopic() { return this.getString(KAFKA_TOPIC_CONF); }
 
 }
 

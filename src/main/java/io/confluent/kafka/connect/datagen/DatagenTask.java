@@ -50,7 +50,7 @@ public class DatagenTask extends SourceTask {
   static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
 
   private static final Schema KEY_SCHEMA = Schema.STRING_SCHEMA;
-
+  private DatagenConnectorConfig config;
   private String topic;
 
   private BlockingQueue<SourceRecord> queue = null;
@@ -62,7 +62,8 @@ public class DatagenTask extends SourceTask {
 
   @Override
   public void start(Map<String, String> props) {
-
+    config = new DatagenConnectorConfig(props);
+    topic = config.getKafkaTopic();
   }
 
   @Override
