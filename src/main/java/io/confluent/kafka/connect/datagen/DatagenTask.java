@@ -70,6 +70,12 @@ public class DatagenTask extends SourceTask {
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
 
+    try {
+      Thread.sleep((long) (1000 * Math.random()));
+    } catch (InterruptedException e) {
+      // Ignore the exception.
+    }
+
     final List<SourceRecord> records = new ArrayList<>();
 
     Generator generator = null;
