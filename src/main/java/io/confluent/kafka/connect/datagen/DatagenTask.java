@@ -92,10 +92,10 @@ public class DatagenTask extends SourceTask {
 
     final String keyFieldName = "userid";
 
+    // Value
     org.apache.avro.Schema avroSchema = generator.schema();
     final AvroData avroData = new AvroData(1);
     org.apache.kafka.connect.data.Schema ksqlSchema = avroData.toConnectSchema(avroSchema);
-
 
     Map<String, ?> srcPartition = Collections.emptyMap();
     Map<String, ?> srcOffset = Collections.emptyMap();
@@ -126,13 +126,14 @@ public class DatagenTask extends SourceTask {
 
     }
 
-    final GenericRow messageValue = new GenericRow(genericRowValues); 
-
+    // Key
     final String keyString = avroData.toConnectData(
         randomAvroMessage.getSchema().getField(keyFieldName).schema(),
         randomAvroMessage.get(keyFieldName)).value().toString();
 
+    // Value
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
+    final Object messageValue = avroData.toConnectData(avroSchema, new GenericRow(genericRowValues));
 
     records.add(
               new SourceRecord(
