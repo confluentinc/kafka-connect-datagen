@@ -108,7 +108,7 @@ public class DatagenTask extends SourceTask {
     schemaKeyfield = config.getSchemaKeyfield();
 
     quickstart = Quickstart.valueOf(config.getQuickstart().toUpperCase());
-    if (quickstart != "") {
+    if (quickstart != null) {
       schemaFilename = quickstart.getSchemaFilename();
       schemaKeyfield = quickstart.getSchemaKeyfield();
     }
