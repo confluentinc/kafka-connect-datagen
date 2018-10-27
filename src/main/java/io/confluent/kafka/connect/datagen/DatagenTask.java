@@ -35,7 +35,6 @@ import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
-import io.confluent.kafka.connect.datagen.GenericRow;
 
 import java.io.IOException;
 import java.io.File;
