@@ -107,10 +107,17 @@ public class DatagenTask extends SourceTask {
     schemaFilename = config.getSchemaFilename();
     schemaKeyfield = config.getSchemaKeyfield();
 
-    quickstart = Quickstart.valueOf(config.getQuickstart().toUpperCase());
-    if (quickstart != null) {
-      schemaFilename = quickstart.getSchemaFilename();
-      schemaKeyfield = quickstart.getSchemaKeyfield();
+    String quickstartName = config.getQuickstart();
+    if (quickstartName != "") {
+      try {
+        quickstart = Quickstart.valueOf(quickstartName.toUpperCase());
+        if (quickstart != null) {
+          schemaFilename = quickstart.getSchemaFilename();
+          schemaKeyfield = quickstart.getSchemaKeyfield();
+        }
+      } catch(IllegalArgumentException e) {
+        log.warn ("quickstart {} not found: ", quickstartName, e);
+      }
     }
   }
 
