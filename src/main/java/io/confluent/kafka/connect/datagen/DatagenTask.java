@@ -197,7 +197,8 @@ public class DatagenTask extends SourceTask {
 
     count = count + 1;
     if (count > iterations) {
-      this.stop();
+      log.info ("number messages sent {} > configured iterations {}", count, iterations);
+      stop();
     }
 
     return records;
@@ -206,6 +207,7 @@ public class DatagenTask extends SourceTask {
 
   @Override
   public void stop() {
+    log.info("Stopping DatagenTask");
   }
 
   private org.apache.kafka.connect.data.Schema getOptionalSchema(
