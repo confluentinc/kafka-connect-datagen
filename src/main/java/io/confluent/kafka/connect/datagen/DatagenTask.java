@@ -39,6 +39,7 @@ import io.confluent.kafka.connect.datagen.GenericRow;
 
 import java.io.IOException;
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -58,10 +59,39 @@ public class DatagenTask extends SourceTask {
   private Integer iterations;
   private String schemaFilename;
   private String schemaKeyfield;
+  private Quickstart quickstart;
 
   private Integer count = 0;
 
-  private BlockingQueue<SourceRecord> queue = null;
+  private enum Quickstart {
+    CLICKSTREAM_CODES("clickstream_codes_schema.avro", "clickstream", "code"),
+    CLICKSTREAM("clickstream_schema.avro", "clickstream", "ip"),
+    CLICKSTREAM_USERS("clickstream_users_schema.avro", "webusers", "user_id"),
+    ORDERS("orders_schema.avro", "orders", "orderid"),
+    RATINGS("ratings_schema.avro", "ratings", "rating_id"),
+    USERS("users_schema.avro", "users", "userid"),
+    USERS_("users_array_map_schema.avro", "users", "userid"),
+    PAGEVIEWS("pageviews_schema.avro", "pageviews", "viewtime");
+
+    private final String schemaFilename;
+    private final String rootTopicName;
+    private final String keyName;
+
+    Quickstart(String schemaFilename, String rootTopicName, String keyName) {
+      this.schemaFilename = schemaFilename;
+      this.rootTopicName = rootTopicName;
+      this.keyName = keyName;
+    }
+
+    public String getSchemaFilename() {
+      return schemaFilename;
+    }
+
+    public String getSchemaKeyfield() {
+      return keyName;
+    }
+
+  }
 
   @Override
   public String version() {
@@ -76,6 +106,14 @@ public class DatagenTask extends SourceTask {
     iterations = config.getIterations();
     schemaFilename = config.getSchemaFilename();
     schemaKeyfield = config.getSchemaKeyfield();
+
+    quickstart = Quickstart.valueOf(config.getQuickstart().toUpperCase());
+
+
+    if (quickstart != null) {
+      schemaFilename = quickstart.getSchemaFilename();
+      schemaKeyfield = quickstart.getSchemaKeyfield();
+    }
   }
 
   @Override
@@ -91,16 +129,12 @@ public class DatagenTask extends SourceTask {
 
     Generator generator = null;
 
-    //String schemaString = "{\"type\":\"record\",\"name\":\"Payment\",\"namespace\":\"io.confluent.examples.clients.basicavro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"amount\",\"type\":\"double\"}]}";
-    //generator = new Generator(schemaString, new Random());
-    final File schemaFile = new File(schemaFilename);
     try {
-      generator = new Generator(schemaFile, new Random());
+      generator = new Generator(getClass().getClassLoader().getResourceAsStream(schemaFilename), new Random());
     } catch (IOException e) {
       e.printStackTrace();
     }
 
-    // Value
     org.apache.avro.Schema avroSchema = generator.schema();
     final AvroData avroData = new AvroData(1);
     org.apache.kafka.connect.data.Schema ksqlSchema = avroData.toConnectSchema(avroSchema);
