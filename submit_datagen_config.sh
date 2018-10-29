@@ -16,7 +16,7 @@ DATA=$( cat << EOF
     "quickstart": "users",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-    "maxInterval": 1000,
+    "max.interval": 1000,
     "iterations": 1000000,
     "tasks.max": "1"
   }
