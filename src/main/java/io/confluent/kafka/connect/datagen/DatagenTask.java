@@ -1,23 +1,22 @@
 /**
- * Copyright © 2018 Yeva Byzek (yeva@confluent.io)
+ * Copyright 2018 Confluent Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ **/
+
 package io.confluent.kafka.connect.datagen;
 
 
-import org.apache.kafka.common.config.ConfigException;
-import org.apache.kafka.common.config.types.Password;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
@@ -29,21 +28,17 @@ import org.apache.kafka.connect.data.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import org.apache.avro.Schema;
-
 import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
 
 import java.io.IOException;
-import java.io.File;
-import java.io.InputStream;
-import java.util.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class DatagenTask extends SourceTask {
@@ -114,8 +109,8 @@ public class DatagenTask extends SourceTask {
           schemaFilename = quickstart.getSchemaFilename();
           schemaKeyfield = quickstart.getSchemaKeyfield();
         }
-      } catch(IllegalArgumentException e) {
-        log.warn ("quickstart {} not found: ", quickstartName, e);
+      } catch (IllegalArgumentException e) {
+        log.warn("quickstart {} not found: ", quickstartName, e);
       }
     }
   }
@@ -126,7 +121,8 @@ public class DatagenTask extends SourceTask {
     try {
       Thread.sleep((long) (maxInterval * Math.random()));
     } catch (InterruptedException e) {
-      // Ignore the exception.
+      Thread.interrupted();
+      return null;
     }
 
     final List<SourceRecord> records = new ArrayList<>();
@@ -134,7 +130,10 @@ public class DatagenTask extends SourceTask {
     Generator generator = null;
 
     try {
-      generator = new Generator(getClass().getClassLoader().getResourceAsStream(schemaFilename), new Random());
+      generator = new Generator(
+          getClass().getClassLoader().getResourceAsStream(schemaFilename),
+          new Random()
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }
