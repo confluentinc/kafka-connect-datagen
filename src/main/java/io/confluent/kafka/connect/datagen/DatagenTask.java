@@ -54,7 +54,7 @@ public class DatagenTask extends SourceTask {
   private DatagenConnectorConfig config;
 
   private String topic;
-  private Long interval;
+  private Long maxInterval;
   private Integer iterations;
   private String schemaFilename;
   private String schemaKeyfield;
@@ -101,7 +101,7 @@ public class DatagenTask extends SourceTask {
   public void start(Map<String, String> props) {
     config = new DatagenConnectorConfig(props);
     topic = config.getKafkaTopic();
-    interval = config.getInterval();
+    maxInterval = config.getMaxInterval();
     iterations = config.getIterations();
     schemaFilename = config.getSchemaFilename();
     schemaKeyfield = config.getSchemaKeyfield();
@@ -124,7 +124,7 @@ public class DatagenTask extends SourceTask {
   public List<SourceRecord> poll() throws InterruptedException {
 
     try {
-      Thread.sleep((long) (interval * Math.random()));
+      Thread.sleep((long) (maxInterval * Math.random()));
     } catch (InterruptedException e) {
       // Ignore the exception.
     }
@@ -184,7 +184,9 @@ public class DatagenTask extends SourceTask {
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
-    records.add(
+    count = count + 1;
+    if (count <= iterations) {
+      records.add(
               new SourceRecord(
                   srcPartition,
                   srcOffset,
@@ -194,11 +196,6 @@ public class DatagenTask extends SourceTask {
                   messageSchema,
                   messageValue
               ));
-
-    count = count + 1;
-    if (count > iterations) {
-      log.info ("number messages sent {} > configured iterations {}", count, iterations);
-      stop();
     }
 
     return records;
@@ -207,7 +204,6 @@ public class DatagenTask extends SourceTask {
 
   @Override
   public void stop() {
-    log.info("Stopping DatagenTask");
   }
 
   private org.apache.kafka.connect.data.Schema getOptionalSchema(
