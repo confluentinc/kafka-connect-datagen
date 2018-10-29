@@ -184,8 +184,7 @@ public class DatagenTask extends SourceTask {
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
-    count = count + 1;
-    if (count <= iterations) {
+    if (count < iterations) {
       records.add(
               new SourceRecord(
                   srcPartition,
@@ -196,7 +195,10 @@ public class DatagenTask extends SourceTask {
                   messageSchema,
                   messageValue
               ));
+    } else {
+      throw new ConnectException(String.format("Stopping connector: generated the configured %d number of messages", count));
     }
+    count = count + 1;
 
     return records;
 
