@@ -27,7 +27,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public static final String KAFKA_TOPIC_CONF = "kafka.topic";
   private static final String KAFKA_TOPIC_DOC = "Topic to write to";
-  public static final String MAXINTERVAL_CONF = "maxInterval";
+  public static final String MAXINTERVAL_CONF = "max.interval";
   private static final String MAXINTERVAL_DOC = "Max interval between messages (ms)";
   public static final String ITERATIONS_CONF = "iterations";
   private static final String ITERATIONS_DOC = "number of messages to send";
