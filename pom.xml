@@ -37,6 +37,9 @@
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
         <checkstyle.config.location>checkstyle/checkstyle.xml</checkstyle.config.location>
         <checkstyle.suppressions.location>checkstyle/common-suppressions.xml</checkstyle.suppressions.location>
+        <!-- 3.1.6 has a regression that breaks when processing Kafka code, seems to be https://github.com/spotbugs/spotbugs/pull/688 -->
+        <spotbugs.version>3.1.5</spotbugs.version>
+        <spotbugs.maven.plugin.version>3.1.5</spotbugs.maven.plugin.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
@@ -65,6 +68,21 @@
             <timezone>America/New_York</timezone>
         </developer>
     </developers>
+
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>http://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <url>http://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -76,6 +94,21 @@
             <groupId>io.confluent</groupId>
             <artifactId>kafka-connect-avro-converter</artifactId>
             <version>${confluent.version}</version>
+            <exclusions>
+                <!-- We're only using AvroData, which doesn't use Schema Registry -->
+                <exclusion>
+                    <groupId>io.confluent</groupId>
+                    <artifactId>kafka-schema-registry-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.101tec</groupId>
+                    <artifactId>zkclient</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -92,31 +125,6 @@
 
     <build>
         <plugins>
-            <!--plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-                    <properties>
-                        <owner>Yeva Byzek</owner>
-                        <email>ybyzek@gmail.com</email>
-                    </properties>
-                    <excludes>
-                        <exclude>**/README**</exclude>
-                        <exclude>src/test/resources/**</exclude>
-                        <exclude>src/main/resources/**</exclude>
-                        <exclude>src/assembly/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -153,6 +161,30 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.maven.plugin.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>High</threshold>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>${spotbugs.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -208,24 +240,24 @@
                             <configuration>
                                 <title>Kafka Connect Datagen</title>
                                 <documentationUrl>https://github.com/confluentinc/kafka-connect-datagen/blob/master/README.md</documentationUrl>
-                                <description>A Kafka Connect source connector to generate demo data</description>
+                                <description>A Kafka Connect source connector to generate demo data.</description>
 
                                 <ownerUsername>confluentinc</ownerUsername>
-                                <ownerType>user</ownerType>
-                                <ownerName>Yeva Byzek</ownerName>
-                                <ownerUrl>https://github.com/ybyzek</ownerUrl>
+                                <ownerType>organization</ownerType>
+                                <ownerName>Confluent, Inc.</ownerName>
+                                <ownerUrl>https://confluent.io/</ownerUrl>
+                                <ownerLogo>logos/confluent.png</ownerLogo>
+
                                 <componentTypes>
                                     <componentType>source</componentType>
                                 </componentTypes>
 
                                 <tags>
                                     <tag>datagen</tag>
-                                    <tag>Kafka</tag>
+                                    <tag>generator</tag>
                                 </tags>
 
                                 <confluentControlCenterIntegration>true</confluentControlCenterIntegration>
-
-                                <singleMessageTransforms>true</singleMessageTransforms>
                             </configuration>
                     </execution>
                 </executions>
@@ -238,10 +270,4 @@
             </resource>
         </resources>
     </build>
-    <repositories>
-        <repository>
-            <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
-        </repository>
-    </repositories>
 </project>
