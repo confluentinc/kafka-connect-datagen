@@ -56,10 +56,10 @@ services:
       - "moby:127.0.0.1"
 
   connect:
-    image: local-kafka-connect:1.0.0
+    image: local-kafka-connect:0.1.0
+    build: .
     container_name: connect
     restart: always
-    build: .
     ports:
       - "8083:8083"
     depends_on:
@@ -84,3 +84,4 @@ services:
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:32181'
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components,/usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen"
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
