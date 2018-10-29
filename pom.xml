@@ -47,7 +47,7 @@
     <url>https://github.com/confluentinc/kafka-connect-datagen</url>
 
     <description>
-        A Kafka Connect connector for generating data for demos
+        For demos only: A Kafka Connect connector for generating mock data, not suitable for production
     </description>
 
     <inceptionYear>2018</inceptionYear>
@@ -240,8 +240,7 @@
                             <configuration>
                                 <title>Kafka Connect Datagen</title>
                                 <documentationUrl>https://github.com/confluentinc/kafka-connect-datagen/blob/master/README.md</documentationUrl>
-                                <description>A Kafka Connect source connector to generate demo data.</description>
-
+                                <description>For demos only: A Kafka Connect connector for generating mock data, not suitable for production</description>
                                 <ownerUsername>confluentinc</ownerUsername>
                                 <ownerType>organization</ownerType>
                                 <ownerName>Confluent, Inc.</ownerName>
