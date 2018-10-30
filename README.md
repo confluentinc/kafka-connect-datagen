@@ -5,6 +5,7 @@
 ## Local
 
 ```bash
+git checkout v0.1.0
 confluent destroy
 mvn clean compile package
 confluent-hub install --no-prompt target/components/packages/confluentinc-kafka-connect-datagen-0.1.0.zip
@@ -22,6 +23,7 @@ confluent consume test1 --value-format avro --max-messages 5 --property print.ke
 ## Docker
 
 ```bash
+git checkout v0.1.0
 docker-compose down --remove-orphans
 mvn clean compile package
 docker-compose up -d --build
