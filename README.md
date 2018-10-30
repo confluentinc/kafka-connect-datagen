@@ -11,7 +11,7 @@ It is not suitable for production.
 You may install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
 
 ```bash
-confluent-hub install --no-prompt confluentinc/kafka-connect-datagen:0.1.0
+confluent-hub install confluentinc/kafka-connect-datagen:0.1.0
 ```
 
 ## Build connector from latest code
@@ -21,7 +21,7 @@ Alternatively, you may build and install the `kafka-connect-datagen` connector f
 ```bash
 git checkout v0.1.0
 mvn clean compile package
-confluent-hub install --no-prompt target/components/packages/confluentinc-kafka-connect-datagen-0.1.0.zip
+confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.0.zip
 ```
 
 ## Run connector in local install
