@@ -1,16 +1,22 @@
-# kafka-connect-datagen
+# Overview
 
-`kafka-connect-datagen` is a Kafka Connect connector for generating mock data, not suitable for production
+`kafka-connect-datagen` is a Kafka Connect connector for generating mock data.
+It is available in [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
+It is not suitable for production.
 
 # Confluent Platform running on local install
 
 ## Install connector from Confluent Hub
+
+You may install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
 
 ```bash
 confluent-hub install --no-prompt confluentinc/kafka-connect-datagen:0.1.0
 ```
 
 ## Build connector from latest code
+
+Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
 
 ```bash
 git checkout v0.1.0
@@ -19,6 +25,8 @@ confluent-hub install --no-prompt target/components/packages/confluentinc-kafka-
 ```
 
 ## Run connector in local install
+
+Here is an example of how to run the `kafka-connect-datagen` on a local install:
 
 ```bash
 confluent destroy
@@ -35,19 +43,25 @@ confluent consume test1 --value-format avro --max-messages 5 --property print.ke
 
 ## Install connector from Confluent Hub
 
+You may install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
+
 ```bash
-docker build Dockerfile-confluenthub -t confluentinc/kafka-connect-datagen:0.1.0
+docker build . -f Dockerfile-confluenthub -t confluentinc/kafka-connect-datagen:0.1.0
 ```
 
 ## Build connector from latest code
 
+Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
+
 ```bash
 git checkout v0.1.0
 mvn clean compile package
-docker build Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.0
+docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.0
 ```
 
 ## Run connector in Docker Compose
+
+Here is an example of how to run the `kafka-connect-datagen` with Docker Compose:
 
 ```bash
 docker-compose down --remove-orphans
