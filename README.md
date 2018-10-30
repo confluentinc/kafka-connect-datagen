@@ -71,3 +71,15 @@ sleep 30
 sleep 5
 docker-compose exec connect kafka-console-consumer --topic test1 --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
+
+# Schemas for Random Data
+
+## Pre-defined Schemas
+
+Pre-defined schemas are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
+
+## Define your own schema
+
+You can define your own schema.
+Configure the settings `schema.filename` and `schema.keyfield`
+
