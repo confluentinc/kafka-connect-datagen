@@ -72,6 +72,10 @@ sleep 5
 docker-compose exec connect kafka-console-consumer --topic test1 --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
 
+# Configuration Parameters
+
+See `kafka-connect-datagen` [configuration parameters](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenConnectorConfig.java) and their defaults.
+
 # Schemas for Random Data
 
 ## Pre-defined Schemas
