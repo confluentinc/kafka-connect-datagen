@@ -21,7 +21,7 @@
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-datagen</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
