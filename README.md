@@ -20,7 +20,7 @@ Alternatively, you may build and install the `kafka-connect-datagen` connector f
 
 ```bash
 git checkout v0.1.0
-mvn clean compile package
+mvn clean package
 confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.0.zip
 ```
 
@@ -29,7 +29,6 @@ confluent-hub install target/components/packages/confluentinc-kafka-connect-data
 Here is an example of how to run the `kafka-connect-datagen` on a local install:
 
 ```bash
-confluent destroy
 confluent start connect
 sleep 15
 confluent config datagen -d ./connector_datagen.config
@@ -55,7 +54,7 @@ Alternatively, you may build and install the `kafka-connect-datagen` connector f
 
 ```bash
 git checkout v0.1.0
-mvn clean compile package
+mvn clean package
 docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.0
 ```
 
@@ -64,7 +63,6 @@ docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.0
 Here is an example of how to run the `kafka-connect-datagen` with Docker Compose:
 
 ```bash
-docker-compose down --remove-orphans
 docker-compose up -d --build
 sleep 30
 ./submit_datagen_config.sh
