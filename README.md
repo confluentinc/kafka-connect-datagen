@@ -1,5 +1,9 @@
 # kafka-connect-datagen
 
+`kafka-connect-datagen` is a Kafka Connect connector for generating mock data, not suitable for production
+
+## Local
+
 ```bash
 confluent destroy
 mvn clean compile package
@@ -12,4 +16,17 @@ sleep 5
 confluent status connectors
 confluent consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 
+```
+
+
+## Docker
+
+```bash
+docker-compose down --remove-orphans
+mvn clean compile package
+docker-compose up -d --build
+sleep 30
+./submit_datagen_config.sh
+sleep 5
+docker-compose exec connect kafka-console-consumer --topic test1 --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
