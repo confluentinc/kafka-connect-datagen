@@ -60,6 +60,13 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:git:git://github.com/confluentinc/kafka-connect-datagen.git</connection>
+        <developerConnection>scm:git:git@github.com:confluentinc/kafka-connect-datagen.git</developerConnection>
+        <url>https://github.com/confluentinc/kafka-connect-datagen</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <developers>
         <developer>
             <id>ybyzek</id>
@@ -254,9 +261,18 @@
                                 <tags>
                                     <tag>datagen</tag>
                                     <tag>generator</tag>
+                                    <tag>demo</tag>
                                 </tags>
 
+                                <supportProviderName>Community Support</supportProviderName>
+                                <supportSummary>This connector is open source at https://github.com/confluentinc/kafka-connect-datagen and supported by community members.</supportSummary>
+                                <supportUrl>https://github.com/confluentinc/kafka-connect-datagen</supportUrl>
+
                                 <confluentControlCenterIntegration>true</confluentControlCenterIntegration>
+                                <requirements>
+                                    <requirement>Confluent Platform 4.x or later</requirement>
+                                    <requirement>Apache Kafka 1.x or later</requirement>
+                                </requirements>
                             </configuration>
                     </execution>
                 </executions>
