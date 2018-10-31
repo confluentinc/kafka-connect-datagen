@@ -72,7 +72,7 @@ See `kafka-connect-datagen` [configuration parameters](https://github.com/conflu
 # Schemas for Random Data
 
 Pre-defined schemas are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
-To use a pre-defined schema, configure the parameter `quickstart`.
+To use a pre-defined schema, refer to [this mapping](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L66-L73) and set the parameter `quickstart` to the associated name.
 
 This connector uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator), so you may also define your own schema accordingly.
 Use the pre-defined schemas as reference examples.
