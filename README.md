@@ -30,10 +30,7 @@ Here is an example of how to run the `kafka-connect-datagen` on a local install:
 
 ```bash
 confluent start connect
-sleep 15
 confluent config datagen -d ./connector_datagen.config
-#confluent config datagen -d ./connector_datagen.custom.config
-sleep 5
 confluent status connectors
 confluent consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 ```
@@ -64,24 +61,19 @@ Here is an example of how to run the `kafka-connect-datagen` with Docker Compose
 
 ```bash
 docker-compose up -d --build
-sleep 30
 ./submit_datagen_config.sh
-sleep 5
 docker-compose exec connect kafka-console-consumer --topic test1 --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
 
-# Configuration Parameters
+# Configuration
 
 See `kafka-connect-datagen` [configuration parameters](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenConnectorConfig.java) and their defaults.
 
 # Schemas for Random Data
 
-## Pre-defined Schemas
-
 Pre-defined schemas are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
+To use a pre-defined schema, configure the parameter `quickstart`.
 
-## Define your own schema
-
-You can define your own schema.
-Configure the settings `schema.filename` and `schema.keyfield`
-
+This connector uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator), so you may also define your own schema accordingly.
+Use the pre-defined schemas as reference examples.
+To define your own schema, create the schema file and then set the configuration parameters `schema.filename` and `schema.keyfield`.
