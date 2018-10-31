@@ -30,7 +30,7 @@ Here is an example of how to run the `kafka-connect-datagen` on a local install:
 
 ```bash
 confluent start connect
-confluent config datagen -d ./connector_datagen.config
+confluent config datagen-pageviews -d config/connector_pageviews.config
 confluent status connectors
 confluent consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 ```
@@ -61,8 +61,8 @@ Here is an example of how to run the `kafka-connect-datagen` with Docker Compose
 
 ```bash
 docker-compose up -d --build
-./submit_datagen_config.sh
-docker-compose exec connect kafka-console-consumer --topic test1 --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
+curl -X POST -H "Content-Type: application/json" --data @config/connector_pageviews.config http://localhost:8083/connectors
+docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
 
 # Configuration
