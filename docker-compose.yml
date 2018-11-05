@@ -49,7 +49,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-confluenthub
-    container_name: connect
     restart: always
     ports:
       - "8083:8083"
