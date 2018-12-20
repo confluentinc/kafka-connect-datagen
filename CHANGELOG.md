@@ -1,5 +1,9 @@
 # Changelog
 
+Version 0.2.0 (unreleased)
+--------------------------
+* TBD
+
 Version 0.1.1
 -------------
 * Include LICENSE in repository and packaged connector
