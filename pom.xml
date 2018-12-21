@@ -161,8 +161,8 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.release</groupId>
-                <artifactId>maven-release</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
                 <version>${maven.release.plugin.version}</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
