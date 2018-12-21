@@ -61,7 +61,7 @@ public class DatagenTask extends SourceTask {
   private org.apache.kafka.connect.data.Schema ksqlSchema;
   private AvroData avroData;
 
-  private enum Quickstart {
+  protected enum Quickstart {
     CLICKSTREAM_CODES("clickstream_codes_schema.avro", "code"),
     CLICKSTREAM("clickstream_schema.avro", "ip"),
     CLICKSTREAM_USERS("clickstream_users_schema.avro", "user_id"),
