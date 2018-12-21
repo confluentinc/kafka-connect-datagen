@@ -50,8 +50,9 @@ public class DatagenTask extends SourceTask {
 
   private DatagenConnectorConfig config;
   private String topic;
-  private Long maxInterval;
-  private Integer iterations;
+  private long maxInterval;
+  private int maxRecords;
+  private long count = 0L;
   private String schemaFilename;
   private String schemaKeyField;
   private Quickstart quickstart;
@@ -59,8 +60,6 @@ public class DatagenTask extends SourceTask {
   private org.apache.avro.Schema avroSchema;
   private org.apache.kafka.connect.data.Schema ksqlSchema;
   private AvroData avroData;
-
-  private Integer count = 0;
 
   private enum Quickstart {
     CLICKSTREAM_CODES("clickstream_codes_schema.avro", "code"),
@@ -99,7 +98,7 @@ public class DatagenTask extends SourceTask {
     config = new DatagenConnectorConfig(props);
     topic = config.getKafkaTopic();
     maxInterval = config.getMaxInterval();
-    iterations = config.getIterations();
+    maxRecords = config.getIterations();
     schemaFilename = config.getSchemaFilename();
     schemaKeyField = config.getSchemaKeyfield();
 
@@ -133,14 +132,15 @@ public class DatagenTask extends SourceTask {
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
 
-    try {
-      Thread.sleep((long) (maxInterval * Math.random()));
-    } catch (InterruptedException e) {
-      Thread.interrupted();
-      return null;
+    if (maxInterval > 0) {
+      try {
+        Thread.sleep((long) (maxInterval * Math.random()));
+      } catch (InterruptedException e) {
+        Thread.interrupted();
+        return null;
+      }
     }
 
-    final List<SourceRecord> records = new ArrayList<>();
     final Object generatedObject = generator.generate();
     if (!(generatedObject instanceof GenericRecord)) {
       throw new RuntimeException(String.format(
@@ -177,23 +177,24 @@ public class DatagenTask extends SourceTask {
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
-    if (count < iterations) {
-      SourceRecord record = new SourceRecord(
-          SOURCE_PARTITION,
-          SOURCE_OFFSET,
-          topic,
-          KEY_SCHEMA,
-          keyString,
-          messageSchema,
-          messageValue
-      );
-      records.add(record);
-    } else {
+    if (maxRecords > 0 && count >= maxRecords) {
       throw new ConnectException(
           String.format("Stopping connector: generated the configured %d number of messages", count)
       );
     }
-    ++count;
+
+    final List<SourceRecord> records = new ArrayList<>();
+    SourceRecord record = new SourceRecord(
+        SOURCE_PARTITION,
+        SOURCE_OFFSET,
+        topic,
+        KEY_SCHEMA,
+        keyString,
+        messageSchema,
+        messageValue
+    );
+    records.add(record);
+    count += records.size();
     return records;
   }
 
