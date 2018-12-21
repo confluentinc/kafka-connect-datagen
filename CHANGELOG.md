@@ -6,6 +6,7 @@ Version 0.2.0 (unreleased)
 
 Version 0.1.1
 -------------
+* Downgrade to Avro 1.8.1 to avoid a [critical Avro bug](https://issues.apache.org/jira/browse/AVRO-2122)
 * Include LICENSE in repository and packaged connector
 * Updated Maven build process
 
