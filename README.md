@@ -90,10 +90,13 @@ docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap
 
 # Configuration
 
+## Generic Kafka Connect Parameters
+
+See all Kafka Connect [configuration parameters](https://docs.confluent.io/current/connect/managing/configuring.html).
+
+## Connector-specific Parameters
+
 See `kafka-connect-datagen` [configuration parameters](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenConnectorConfig.java) and their defaults.
-
-
-# Customize the Generated Data
 
 ## Use a bundled schema specifications
 
