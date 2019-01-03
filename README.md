@@ -1,3 +1,13 @@
+# Table of Contents
+
+- [Overview](#overview)
+- [Versions](#versions)
+- [Confluent Platform running on local install](#confluent-platform-running-on-local-install
+- [Confluent Platform running in Docker](#confluent-platform-running-in-docker)
+- [Configuration](#configuration)
+- [Confusion about schemas and Avro](#confusion-about-schemas-and-avro)
+
+
 # Overview
 
 `kafka-connect-datagen` is a Kafka Connect connector for generating mock data.
