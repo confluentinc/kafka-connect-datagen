@@ -92,11 +92,79 @@ docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap
 
 See `kafka-connect-datagen` [configuration parameters](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenConnectorConfig.java) and their defaults.
 
-# Schemas for Random Data
 
-Pre-defined schemas are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
-To use a pre-defined schema, refer to [this mapping](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L66-L73) and set the parameter `quickstart` to the associated name.
+# Customize the Generated Data
 
-This connector uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator), so you may also define your own schema accordingly.
-Use the pre-defined schemas as reference examples.
-To define your own schema, create the schema file and then set the configuration parameters `schema.filename` and `schema.keyfield`.
+## Use a bundled schema specifications
+
+There are a few quickstart schema specifications bundled with `kafka-connect-datagen`, and they are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
+To use one of these bundled schema, refer to [this mapping](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L66-L73) and in the configuration file, set the parameter `quickstart` to the associated name.
+For example:
+
+```bash
+...
+"quickstart": "users",
+...
+```
+
+## Define a new schema specification
+
+You can also define your own schema specifications if you want to customize the fields and their values to be more domain specific or to match what your application is expecting.
+Under the hood, `kafka-connect-datagen` uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator), so the only constraint in writing your own schema specification is that it is compatible with Avro Random Generator.
+To define your own schema:
+
+1. Create your own schema file `/path/to/your_schema.avro` that is compatible with [Avro Random Generator](https://github.com/confluentinc/avro-random-generator)
+2. In the connector configuration, remove the configuration parameter `quickstart` and add the parameters `schema.filename` and `schema.keyfield`:
+
+```bash
+...
+"schema.filename": "/path/to/your_schema.avro",
+"schema.keyfield": "<field representing the key>",
+...
+```
+
+# Confusion about schemas and Avro
+
+The Avro schemas used by the `kafka-connect-datagen` declare the "rules" for generating the data.
+These rules declare a list of primitives or more complex data types, length of data, and other properties about the generated data.
+Examples of these schema files are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
+
+But these schemas are independent of the format of the data produced to Kafka and independent of the schema in Confluent Schema Registry.
+
+1. To define the format of the data produced to Kafka, you must set the format type in your connector configuration.
+For example to produce Avro records to Kafka, in the connector configuration set the `value.converter` and `value.converter.schema.registry.url` parameters:
+
+```bash
+...
+"value.converter": "io.confluent.connect.avro.AvroConverter",
+"value.converter.schema.registry.url": "http://localhost:8081",
+...
+```
+
+Or to produce JSON records to Kafka, in the connector configuration set the `value.converter` parameter:
+
+```bash
+...
+"value.converter": "org.apache.kafka.connect.json.JsonConverter",
+...
+```
+
+2. The schema in Confluent Schema Registry declares the record fields and their types.
+As an example, consider the following "rule" in the schema specification to generate a field `userid`:
+
+```bash
+...
+{"name": "userid", "type": {
+    "type": "string",
+    "arg.properties": {
+        "regex": "User_[1-9]{0,1}"
+    }
+}},
+...
+```
+
+Here is the corresponding field in the schema in Confluent Schema Registry (if you are using Avro format for producing data to Kafka):
+
+```bash
+{"name": "userid", "type": ["null", "string"], "default": null},
+```
