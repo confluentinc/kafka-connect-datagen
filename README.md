@@ -132,9 +132,15 @@ To define your own schema:
 
 ```bash
 ...
-"schema.filename": "/path/to/your_schema.avro",
+"schema.filename": "your_schema.avro",
 "schema.keyfield": "<field representing the key>",
 ...
+```
+
+3. Set `CONNECT_CLASSPATH` to the directory that has the file `your_schema.avro`. For example, if your file is `/Users/alice/schemas/your_schema.avro`, then set `schema.filename=your_schema.avro` in the connector configuration above and `CONNECT_CLASSPATH=/Users/alice/schemas/` in the export command below. This needs to be done before running Connect, so restart Connect if needed.
+
+```bash
+export CONNECT_CLASSPATH=</path/to/>
 ```
 
 # Confusion about schemas and Avro
