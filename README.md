@@ -127,17 +127,17 @@ You can also define your own schema specifications if you want to customize the 
 Under the hood, `kafka-connect-datagen` uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator), so the only constraint in writing your own schema specification is that it is compatible with Avro Random Generator.
 To define your own schema:
 
-1. Create your own schema file `/path/to/your_schema.avro` that is compatible with [Avro Random Generator](https://github.com/confluentinc/avro-random-generator)
+1. Create your own schema file `/path/to/your_schema.avsc` that is compatible with [Avro Random Generator](https://github.com/confluentinc/avro-random-generator)
 2. In the connector configuration, remove the configuration parameter `quickstart` and add the parameters `schema.filename` and `schema.keyfield`:
 
 ```bash
 ...
-"schema.filename": "your_schema.avro",
+"schema.filename": "your_schema.avsc",
 "schema.keyfield": "<field representing the key>",
 ...
 ```
 
-3. Set `CONNECT_CLASSPATH` to the directory that has the file `your_schema.avro`. For example, if your file is `/Users/alice/schemas/your_schema.avro`, then set `schema.filename=your_schema.avro` in the connector configuration above and `CONNECT_CLASSPATH=/Users/alice/schemas/` in the export command below. This needs to be done before running Connect, so restart Connect if needed.
+3. Set `CONNECT_CLASSPATH` to the directory that has the file `your_schema.avsc`. For example, if your file is `/Users/alice/schemas/your_schema.avsc`, then set `schema.filename=your_schema.avsc` in the connector configuration above and `CONNECT_CLASSPATH=/Users/alice/schemas/` in the export command below. This needs to be done before running Connect, so restart Connect if needed.
 
 ```bash
 export CONNECT_CLASSPATH=</path/to/>
