@@ -139,13 +139,15 @@ To define your own schema:
 
 # Confusion about schemas and Avro
 
-To define the data "rules" for the mock data, `kafka-connect-datagen` uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator).
-The configuration parameters `quickstart` or `schema.filename` specify the Avro schema, which declares a list of primitives or more complex data types, length of data, and other properties about the generated data.
+To define the set of "rules" for the mock data, `kafka-connect-datagen` uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator).
+The configuration parameters `quickstart` or `schema.filename` specify the Avro schema, or the set of "rules", which declares a list of primitives or more complex data types, length of data, and other properties about the generated mock data.
 Examples of these schema files are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
 
-But these schemas are independent of the format of the data produced to Kafka and independent of the schema in Confluent Schema Registry.
+Do not confuse the above terminology with `Avro` and `schemas` used in a different context as described below.
+The Avro schemas for generating mock data are independent of (1) the format of the data produced to Kafka and (2) the schema in Confluent Schema Registry.
 
-1. To define the format of the data produced to Kafka, you must set the format type in your connector configuration.
+1. The format of data produced to Kafka may or may not be Avro.
+To define the format of the data produced to Kafka, you must set the format type in your connector configuration.
 The connector configuration parameters can be defined for the key or value.
 For example, to produce messages to Kafka where the message value format is Avro, set the `value.converter` and `value.converter.schema.registry.url` parameters:
 
@@ -164,7 +166,7 @@ Or to produce messages to Kafka where the message value format is JSON, set the 
 ...
 ```
 
-2. The schema in Confluent Schema Registry declares the record fields and their types.
+2. The schema in Confluent Schema Registry declares the record fields and their types, and is used by Kafka clients when they are configured to produce or consume Avro data.
 As an example, consider the following "rule" in the schema specification to generate a field `userid`:
 
 ```bash
