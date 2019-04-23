@@ -128,31 +128,26 @@ Under the hood, `kafka-connect-datagen` uses [Avro Random Generator](https://git
 To define your own schema:
 
 1. Create your own schema file `/path/to/your_schema.avsc` that is compatible with [Avro Random Generator](https://github.com/confluentinc/avro-random-generator)
-2. In the connector configuration, remove the configuration parameter `quickstart` and add the parameters `schema.filename` and `schema.keyfield`:
+2. In the connector configuration, remove the configuration parameter `quickstart` and add the parameters `schema.filename` (which should be the absolute path) and `schema.keyfield`:
 
 ```bash
 ...
-"schema.filename": "your_schema.avsc",
+"schema.filename": "/path/to/your_schema.avsc",
 "schema.keyfield": "<field representing the key>",
 ...
 ```
 
-3. Set `CONNECT_CLASSPATH` to the directory that has the file `your_schema.avsc`. For example, if your file is `/Users/alice/schemas/your_schema.avsc`, then set `schema.filename=your_schema.avsc` in the connector configuration above and `CONNECT_CLASSPATH=/Users/alice/schemas/` in the export command below. This needs to be done before running Connect, so restart Connect if needed.
-
-```bash
-export CONNECT_CLASSPATH=</path/to/>
-```
-
 # Confusion about schemas and Avro
 
-The Avro schemas used by the `kafka-connect-datagen` declare the "rules" for generating the data.
-These rules declare a list of primitives or more complex data types, length of data, and other properties about the generated data.
+To define the data "rules" for the mock data, `kafka-connect-datagen` uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator).
+The configuration parameters `quickstart` or `schema.filename` specify the Avro schema, which declares a list of primitives or more complex data types, length of data, and other properties about the generated data.
 Examples of these schema files are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
 
 But these schemas are independent of the format of the data produced to Kafka and independent of the schema in Confluent Schema Registry.
 
 1. To define the format of the data produced to Kafka, you must set the format type in your connector configuration.
-For example to produce Avro records to Kafka, in the connector configuration set the `value.converter` and `value.converter.schema.registry.url` parameters:
+The connector configuration parameters can be defined for the key or value.
+For example, to produce messages to Kafka where the message value format is Avro, set the `value.converter` and `value.converter.schema.registry.url` parameters:
 
 ```bash
 ...
@@ -161,7 +156,7 @@ For example to produce Avro records to Kafka, in the connector configuration set
 ...
 ```
 
-Or to produce JSON records to Kafka, in the connector configuration set the `value.converter` parameter:
+Or to produce messages to Kafka where the message value format is JSON, set the `value.converter` parameter:
 
 ```bash
 ...
@@ -183,8 +178,10 @@ As an example, consider the following "rule" in the schema specification to gene
 ...
 ```
 
-Here is the corresponding field in the schema in Confluent Schema Registry (if you are using Avro format for producing data to Kafka):
+If you are using Avro format for producing data to Kafka, here is the corresponding field in the registered schema in Confluent Schema Registry:
 
 ```bash
 {"name": "userid", "type": ["null", "string"], "default": null},
 ```
+
+If you are not using Avro format for producing data to Kafka, there will be no schema in Confluent Schema Registry.
