@@ -51,7 +51,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
     return new ConfigDef()
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC)
         .define(MAXINTERVAL_CONF, Type.LONG, 500L, Importance.HIGH, MAXINTERVAL_DOC)
-        .define(ITERATIONS_CONF, Type.INT, 1000000, Importance.HIGH, ITERATIONS_DOC)
+        .define(ITERATIONS_CONF, Type.INT, -1, Importance.HIGH, ITERATIONS_DOC)
         .define(SCHEMA_FILENAME_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_FILENAME_DOC)
         .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC)
         .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC);
