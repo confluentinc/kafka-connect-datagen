@@ -139,6 +139,8 @@ To define your own schema:
 ...
 ```
 
+_The custom schema can be used at runtime; it is not necessary to recompile the connector_.
+
 # Confusion about schemas and Avro
 
 To define the set of "rules" for the mock data, `kafka-connect-datagen` uses [Avro Random Generator](https://github.com/confluentinc/avro-random-generator).
