@@ -100,12 +100,12 @@ See all Kafka Connect [configuration parameters](https://docs.confluent.io/curre
 
 Parameter | Description | Default
 -|-|-
-kafka.topic | Topic to write to | 
-max.interval | Max interval between messages (ms) | 500
-iterations | Number of messages to send, or less than 1 for unlimited | -1
-schema.filename | Filename of schema to use
-schema.keyfield | Name of field to use as the message key
-quickstart | Name of [quickstart](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources) to use
+`kafka.topic` | Topic to write to | 
+`max.interval` | Max interval between messages (ms) | 500
+`iterations` | Number of messages to send, or less than 1 for unlimited | -1
+`schema.filename` | Filename of schema to use
+`schema.keyfield` | Name of field to use as the message key
+`quickstart` | Name of [quickstart](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources) to use
 
 ## Sample configurations
 
