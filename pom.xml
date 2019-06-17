@@ -126,11 +126,6 @@
         </dependency>
         <!-- Inherited unnecessarily, scope to test so it's not packaged -->
         <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>common-utils</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
