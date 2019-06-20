@@ -207,6 +207,45 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>truezip-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <id>remove-avro-converter-plugin</id>
+                        <goals>
+                            <goal>remove</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <fileset>
+                                <directory>${project.basedir}/target/components/packages/confluentinc-kafka-connect-datagen-${project.version}/confluentinc-kafka-connect-datagen-${project.version}/lib/kafka-connect-avro-converter-${confluent.version}.jar</directory>
+                                <includes>
+                                    <include>io/confluent/connect/avro/AvroConverter.class</include>
+                                    <include>io/confluent/connect/avro/AvroConverter$*.class</include>
+                                </includes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>repackage-avro-converter-dependency</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <fileset>
+                                <directory>${project.basedir}/target/components/packages/confluentinc-kafka-connect-datagen-${project.version}</directory>
+                                <includes>
+                                    <include>confluentinc-kafka-connect-datagen-${project.version}/lib/kafka-connect-avro-converter-${confluent.version}.jar</include>
+                                </includes>
+                                <outputDirectory>${project.basedir}/target/components/packages/confluentinc-kafka-connect-datagen-${project.version}.zip</outputDirectory>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
