@@ -27,6 +27,6 @@ version-connect: check-dependencies
 package: check-dependencies ## Creates any package artifacts (Docker, Assembly JAR, etc..)
 	@mvn clean package
 
-publish: package ## Publishes packages to registries (Docker only for now) 
+publish: package ## Publishes packages to Dockerhub
 	docker build . -f Dockerfile-dockerhub -t cnfldemos/kafka-connect-datagen:$(shell make version-connector)-$(shell make version-connect)
 	docker push cnfldemos/kafka-connect-datagen:$(shell make version-connector)-$(shell make version-connect)
