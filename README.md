@@ -187,3 +187,14 @@ If you are using Avro format for producing data to Kafka, here is the correspond
 ```
 
 If you are not using Avro format for producing data to Kafka, there will be no schema in Confluent Schema Registry.
+
+# Publishing Docker Image
+
+To release a new version and publish a new Docker image:
+
+* Update the version number in `build.gradle`
+* Run (docker daemon must be logged into proper Docker Hub account):
+
+```
+make publish
+```
