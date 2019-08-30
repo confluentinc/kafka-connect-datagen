@@ -3,6 +3,6 @@
  * Copyright [2018 - 2018] Confluent Inc.
  */
 common {
-  slackChannel = '#connect-eng'
+  slackChannel = '#connect-warn'
   nodeLabel = 'docker-oraclejdk8'
 }
