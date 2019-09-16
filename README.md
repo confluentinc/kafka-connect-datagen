@@ -5,7 +5,7 @@
 - [Install and Run](#install-and-run)
 - [Configuration](#configuration)
 - [Confusion about schemas and Avro](#confusion-about-schemas-and-avro)
-
+- [Publish Docker image](#publish-docker-image)
 
 # Overview
 
@@ -189,7 +189,7 @@ If you are using Avro format for producing data to Kafka, here is the correspond
 If you are not using Avro format for producing data to Kafka, there will be no schema in Confluent Schema Registry.
 
 
-# Publishing Docker Image
+# Publish Docker Image
 
 To release a new version and publish a new Docker image to Dockerhub:
 
