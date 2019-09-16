@@ -5,7 +5,6 @@
 - [Install and Run](#install-and-run)
 - [Configuration](#configuration)
 - [Confusion about schemas and Avro](#confusion-about-schemas-and-avro)
-- [Publish Docker image](#publish-docker-image)
 
 # Overview
 
@@ -99,6 +98,19 @@ curl -X POST -H "Content-Type: application/json" --data @config/connector_pagevi
 docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
 
+### Publish Docker Image
+
+To release a new version and publish a new Docker image to Dockerhub at https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/:
+
+* Update the version numbers in `Dockerfile-dockerhub`
+* Run the following:
+
+```
+make publish
+```
+
+Note: The provided Makefile and `make publish` command publishes the Docker image to https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ which is accessible only to the organization admins. Docker daemon must be logged into proper Docker Hub account.
+
 # Configuration
 
 ## Generic Kafka Connect Parameters
@@ -187,17 +199,3 @@ If you are using Avro format for producing data to Kafka, here is the correspond
 ```
 
 If you are not using Avro format for producing data to Kafka, there will be no schema in Confluent Schema Registry.
-
-
-# Publish Docker Image
-
-To release a new version and publish a new Docker image to Dockerhub:
-
-* Update the version numbers in `Dockerfile-dockerhub`
-* Run the following:
-
-```
-make publish
-```
-
-Note: The provided Makefile and `make publish` command publishes the Docker image to https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ which is accessible only to the organization admins. Docker daemon must be logged into proper Docker Hub account.
