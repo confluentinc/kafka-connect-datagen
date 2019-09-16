@@ -6,7 +6,6 @@
 - [Configuration](#configuration)
 - [Confusion about schemas and Avro](#confusion-about-schemas-and-avro)
 
-
 # Overview
 
 `kafka-connect-datagen` is a Kafka Connect connector for generating mock data.
@@ -16,7 +15,7 @@ It is not suitable for production.
 # Versions
 
 There are multiple [released versions](https://github.com/confluentinc/kafka-connect-datagen/releases) of this connector, starting with `0.1.0`.
-The instructions below use version `0.1.1` as an example, but you can substitute any of the other released versions.
+The instructions below use version `0.1.5` as an example, but you can substitute any of the other released versions.
 In fact, unless specified otherwise, we recommend using the latest released version to get all of the features and bug fixes.
 
 # Install and Run
@@ -28,10 +27,10 @@ In fact, unless specified otherwise, we recommend using the latest released vers
 You may install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
 
 ```bash
-confluent-hub install confluentinc/kafka-connect-datagen:0.1.1
+confluent-hub install confluentinc/kafka-connect-datagen:0.1.5
 ```
 
-for a the `0.1.1` version of the connector (you can use any released version), or
+for a the `0.1.5` version of the connector (you can use any released version), or
 
 ```bash
 confluent-hub install confluentinc/kafka-connect-datagen:latest
@@ -43,12 +42,12 @@ for the latest released version of the connector.
 ### Build connector from latest code
 
 Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
-Here we use `v0.1.1` to reference the git tag for the `0.1.1` version, but the same pattern works for all released versions.
+Here we use `v0.1.5` to reference the git tag for the `0.1.5` version, but the same pattern works for all released versions.
 
 ```bash
-git checkout v0.1.1
+git checkout v0.1.5
 mvn clean package
-confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.1.zip
+confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.5.zip
 ```
 
 ### Run connector in local install
@@ -70,34 +69,47 @@ The Dockerfiles differ slightly with each release, so be sure the connector vers
 ### Install connector from Confluent Hub
 
 You may install into your Docker image the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
-The following command builds the image using the `Dockerfile-confluenthub` specification and tags that image with `confluentinc/kafka-connect-datagen:0.1.1` (be sure to use the correct datagen connector version in the label).
+The following command builds the image using the `Dockerfile-confluenthub` specification and tags that image with `confluentinc/kafka-connect-datagen:0.1.5` (be sure to use the correct datagen connector version in the label).
 
 ```bash
-docker build . -f Dockerfile-confluenthub -t confluentinc/kafka-connect-datagen:0.1.1
+docker build . -f Dockerfile-confluenthub -t confluentinc/kafka-connect-datagen:0.1.5
 ```
 
 ### Build connector from latest code
 
 Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
-Here we use `v0.1.1` to reference the git tag for the `0.1.1` version, but the same pattern works for all released versions.
-Be sure to use the same version in the Docker image tag (e.g., `confluentinc/kafka-connect-datagen:0.1.1`) that you checked out (e.g., `v0.1.1`).
+Here we use `v0.1.5` to reference the git tag for the `0.1.5` version, but the same pattern works for all released versions.
+Be sure to use the same version in the Docker image tag (e.g., `confluentinc/kafka-connect-datagen:0.1.5`) that you checked out (e.g., `v0.1.5`).
 
 ```bash
-git checkout v0.1.1
+git checkout v0.1.5
 mvn clean package
-docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.1
+docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.5
 ```
 
 ### Run connector in Docker Compose
 
 Here is an example of how to run the `kafka-connect-datagen` with Docker Compose.
-If you used a different Docker image tag, be sure to use that here instead of `confluentinc/kafka-connect-datagen:0.1.1`.
+If you used a different Docker image tag, be sure to use that here instead of `confluentinc/kafka-connect-datagen:0.1.5`.
 
 ```bash
 docker-compose up -d --build
 curl -X POST -H "Content-Type: application/json" --data @config/connector_pageviews.config http://localhost:8083/connectors
 docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
+
+### Publish Docker Image
+
+To release a new version and publish a new Docker image to Dockerhub at https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/:
+
+* Update the version numbers in `Dockerfile-dockerhub`
+* Run the following:
+
+```
+make publish
+```
+
+Note: The provided Makefile and `make publish` command publishes the Docker image to https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ which is accessible only to the organization admins. Docker daemon must be logged into proper Docker Hub account.
 
 # Configuration
 
@@ -187,15 +199,3 @@ If you are using Avro format for producing data to Kafka, here is the correspond
 ```
 
 If you are not using Avro format for producing data to Kafka, there will be no schema in Confluent Schema Registry.
-
-
-# Publishing Docker Image
-
-To release a new version and publish a new Docker image to Dockerhub:
-
-* Update the version numbers in `Dockerfile-dockerhub`
-* Run (docker daemon must be logged into proper Docker Hub account):
-
-```
-make publish
-```
