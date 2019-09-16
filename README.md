@@ -194,8 +194,10 @@ If you are not using Avro format for producing data to Kafka, there will be no s
 To release a new version and publish a new Docker image to Dockerhub:
 
 * Update the version numbers in `Dockerfile-dockerhub`
-* Run (docker daemon must be logged into proper Docker Hub account):
+* Run the following:
 
 ```
 make publish
 ```
+
+Note: The provided Makefile and `make publish` command publishes the Docker image to https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ which is accessible only to the organization admins. Docker daemon must be logged into proper Docker Hub account.
