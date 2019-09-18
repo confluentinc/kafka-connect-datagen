@@ -105,8 +105,7 @@ make publish
 ```
 Here is an example overriding the Confluent Platform version:
 ```bash
-CP_VERSION=5.3.0
-make publish
+CP_VERSION=5.3.0 make publish
 ```
 
 # Configuration
