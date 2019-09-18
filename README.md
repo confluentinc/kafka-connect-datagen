@@ -69,16 +69,16 @@ You can create a local build of the Docker image by running:
 ```bash
 make build-local
 ```
-This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the `Makefile` (example 0.1.5-5.3.1).
+This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the `Makefile` (example `0.1.5-5.3.1`).
 
 ### Install connector from Confluent Hub
 
-You may install into your Docker image the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).  The `Makefile` has a target to build an image from the standard `cp-kafka-connect` image as well as the `cp-server-connect-operator` base image if running Confluent Platform on Kubernetes.
+You may install into your Docker image the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).  The `Dockerfile-confluenthub` file has an example of how this can be accomplished.  The `Makefile` has targets to build an image from the standard `cp-kafka-connect` and the `cp-server-connect-operator` base image if running Confluent Platform on Kubernetes.
 
 ### Run connector in Docker Compose
 
 Here is an example of how to run the `kafka-connect-datagen` with Docker Compose.
-If you used a different Docker image tag, be sure to use that here instead of `confluentinc/kafka-connect-datagen:0.1.5`.
+If you wish to use a different Docker image tag, be sure to modify appropriately in the `docker-compose.yml` file.
 
 ```bash
 docker-compose up -d --build
