@@ -50,6 +50,17 @@ mvn clean package
 confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.5.zip
 ```
 
+### Build connector from latest code
+
+Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
+Here we use `v0.1.5` to reference the git tag for the `0.1.5` version, but the same pattern works for all released versions.
+Be sure to use the same version in the Docker image tag (e.g., `confluentinc/kafka-connect-datagen:0.1.5`) that you checked out (e.g., `v0.1.5`).
+
+```bash
+git checkout v0.1.5
+mvn clean package
+docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.5
+```
 ### Run connector in local install
 
 Here is an example of how to run the `kafka-connect-datagen` on a local install:
@@ -63,29 +74,17 @@ confluent consume test1 --value-format avro --max-messages 5 --property print.ke
 
 ## Confluent Platform running in Docker
 
-This project provides several Dockerfiles that you can use to create Docker images with this connector.
-The Dockerfiles differ slightly with each release, so be sure the connector version in the Dockerfile matches the version you want to use.
+This project provides several Dockerfiles that you can use to create Docker images with this connector.  A few of these images are provided in [Dockerhub](https://hub.docker.com/r/cnfldemos/kafka-connect-datagen) already and you may not need to build the images locally.
+
+You can create a local build of the Docker image by running:
+```bash
+make build-local
+```
+This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the `Makefile` (example 0.1.5-5.3.1).
 
 ### Install connector from Confluent Hub
 
-You may install into your Docker image the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).
-The following command builds the image using the `Dockerfile-confluenthub` specification and tags that image with `confluentinc/kafka-connect-datagen:0.1.5` (be sure to use the correct datagen connector version in the label).
-
-```bash
-docker build . -f Dockerfile-confluenthub -t confluentinc/kafka-connect-datagen:0.1.5
-```
-
-### Build connector from latest code
-
-Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
-Here we use `v0.1.5` to reference the git tag for the `0.1.5` version, but the same pattern works for all released versions.
-Be sure to use the same version in the Docker image tag (e.g., `confluentinc/kafka-connect-datagen:0.1.5`) that you checked out (e.g., `v0.1.5`).
-
-```bash
-git checkout v0.1.5
-mvn clean package
-docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.5
-```
+You may install into your Docker image the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/).  The `Makefile` has a target to build an image from the standard `cp-kafka-connect` image as well as the `cp-server-connect-operator` base image if running Confluent Platform on Kubernetes.
 
 ### Run connector in Docker Compose
 
@@ -98,18 +97,28 @@ curl -X POST -H "Content-Type: application/json" --data @config/connector_pagevi
 docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
 
-### Publish Docker Image
+### Publish Docker Images
 
-To release a new version and publish a new Docker image to Dockerhub at https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/:
+Note: The provided Makefile and `make publish` command publishes the Docker image to https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ , which is accessible only to the organization admins. The local Docker daemon must be logged into a proper Docker Hub account.
 
-* Update the version numbers in `Dockerfile-dockerhub`
-* Run the following:
+To release new versions of the Docker images to Dockerhub (https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ & https://hub.docker.com/r/cnfldemos/cp-server-connect-operator-with-datagen)
+
+The `Makefile` contains a publish target and you can override the version numbers used by overriding the following variables:
 
 ```
+CP_VERSION
+KAFKA_CONNECT_DATAGEN_VERSION
+```
+
+Run the following, optionally overriding the version variables:
+```bash
 make publish
 ```
-
-Note: The provided Makefile and `make publish` command publishes the Docker image to https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ which is accessible only to the organization admins. Docker daemon must be logged into proper Docker Hub account.
+Here is an example overriding the Confluent Platform version:
+```bash
+CP_VERSION=5.3.0
+make publish
+```
 
 # Configuration
 
