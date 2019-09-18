@@ -50,17 +50,6 @@ mvn clean package
 confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.5.zip
 ```
 
-### Build connector from latest code
-
-Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
-Here we use `v0.1.5` to reference the git tag for the `0.1.5` version, but the same pattern works for all released versions.
-Be sure to use the same version in the Docker image tag (e.g., `confluentinc/kafka-connect-datagen:0.1.5`) that you checked out (e.g., `v0.1.5`).
-
-```bash
-git checkout v0.1.5
-mvn clean package
-docker build . -f Dockerfile-local -t confluentinc/kafka-connect-datagen:0.1.5
-```
 ### Run connector in local install
 
 Here is an example of how to run the `kafka-connect-datagen` on a local install:
