@@ -63,7 +63,8 @@ confluent consume test1 --value-format avro --max-messages 5 --property print.ke
 
 ## Confluent Platform running in Docker
 
-This project provides several Dockerfiles that you can use to create Docker images with this connector.  A few of these images are provided in [Dockerhub](https://hub.docker.com/r/cnfldemos/kafka-connect-datagen) already and you may not need to build the images locally.
+A Docker image based on Kafka Connect with the `kafka-connect-datagen` plugin is already available in [Dockerhub](https://hub.docker.com/r/cnfldemos/kafka-connect-datagen), and it is ready for you to use.
+If you want to build your own Docker image with `kafka-connect-datagen`, this project provides several Dockerfiles that you can use.
 
 You can create a local build of the Docker image by running:
 ```bash
