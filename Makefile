@@ -31,11 +31,11 @@ local-package-version: check-dependencies ## Retrieves the jar version from the 
 package: check-dependencies ## Creates the assembly jar
 	@mvn clean package
 
-build-local: check-dependencies package ## Build the Docker image using the locally mvn built kafka-connect-datagen package
+build-docker-from-local: check-dependencies package ## Build the Docker image using the locally mvn built kafka-connect-datagen package
 	@docker build -t kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile .
 
-build-local-confluenthub: check-dependencies ## Build a Docker image using a released version of the kafka-connect-datagen connector 
-	@docker build -t kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
+build-docker-from-released: check-dependencies ## Build a Docker image using a released version of the kafka-connect-datagen connector 
+	@docker build -t kafka-connect-datagen:$(AGGREGATE_VERSION) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
 
 publish-cp-kafka-connect-confluenthub: check-dependencies ## Build the cp-kafka-connect image pulling datagen from Confluent Hub
 	@docker build -t cnfldemos/kafka-connect-datagen:$(AGGREGATE_VERSION) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
