@@ -72,7 +72,7 @@ KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.5
 ```
 These values can be overriden with variable declarations before the `make` command.  For example:
 ```bash
-KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make build-local-confluenthub
+KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make build-docker-from-released
 ```
 
 ### Run connector in Docker Compose
