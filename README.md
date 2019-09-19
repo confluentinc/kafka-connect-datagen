@@ -185,7 +185,7 @@ If you are not using Avro format for producing data to Kafka, there will be no s
 
 # Publishing Docker Images
 
-*Note: The following instructions are only relevant if you are an administrator of this repository and have push access to the https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ registry.  The local Docker daemon must be logged into a proper Docker Hub account.*
+*Note: The following instructions are only relevant if you are an administrator of this repository and have push access to the https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ repository.  The local Docker daemon must be logged into a proper Docker Hub account.*
 
 To release new versions of the Docker images to Dockerhub (https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ & https://hub.docker.com/r/cnfldemos/cp-server-connect-operator-with-datagen) use the respective targets in the [Makefile](Makefile).
 
