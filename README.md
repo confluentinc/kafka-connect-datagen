@@ -70,7 +70,7 @@ You can create a Docker image packaged with the locally built source by running:
 make build-docker-from-local
 ```
 
-This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.1.5-5.3.1`.
+This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `2.0.0-5.3.1`.
 
 Alternatively, you can install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/) into a Docker image by running:
 ```bash
@@ -100,12 +100,12 @@ docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap
 ```
 ## Building
 
-To build the `kafka-connect-datagen` connector from latest code and install it to a local Confluent Platform, you can perform the following (here we use `v0.1.5` to reference the git tag for the `0.1.5` version, but the same pattern works for all released versions).
+To build the `kafka-connect-datagen` connector from latest code and install it to a local Confluent Platform, you can perform the following (here we use `v2.0.0` to reference the git tag for the `2.0.0` version, but the same pattern works for all released versions).
 
 ```bash
-git checkout v0.1.5
+git checkout v2.0.0
 make package
-confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.5.zip
+confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-2.0.0.zip
 ```
 
 # Configuration
@@ -220,7 +220,7 @@ The [Makefile](Makefile) contains some default variables that affect the version
 
 ```bash
 CP_VERSION ?= 5.3.1
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.5
+KAFKA_CONNECT_DATAGEN_VERSION ?= 2.0.0 
 ```
 
 To publish the https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ image:
