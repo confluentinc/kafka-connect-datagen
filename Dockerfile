@@ -13,10 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM confluentinc/cp-kafka-connect:5.3.1
+ARG CP_VERSION
+
+FROM confluentinc/cp-kafka-connect:$CP_VERSION
 
 ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 
-COPY target/components/packages/confluentinc-kafka-connect-datagen-0.2.0.zip /tmp/confluentinc-kafka-connect-datagen-0.2.0.zip
+ARG KAFKA_CONNECT_DATAGEN_VERSION
 
-RUN confluent-hub install --no-prompt /tmp/confluentinc-kafka-connect-datagen-0.2.0.zip
+COPY target/components/packages/confluentinc-kafka-connect-datagen-${KAFKA_CONNECT_DATAGEN_VERSION}.zip /tmp/confluentinc-kafka-connect-datagen-${KAFKA_CONNECT_DATAGEN_VERSION}.zip
+
+RUN confluent-hub install --no-prompt /tmp/confluentinc-kafka-connect-datagen-${KAFKA_CONNECT_DATAGEN_VERSION}.zip
