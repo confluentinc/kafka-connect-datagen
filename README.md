@@ -40,10 +40,10 @@ confluent-hub install confluentinc/kafka-connect-datagen:latest
 Here is an example of how to run the `kafka-connect-datagen` on a local Confluent Platform after it's been installed.  [Configuration](#configuration) details are provided below.
 
 ```bash
-confluent start connect
-confluent config datagen-pageviews -d config/connector_pageviews.config
-confluent status connectors
-confluent consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
+confluent local start connect
+confluent local config datagen-pageviews -d config/connector_pageviews.config
+confluent local status connectors
+confluent local consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 ```
 
 ## Install the connector from Confluent Hub into a [Kafka Connect](https://docs.confluent.io/current/connect/index.html) based Docker image
