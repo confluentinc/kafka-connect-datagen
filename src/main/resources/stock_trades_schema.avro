@@ -16,7 +16,7 @@
     },
     {
       "name": "quantity",
-      "doc": "A simualted random quantity of the trade",
+      "doc": "A simulated random quantity of the trade",
       "type": {
         "type": "int",
         "arg.properties": {
@@ -52,7 +52,7 @@
     },
     {
       "name": "account",
-      "doc": "Simualted accounts assigned to the trade",
+      "doc": "Simulated accounts assigned to the trade",
       "type": {
         "type": "string",
         "arg.properties": {
