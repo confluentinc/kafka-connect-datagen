@@ -33,7 +33,7 @@
       "type": {
         "type": "string",
         "arg.properties": {
-          "options": [ "ZJZZT","ZVZZT","ZWZZT" ]
+          "options": [ "ZBZX", "ZJZZT", "ZTEST", "ZVV", "ZVZZT", "ZWZZT", "ZXZZT" ]
         }
       }
     },
@@ -59,6 +59,17 @@
           "options": [ "ABC123", "LMN456", "XYZ789" ]
         }
       }
+    },
+    {
+      "name": "userid", 
+      "doc": "The simulated user who executed the trade",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+            "regex": "User_[1-9]{0,1}"
+        }
+      }
     }
   ]
 }
+
