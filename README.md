@@ -41,7 +41,7 @@ Here is an example of how to run the `kafka-connect-datagen` on a local Confluen
 
 ```bash
 confluent local start connect
-confluent local config datagen-pageviews -d config/connector_pageviews.config
+confluent local config datagen-pageviews -- -d config/connector_pageviews.config
 confluent local status connectors
 confluent local consume test1 --value-format avro --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 ```
