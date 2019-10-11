@@ -10,7 +10,7 @@
       "type": {
         "type": "string",
         "arg.properties": {
-          "options": [ "BUY", "SELL", "SHORT" ]
+          "options": [ "BUY", "SELL"  ]
         }
       }
     },
