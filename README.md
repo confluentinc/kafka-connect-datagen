@@ -90,7 +90,7 @@ KAFKA_CONNECT_DATAGEN_VERSION=0.2.0 make build-docker-from-released
 
 ### Run connector in Docker Compose
 
-Here is an example of how to run the `kafka-connect-datagen` with the provided [docker-compose.yml](docker-compose.yml) file.  If you wish to use a different Docker image tag, be sure to modify appropriately in the [docker-compose.yml](docker-compose.yml)` file.
+Here is an example of how to run the `kafka-connect-datagen` with the provided [docker-compose.yml](docker-compose.yml) file.  If you wish to use a different Docker image tag, be sure to modify appropriately in the [docker-compose.yml](docker-compose.yml) file.
 
 
 ```bash
