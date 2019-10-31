@@ -16,7 +16,7 @@ check-dependencies:
 	@#(call check-dependency,sed)
 
 CP_VERSION ?= 5.3.1
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.5
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.6
 AGGREGATE_VERSION = $(KAFKA_CONNECT_DATAGEN_VERSION)-$(CP_VERSION)
 
 KAFKA_CONNECT_DATAGEN_LOCAL_VERSION = $(shell make local-package-version)
