@@ -16,8 +16,11 @@ check-dependencies:
 	@#(call check-dependency,sed)
 
 CP_VERSION ?= 5.3.1
+OPERATOR_VERSION ?= 0
+
 KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.6
 AGGREGATE_VERSION = $(KAFKA_CONNECT_DATAGEN_VERSION)-$(CP_VERSION)
+OPERATOR_AGGREGATE_VERSION = $(AGGREGATE_VERSION).$(OPERATOR_VERSION)
 
 KAFKA_CONNECT_DATAGEN_LOCAL_VERSION = $(shell make local-package-version)
 AGGREGATE_LOCAL_VERSION = $(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION)-$(CP_VERSION)
@@ -41,18 +44,14 @@ publish-cp-kafka-connect-confluenthub: check-dependencies ## Build the cp-kafka-
 	@docker build -t cnfldemos/kafka-connect-datagen:$(AGGREGATE_VERSION) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
 	@docker push cnfldemos/kafka-connect-datagen:$(AGGREGATE_VERSION)
 
-#######################################################################################
-#	Note on Operator version numbers.   Operator overlays functionality on CP images,
-# 	resulting in images that look like: 5.3.1.0, giving them the option to rev
-# 	operator independently of CP.   For right now, I (Rick) just added `.0`
-#		strings to the end of the docker tags below just to move on, but if CP engineering
-#		releases sub-versions of Operator on top of standard CP versions, we'll need to
-# 	automate this appropriately or fix up manually and publish images
-#######################################################################################
+#  The combination of CP_VERSION & OPERATOR_VERSION will determine two things:
+#    1. The version of the operator base image used in the Dockerfiles for operator (Dockerfile-operator-local & Dockerfile-operator)
+#    2. The version of the docker images _this_ repository builds and pushes to cnfldemos (cp-server-connect-operator-with-datagen)
+
 publish-cp-server-connect-operator-confluenthub: check-dependencies ## Build the cp-server-connect-operator image pulling datagen from Confluent Hub
-	@docker build -t cnfldemos/cp-server-connect-operator-with-datagen:$(AGGREGATE_VERSION).0 --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-operator .
-	@docker push cnfldemos/cp-server-connect-operator-with-datagen:$(AGGREGATE_VERSION).0
+	@docker build -t cnfldemos/cp-server-connect-operator-with-datagen:$(AGGREGATE_VERSION).0 --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg OPERATOR_VERSION=$(OPERATOR_VERSION) -f Dockerfile-operator .
+	@docker push cnfldemos/cp-server-connect-operator-with-datagen:$(OPERATOR_AGGREGATE_VERSION)
 
 publish-cp-server-connect-operator-local: check-dependencies ## Build the cp-server-connect-operator image installing datagen from the local build	
-	@docker build -t cnfldemos/cp-server-connect-operator-with-datagen:$(AGGREGATE_VERSION).0 --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-operator-local .
-	@docker push cnfldemos/cp-server-connect-operator-with-datagen:$(AGGREGATE_VERSION).0
+	@docker build -t cnfldemos/cp-server-connect-operator-with-datagen:$(AGGREGATE_VERSION).0 --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg OPERATOR_VERSION=$(OPERATOR_VERSION) -f Dockerfile-operator-local .
+	@docker push cnfldemos/cp-server-connect-operator-with-datagen:$(OPERATOR_AGGREGATE_VERSION)

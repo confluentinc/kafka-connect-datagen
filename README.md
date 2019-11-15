@@ -194,6 +194,7 @@ The [Makefile](Makefile) contains some default variables that affect the version
 ```bash
 CP_VERSION ?= 5.3.1
 KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.6
+OPERATOR_VERSION ?= 0 # Operator is a 'rev' version appended at the end of the CP version, like so: 5.3.1.0
 ```
 
 To publish the https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ image:
@@ -205,6 +206,12 @@ and to override the CP Version of the `kafka-connect-datagen` version you can ru
 ```bash
 CP_VERSION=5.3.0 KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make publish-cp-kafka-connect-confluenthub
 ```
+
+to override the CP Version and the Operator version, which may happen if Operator releases a patch version, you could run something similar to:
+```bash
+CP_VERSION=5.3.0 OPERATOR_VERSION=1 KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make publish-cp-server-connect-operator-confluenthub
+```
+which would result in a docker image tagged as: `cp-server-connect-operator-with-datagen:0.1.4-5.3.0.1`
 
 To publish the https://hub.docker.com/r/cnfldemos/cp-server-connect-operator-with-datagen image:
 ```bash
