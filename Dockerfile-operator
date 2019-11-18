@@ -14,8 +14,9 @@
 # limitations under the License.
 
 ARG CP_VERSION
+ARG OPERATOR_VERSION
 
-FROM confluentinc/cp-server-connect-operator:${CP_VERSION}.0
+FROM confluentinc/cp-server-connect-operator:${CP_VERSION}.${OPERATOR_VERSION}
 
 ARG KAFKA_CONNECT_DATAGEN_VERSION
 
