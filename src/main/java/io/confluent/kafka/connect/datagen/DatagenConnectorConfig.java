@@ -38,6 +38,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String SCHEMA_KEYFIELD_DOC = "Name of field to use as the message key";
   public static final String QUICKSTART_CONF = "quickstart";
   private static final String QUICKSTART_DOC = "Name of quickstart to use";
+  public static final String RANDOM_SEED_CONF = "random.seed";
+  private static final String RANDOM_SEED_DOC = "Seed for generating random data. Two connectors "
+      + "started with the same seed will deterministically produce the same data. Each task will "
+      + "generate different data than the other tasks in the same connector.";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
@@ -54,7 +58,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
         .define(ITERATIONS_CONF, Type.INT, -1, Importance.HIGH, ITERATIONS_DOC)
         .define(SCHEMA_FILENAME_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_FILENAME_DOC)
         .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC)
-        .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC);
+        .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC)
+        .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC);
   }
 
   public String getKafkaTopic() {
@@ -79,6 +84,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public String getQuickstart() {
     return this.getString(QUICKSTART_CONF);
+  }
+
+  public Long getRandomSeed() {
+    return this.getLong(RANDOM_SEED_CONF);
   }
 
 }

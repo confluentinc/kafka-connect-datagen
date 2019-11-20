@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -45,8 +46,10 @@ public class DatagenTask extends SourceTask {
   static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
 
   private static final Schema KEY_SCHEMA = Schema.STRING_SCHEMA;
-  private static final Map<String, ?> SOURCE_PARTITION = Collections.emptyMap();
-  private static final Map<String, ?> SOURCE_OFFSET = Collections.emptyMap();
+  public static final String TASK_ID = "task.id";
+  public static final String TASK_GENERATION = "task.generation";
+  public static final String CURRENT_ITERATION = "current.iteration";
+  public static final String RANDOM_SEED = "random.seed";
 
 
   private DatagenConnectorConfig config;
@@ -61,6 +64,10 @@ public class DatagenTask extends SourceTask {
   private org.apache.avro.Schema avroSchema;
   private org.apache.kafka.connect.data.Schema ksqlSchema;
   private AvroData avroData;
+  private int taskId;
+  private Map<String, Object> sourcePartition;
+  private int taskGeneration;
+  private Random random;
 
   protected enum Quickstart {
     CLICKSTREAM_CODES("clickstream_codes_schema.avro", "code"),
@@ -103,6 +110,26 @@ public class DatagenTask extends SourceTask {
     maxRecords = config.getIterations();
     schemaFilename = config.getSchemaFilename();
     schemaKeyField = config.getSchemaKeyfield();
+    taskId = Integer.parseInt(props.get(TASK_ID));
+    sourcePartition = Collections.singletonMap(TASK_ID, taskId);
+
+    random = new Random();
+    if (config.getRandomSeed() != null) {
+      random.setSeed(config.getRandomSeed());
+      // Each task will now deterministically advance it's random source
+      // This makes it such that each task will generate different data
+      for (int i = 0; i < taskId; i++) {
+        random.setSeed(random.nextLong());
+      }
+    }
+
+    Map<String, Object> offset = context.offsetStorageReader().offset(sourcePartition);
+    if (offset != null) {
+      //  The offset as it is stored contains our next state, so restore it as-is.
+      taskGeneration = ((Integer) offset.get(TASK_GENERATION));
+      count = ((Long) offset.get(CURRENT_ITERATION));
+      random.setSeed((Long) offset.get(RANDOM_SEED));
+    }
 
     String quickstartName = config.getQuickstart();
     if (quickstartName != "") {
@@ -114,7 +141,7 @@ public class DatagenTask extends SourceTask {
           try {
             generator = new Generator(
                 getClass().getClassLoader().getResourceAsStream(schemaFilename),
-                new Random()
+                random
             );
           } catch (IOException e) {
             throw new ConnectException("Unable to read the '"
@@ -128,7 +155,7 @@ public class DatagenTask extends SourceTask {
       try {
         generator = new Generator(
             new FileInputStream(schemaFilename),
-            new Random()
+            random
         );
       } catch (IOException e) {
         throw new ConnectException("Unable to read the '"
@@ -195,10 +222,24 @@ public class DatagenTask extends SourceTask {
       );
     }
 
+    // Re-seed the random each time so that we can save the seed to the source offsets.
+    long seed = random.nextLong();
+    random.setSeed(seed);
+
+    // The source offsets will be the values that the next task lifetime will restore from
+    // Essentially, the "next" state of the connector after this loop completes
+    Map<String, Object> sourceOffset = new HashMap<>();
+    // The next lifetime will be a member of the next generation.
+    sourceOffset.put(TASK_GENERATION, taskGeneration + 1);
+    // We will have produced this record
+    sourceOffset.put(CURRENT_ITERATION, count + 1);
+    // This is the seed that we just re-seeded for our own next iteration.
+    sourceOffset.put(RANDOM_SEED, seed);
+
     final List<SourceRecord> records = new ArrayList<>();
     SourceRecord record = new SourceRecord(
-        SOURCE_PARTITION,
-        SOURCE_OFFSET,
+        sourcePartition,
+        sourceOffset,
         topic,
         KEY_SCHEMA,
         keyString,

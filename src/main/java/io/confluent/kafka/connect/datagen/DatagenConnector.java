@@ -17,6 +17,7 @@
 package io.confluent.kafka.connect.datagen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +61,9 @@ public class DatagenConnector extends SourceConnector {
   public List<Map<String, String>> taskConfigs(int maxTasks) {
     List<Map<String, String>> taskConfigs = new ArrayList<>();
     for (int i = 0; i < maxTasks; i++) {
-      taskConfigs.add(this.props);
+      Map<String, String> taskConfig = new HashMap<>(this.props);
+      taskConfig.put(DatagenTask.TASK_ID, Integer.toString(i));
+      taskConfigs.add(taskConfig);
     }
     return taskConfigs;
   }
