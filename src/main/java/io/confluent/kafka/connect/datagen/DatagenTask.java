@@ -202,6 +202,16 @@ public class DatagenTask extends SourceTask {
       }
     }
 
+    // Task ID field
+    if (!config.getSchemaTaskIdField().isEmpty()) {
+      randomAvroMessage.put(config.getSchemaTaskIdField(), taskId);
+    }
+
+    // Task Generation field
+    if (!config.getSchemaTaskGenerationField().isEmpty()) {
+      randomAvroMessage.put(config.getSchemaTaskGenerationField(), taskGeneration);
+    }
+
     // Key
     String keyString = "";
     if (!schemaKeyField.isEmpty()) {
@@ -220,6 +230,17 @@ public class DatagenTask extends SourceTask {
       throw new ConnectException(
           String.format("Stopping connector: generated the configured %d number of messages", count)
       );
+    }
+
+    // Partition number
+    Integer partition = null;
+    if (!config.getSchemaPartitionField().isEmpty()) {
+      Object p = randomAvroMessage.get(config.getSchemaPartitionField());
+      if (!(p instanceof Integer)) {
+        throw new ConnectException("Field specified in "
+            + DatagenConnectorConfig.SCHEMA_PARTITION_FIELD_CONF + " must be an integer");
+      }
+      partition = (Integer) p;
     }
 
     // Re-seed the random each time so that we can save the seed to the source offsets.
@@ -241,6 +262,7 @@ public class DatagenTask extends SourceTask {
         sourcePartition,
         sourceOffset,
         topic,
+        partition,
         KEY_SCHEMA,
         keyString,
         messageSchema,

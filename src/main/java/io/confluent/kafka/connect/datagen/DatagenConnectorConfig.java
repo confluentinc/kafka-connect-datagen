@@ -38,6 +38,16 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String SCHEMA_KEYFIELD_DOC = "Name of field to use as the message key";
   public static final String QUICKSTART_CONF = "quickstart";
   private static final String QUICKSTART_DOC = "Name of quickstart to use";
+  public static final String SCHEMA_PARTITION_FIELD_CONF = "schema.partition.field";
+  private static final String SCHEMA_PARTITION_FIELD_DOC = "Name of field to use as the partition "
+      + "number";
+  public static final String SCHEMA_TASK_ID_FIELD_CONF = "schema.task.id.field";
+  private static final String SCHEMA_TASK_ID_FIELD_DOC = "Name of field to inject into the record "
+      + "with the integer task index which generated the record";
+  public static final String SCHEMA_TASK_GENERATION_FIELD_CONF = "schema.task.generation.field";
+  private static final String SCHEMA_TASK_GENERATION_FIELD_DOC = "Name of field to inject into "
+      + "the record with the integer task generation number which generated the record. "
+      + "This value starts at 0 and increments each time the task restarts";
   public static final String RANDOM_SEED_CONF = "random.seed";
   private static final String RANDOM_SEED_DOC = "Seed for generating random data. Two connectors "
       + "started with the same seed will deterministically produce the same data. Each task will "
@@ -59,6 +69,12 @@ public class DatagenConnectorConfig extends AbstractConfig {
         .define(SCHEMA_FILENAME_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_FILENAME_DOC)
         .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC)
         .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC)
+        .define(SCHEMA_PARTITION_FIELD_CONF, Type.STRING, "", Importance.LOW,
+            SCHEMA_PARTITION_FIELD_DOC)
+        .define(SCHEMA_TASK_ID_FIELD_CONF, Type.STRING, "", Importance.LOW,
+            SCHEMA_TASK_ID_FIELD_DOC)
+        .define(SCHEMA_TASK_GENERATION_FIELD_CONF, Type.STRING, "", Importance.LOW,
+            SCHEMA_TASK_GENERATION_FIELD_DOC)
         .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC);
   }
 
@@ -84,6 +100,18 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public String getQuickstart() {
     return this.getString(QUICKSTART_CONF);
+  }
+
+  public String getSchemaPartitionField() {
+    return this.getString(SCHEMA_PARTITION_FIELD_CONF);
+  }
+
+  public String getSchemaTaskIdField() {
+    return this.getString(SCHEMA_TASK_ID_FIELD_CONF);
+  }
+
+  public String getSchemaTaskGenerationField() {
+    return this.getString(SCHEMA_TASK_GENERATION_FIELD_CONF);
   }
 
   public Long getRandomSeed() {
