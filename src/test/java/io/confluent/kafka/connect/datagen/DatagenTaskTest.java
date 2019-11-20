@@ -16,8 +16,11 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -27,11 +30,15 @@ import java.util.Random;
 import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
+import org.apache.kafka.connect.source.SourceTaskContext;
+import org.apache.kafka.connect.storage.OffsetStorageReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +53,7 @@ public class DatagenTaskTest {
   private static final String TOPIC = "my-topic";
   private static final int NUM_MESSAGES = 100;
   private static final int MAX_INTERVAL_MS = 0;
+  private static final int TASK_ID = 0;
 
   private static final AvroData AVRO_DATA = new AvroData(20);
 
@@ -54,11 +62,13 @@ public class DatagenTaskTest {
   private List<SourceRecord> records;
   private Schema expectedValueConnectSchema;
   private Schema expectedKeyConnectSchema;
+  private Map<String, Object> sourceOffsets;
 
   @Before
   public void setUp() throws Exception {
     config = new HashMap<>();
     records = new ArrayList<>();
+    sourceOffsets = null;
   }
 
   @After
@@ -110,6 +120,19 @@ public class DatagenTaskTest {
   @Test
   public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.STOCK_TRADES);
+  }
+
+  @Test
+  public void shouldRestoreFromSourceOffsets() throws Exception {
+    sourceOffsets = new HashMap<>();
+    sourceOffsets.put(DatagenTask.RANDOM_SEED, 100L);
+    sourceOffsets.put(DatagenTask.CURRENT_ITERATION, 50L);
+    sourceOffsets.put(DatagenTask.TASK_GENERATION, 0);
+    createTaskWith(Quickstart.ORDERS);
+    List<SourceRecord> pollA = task.poll();
+    createTaskWith(Quickstart.ORDERS);
+    List<SourceRecord> pollB = task.poll();
+    assertEquals(pollA, pollB);
   }
 
   @Test
@@ -229,8 +252,40 @@ public class DatagenTaskTest {
     config.putIfAbsent(DatagenConnectorConfig.KAFKA_TOPIC_CONF, TOPIC);
     config.putIfAbsent(DatagenConnectorConfig.ITERATIONS_CONF, Integer.toString(NUM_MESSAGES));
     config.putIfAbsent(DatagenConnectorConfig.MAXINTERVAL_CONF, Integer.toString(MAX_INTERVAL_MS));
+    config.putIfAbsent(DatagenTask.TASK_ID, Integer.toString(TASK_ID));
 
     task = new DatagenTask();
+    // Initialize an offsetStorageReader that returns mocked sourceOffsets.
+    task.initialize(new SourceTaskContext() {
+      @Override
+      public Map<String, String> configs() {
+        return config;
+      }
+
+      @Override
+      public OffsetStorageReader offsetStorageReader() {
+        return new OffsetStorageReader() {
+          @Override
+          public <T> Map<String, Object> offset(final Map<String, T> partition) {
+            return offsets(Collections.singletonList(partition)).get(partition);
+          }
+
+          @Override
+          public <T> Map<Map<String, T>, Map<String, Object>> offsets(
+              final Collection<Map<String, T>> partitions) {
+            if (sourceOffsets == null) {
+              return Collections.emptyMap();
+            }
+            return partitions
+                .stream()
+                .collect(Collectors.toMap(
+                    Function.identity(),
+                    ignored -> sourceOffsets
+                ));
+          }
+        };
+      }
+    });
     task.start(config);
   }
 
