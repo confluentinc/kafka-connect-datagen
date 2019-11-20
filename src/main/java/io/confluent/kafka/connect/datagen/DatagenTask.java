@@ -17,6 +17,7 @@
 package io.confluent.kafka.connect.datagen;
 
 import java.io.IOException;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,7 +70,8 @@ public class DatagenTask extends SourceTask {
     RATINGS("ratings_schema.avro", "rating_id"),
     USERS("users_schema.avro", "userid"),
     USERS_("users_array_map_schema.avro", "userid"),
-    PAGEVIEWS("pageviews_schema.avro", "viewtime");
+    PAGEVIEWS("pageviews_schema.avro", "viewtime"),
+    STOCK_TRADES("stock_trades_schema.avro", "symbol");
 
     private final String schemaFilename;
     private final String keyName;
@@ -109,19 +111,29 @@ public class DatagenTask extends SourceTask {
         if (quickstart != null) {
           schemaFilename = quickstart.getSchemaFilename();
           schemaKeyField = quickstart.getSchemaKeyField();
+          try {
+            generator = new Generator(
+                getClass().getClassLoader().getResourceAsStream(schemaFilename),
+                new Random()
+            );
+          } catch (IOException e) {
+            throw new ConnectException("Unable to read the '"
+                + schemaFilename + "' schema file", e);
+          }
         }
       } catch (IllegalArgumentException e) {
         log.warn("Quickstart '{}' not found: ", quickstartName, e);
       }
-    }
-
-    try {
-      generator = new Generator(
-          getClass().getClassLoader().getResourceAsStream(schemaFilename),
-          new Random()
-      );
-    } catch (IOException e) {
-      throw new ConnectException("Unable to read the '" + schemaFilename + "' schema file", e);
+    } else {
+      try {
+        generator = new Generator(
+            new FileInputStream(schemaFilename),
+            new Random()
+        );
+      } catch (IOException e) {
+        throw new ConnectException("Unable to read the '"
+            + schemaFilename + "' schema file", e);
+      }
     }
 
     avroSchema = generator.schema();

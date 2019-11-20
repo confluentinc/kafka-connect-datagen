@@ -108,6 +108,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
+    generateAndValidateRecordsFor(DatagenTask.Quickstart.STOCK_TRADES);
+  }
+
+  @Test
   public void shouldFailToGenerateMoreRecordsThanSpecified() throws Exception {
     // Generate the expected number of records
     createTaskWith(DatagenTask.Quickstart.USERS);
