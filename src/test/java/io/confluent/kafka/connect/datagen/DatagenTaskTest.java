@@ -128,7 +128,7 @@ public class DatagenTaskTest {
     sourceOffsets = new HashMap<>();
     sourceOffsets.put(DatagenTask.RANDOM_SEED, 100L);
     sourceOffsets.put(DatagenTask.CURRENT_ITERATION, 50L);
-    sourceOffsets.put(DatagenTask.TASK_GENERATION, 0);
+    sourceOffsets.put(DatagenTask.TASK_GENERATION, 0L);
     createTaskWith(Quickstart.ORDERS);
 
     // poll once to advance the generator
@@ -143,8 +143,8 @@ public class DatagenTaskTest {
     SourceRecord pollB = task.poll().get(0);
 
     // the generation should have incremented, but the remaining details of the record should be identical
-    assertEquals(1, pollA.sourceOffset().get(DatagenTask.TASK_GENERATION));
-    assertEquals(2, pollB.sourceOffset().get(DatagenTask.TASK_GENERATION));
+    assertEquals(1L, pollA.sourceOffset().get(DatagenTask.TASK_GENERATION));
+    assertEquals(2L, pollB.sourceOffset().get(DatagenTask.TASK_GENERATION));
     assertEquals(pollA.sourceOffset().get(DatagenTask.TASK_ID), pollB.sourceOffset().get(DatagenTask.TASK_ID));
     assertEquals(pollA.sourceOffset().get(DatagenTask.CURRENT_ITERATION), pollB.sourceOffset().get(DatagenTask.CURRENT_ITERATION));
     assertEquals(pollA.sourcePartition(), pollB.sourcePartition());
