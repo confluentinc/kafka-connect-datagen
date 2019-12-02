@@ -139,11 +139,11 @@ public class DatagenTask extends SourceTask {
           schemaFilename = quickstart.getSchemaFilename();
           schemaKeyField = quickstart.getSchemaKeyField();
           try {
-            generator = new Generator(
-                getClass().getClassLoader().getResourceAsStream(schemaFilename),
-                random,
-                count
-            );
+            generator = new Generator.Builder()
+                .schemaStream(getClass().getClassLoader().getResourceAsStream(schemaFilename))
+                .random(random)
+                .generation(count)
+                .build();
           } catch (IOException e) {
             throw new ConnectException("Unable to read the '"
                 + schemaFilename + "' schema file", e);
@@ -154,11 +154,11 @@ public class DatagenTask extends SourceTask {
       }
     } else {
       try {
-        generator = new Generator(
-            new FileInputStream(schemaFilename),
-            random,
-            count
-        );
+        generator = new Generator.Builder()
+            .schemaStream(new FileInputStream(schemaFilename))
+            .random(random)
+            .generation(count)
+            .build();
       } catch (IOException e) {
         throw new ConnectException("Unable to read the '"
             + schemaFilename + "' schema file", e);
