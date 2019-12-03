@@ -14,9 +14,12 @@
 # limitations under the License.
 
 ARG CP_VERSION
-ARG OPERATOR_VERSION
+ARG NAMESPACE=confluentinc 
+ARG IMAGE=cp-kafka-connect
 
-FROM confluentinc/cp-server-connect-operator:${CP_VERSION}.${OPERATOR_VERSION}
+FROM confluentinc/$IMAGE:$CP_VERSION
+
+ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 
 ARG KAFKA_CONNECT_DATAGEN_VERSION
 
