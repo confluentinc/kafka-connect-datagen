@@ -50,29 +50,30 @@ confluent local consume test1 --value-format avro --max-messages 5 --property pr
 
 A Docker image based on Kafka Connect with the `kafka-connect-datagen` plugin is already available in [Dockerhub](https://hub.docker.com/r/cnfldemos/kafka-connect-datagen), and it is ready for you to use.
 
-If you want to build a local copy of the Docker image with `kafka-connect-datagen`, this project provides a [Dockerfile](Dockerfile) that you can reference.
+If you want to build a local copy of the Docker image with `kafka-connect-datagen`, this project provides a [Dockerfile](Dockerfile-local) that you can reference.
 
-You can create a Docker image packaged with the locally built source by running:
+You can create a Docker image packaged with the locally built source by running (for example with the 5.3.1 version of Confluent Platform):
 ```bash
-make build-docker-from-local
+make build-docker-from-local CP_VERSION=5.3.1
 ```
 
-This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.1.6-5.3.1`.
+This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.1.7-5.3.1`.
 
 Alternatively, you can install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/) into a Docker image by running:
 ```bash
-make build-docker-from-released
+make build-docker-from-released CP_VERSION=5.3.1
 ```
 
 The [Makefile](Makefile) contains some default variables that affect the version numbers of both the installed `kafka-connect-datagen` as well as the base Confluent Platform version.  The variables are located near the top of the [Makefile](Makefile) with the following names and current default values:
 
 ```bash
 CP_VERSION ?= 5.3.1
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.6
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.7
 ```
 These values can be overriden with variable declarations before the `make` command.  For example:
+
 ```bash
-KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make build-docker-from-released
+make build-docker-from-released KAFKA_CONNECT_DATAGEN_VERSION=0.1.6
 ```
 
 ### Run connector in Docker Compose
@@ -193,13 +194,13 @@ The [Makefile](Makefile) contains some default variables that affect the version
 
 ```bash
 CP_VERSION ?= 5.3.1
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.6
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.1.7
 OPERATOR_VERSION ?= 0 # Operator is a 'rev' version appended at the end of the CP version, like so: 5.3.1.0
 ```
 
 To publish the https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ image:
 ```bash
-make publish-cp-kafka-connect-confluenthub
+make push-from-released
 ```
 
 and to override the CP Version of the `kafka-connect-datagen` version you can run something similar to:
@@ -209,11 +210,7 @@ CP_VERSION=5.3.0 KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make publish-cp-kafka-conne
 
 to override the CP Version and the Operator version, which may happen if Operator releases a patch version, you could run something similar to:
 ```bash
-CP_VERSION=5.3.0 OPERATOR_VERSION=1 KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make publish-cp-server-connect-operator-confluenthub
+CP_VERSION=5.3.0 OPERATOR_VERSION=1 KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make push-cp-server-connect-operator-from-released
 ```
-which would result in a docker image tagged as: `cp-server-connect-operator-with-datagen:0.1.4-5.3.0.1`
+which would result in a docker image tagged as: `cp-server-connect-operator-datagen:0.1.4-5.3.0.1` and pushed to DockerHub
 
-To publish the https://hub.docker.com/r/cnfldemos/cp-server-connect-operator-with-datagen image:
-```bash
-make publish-cp-server-connect-operator-confluenthub
-```
