@@ -15,9 +15,9 @@
 
 ARG CP_VERSION
 ARG BASE_PREFIX=confluentinc 
-ARG IMAGE=cp-kafka-connect
+ARG CONNECT_IMAGE=cp-kafka-connect
 
-FROM $BASE_PREFIX/$IMAGE:$CP_VERSION
+FROM $BASE_PREFIX/$CONNECT_IMAGE:$CP_VERSION
 
 ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 
