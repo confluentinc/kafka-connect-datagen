@@ -67,8 +67,11 @@ public class DatagenConnectorTest {
     List<Map<String, String>> taskConfigs = connector.taskConfigs(maxTasks);
     assertEquals(maxTasks, taskConfigs.size());
     // All task configs should match the connector config
-    for (Map<String, String> taskConfig : taskConfigs) {
-      assertEquals(config, taskConfig);
+    for (int i = 0; i < taskConfigs.size(); i++) {
+      Map<String, String> taskConfig = taskConfigs.get(i);
+      Map<String, String> expectedTaskConfig = new HashMap<>(config);
+      expectedTaskConfig.put(DatagenTask.TASK_ID, Integer.toString(i));
+      assertEquals(expectedTaskConfig, taskConfig);
     }
   }
 
