@@ -126,7 +126,7 @@ public class DatagenTask extends SourceTask {
     Map<String, Object> offset = context.offsetStorageReader().offset(sourcePartition);
     if (offset != null) {
       //  The offset as it is stored contains our next state, so restore it as-is.
-      taskGeneration = ((Integer) offset.get(TASK_GENERATION));
+      taskGeneration = ((Long) offset.get(TASK_GENERATION)).intValue();
       count = ((Long) offset.get(CURRENT_ITERATION));
       random.setSeed((Long) offset.get(RANDOM_SEED));
     }
@@ -139,10 +139,11 @@ public class DatagenTask extends SourceTask {
           schemaFilename = quickstart.getSchemaFilename();
           schemaKeyField = quickstart.getSchemaKeyField();
           try {
-            generator = new Generator(
-                getClass().getClassLoader().getResourceAsStream(schemaFilename),
-                random
-            );
+            generator = new Generator.Builder()
+                .schemaStream(getClass().getClassLoader().getResourceAsStream(schemaFilename))
+                .random(random)
+                .generation(count)
+                .build();
           } catch (IOException e) {
             throw new ConnectException("Unable to read the '"
                 + schemaFilename + "' schema file", e);
@@ -153,10 +154,11 @@ public class DatagenTask extends SourceTask {
       }
     } else {
       try {
-        generator = new Generator(
-            new FileInputStream(schemaFilename),
-            random
-        );
+        generator = new Generator.Builder()
+            .schemaStream(new FileInputStream(schemaFilename))
+            .random(random)
+            .generation(count)
+            .build();
       } catch (IOException e) {
         throw new ConnectException("Unable to read the '"
             + schemaFilename + "' schema file", e);
@@ -251,7 +253,7 @@ public class DatagenTask extends SourceTask {
     // Essentially, the "next" state of the connector after this loop completes
     Map<String, Object> sourceOffset = new HashMap<>();
     // The next lifetime will be a member of the next generation.
-    sourceOffset.put(TASK_GENERATION, taskGeneration + 1);
+    sourceOffset.put(TASK_GENERATION, (long) (taskGeneration + 1));
     // We will have produced this record
     sourceOffset.put(CURRENT_ITERATION, count + 1);
     // This is the seed that we just re-seeded for our own next iteration.

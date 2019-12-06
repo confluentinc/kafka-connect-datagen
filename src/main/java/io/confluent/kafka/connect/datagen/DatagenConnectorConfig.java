@@ -30,8 +30,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
   public static final String MAXINTERVAL_CONF = "max.interval";
   private static final String MAXINTERVAL_DOC = "Max interval between messages (ms)";
   public static final String ITERATIONS_CONF = "iterations";
-  private static final String ITERATIONS_DOC = "Number of messages to send, or less than 1 for "
-                                               + "unlimited";
+  private static final String ITERATIONS_DOC = "Number of messages to send from each task, "
+      + "or less than 1 for unlimited";
   public static final String SCHEMA_FILENAME_CONF = "schema.filename";
   private static final String SCHEMA_FILENAME_DOC = "Filename of schema to use";
   public static final String SCHEMA_KEYFIELD_CONF = "schema.keyfield";
@@ -49,9 +49,9 @@ public class DatagenConnectorConfig extends AbstractConfig {
       + "the record with the integer task generation number which generated the record. "
       + "This value starts at 0 and increments each time the task restarts";
   public static final String RANDOM_SEED_CONF = "random.seed";
-  private static final String RANDOM_SEED_DOC = "Seed for generating random data. Two connectors "
-      + "started with the same seed will deterministically produce the same data. Each task will "
-      + "generate different data than the other tasks in the same connector.";
+  private static final String RANDOM_SEED_DOC = "Numeric seed for generating random data. "
+      + "Two connectors started with the same seed will deterministically produce the same data. "
+      + "Each task will generate different data than the other tasks in the same connector.";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);

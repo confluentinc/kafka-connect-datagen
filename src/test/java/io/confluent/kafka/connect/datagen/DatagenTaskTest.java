@@ -124,15 +124,32 @@ public class DatagenTaskTest {
 
   @Test
   public void shouldRestoreFromSourceOffsets() throws Exception {
+    // Give the task an arbitrary source offset
     sourceOffsets = new HashMap<>();
     sourceOffsets.put(DatagenTask.RANDOM_SEED, 100L);
     sourceOffsets.put(DatagenTask.CURRENT_ITERATION, 50L);
-    sourceOffsets.put(DatagenTask.TASK_GENERATION, 0);
+    sourceOffsets.put(DatagenTask.TASK_GENERATION, 0L);
     createTaskWith(Quickstart.ORDERS);
-    List<SourceRecord> pollA = task.poll();
+
+    // poll once to advance the generator
+    SourceRecord firstPoll = task.poll().get(0);
+    // poll a second time to predict the future
+    SourceRecord pollA = task.poll().get(0);
+    // extract the offsets after the first poll to restore to the next task instance
+    //noinspection unchecked
+    sourceOffsets = (Map<String, Object>) firstPoll.sourceOffset();
     createTaskWith(Quickstart.ORDERS);
-    List<SourceRecord> pollB = task.poll();
-    assertEquals(pollA, pollB);
+    // poll once after the restore
+    SourceRecord pollB = task.poll().get(0);
+
+    // the generation should have incremented, but the remaining details of the record should be identical
+    assertEquals(1L, pollA.sourceOffset().get(DatagenTask.TASK_GENERATION));
+    assertEquals(2L, pollB.sourceOffset().get(DatagenTask.TASK_GENERATION));
+    assertEquals(pollA.sourceOffset().get(DatagenTask.TASK_ID), pollB.sourceOffset().get(DatagenTask.TASK_ID));
+    assertEquals(pollA.sourceOffset().get(DatagenTask.CURRENT_ITERATION), pollB.sourceOffset().get(DatagenTask.CURRENT_ITERATION));
+    assertEquals(pollA.sourcePartition(), pollB.sourcePartition());
+    assertEquals(pollA.valueSchema(), pollB.valueSchema());
+    assertEquals(pollA.value(), pollB.value());
   }
 
   @Test
