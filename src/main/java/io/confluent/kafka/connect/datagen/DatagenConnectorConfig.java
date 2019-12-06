@@ -30,8 +30,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
   public static final String MAXINTERVAL_CONF = "max.interval";
   private static final String MAXINTERVAL_DOC = "Max interval between messages (ms)";
   public static final String ITERATIONS_CONF = "iterations";
-  private static final String ITERATIONS_DOC = "Number of messages to send, or less than 1 for "
-                                               + "unlimited";
+  private static final String ITERATIONS_DOC = "Number of messages to send from each task, "
+      + "or less than 1 for unlimited";
   public static final String SCHEMA_FILENAME_CONF = "schema.filename";
   private static final String SCHEMA_FILENAME_DOC = "Filename of schema to use";
   public static final String SCHEMA_KEYFIELD_CONF = "schema.keyfield";
