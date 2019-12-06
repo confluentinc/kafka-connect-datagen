@@ -1,5 +1,9 @@
 # Changelog
 
+Version 0.2.0 (unreleased)
+--------------------------
+* TBD
+
 Version 0.1.1
 -------------
 * Downgrade to Avro 1.8.1 to avoid a [critical Avro bug](https://issues.apache.org/jira/browse/AVRO-2122)
