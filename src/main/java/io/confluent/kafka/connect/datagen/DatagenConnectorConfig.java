@@ -39,9 +39,9 @@ public class DatagenConnectorConfig extends AbstractConfig {
   public static final String QUICKSTART_CONF = "quickstart";
   private static final String QUICKSTART_DOC = "Name of quickstart to use";
   public static final String RANDOM_SEED_CONF = "random.seed";
-  private static final String RANDOM_SEED_DOC = "Seed for generating random data. Two connectors "
-      + "started with the same seed will deterministically produce the same data. Each task will "
-      + "generate different data than the other tasks in the same connector.";
+  private static final String RANDOM_SEED_DOC = "Numeric seed for generating random data. "
+      + "Two connectors started with the same seed will deterministically produce the same data. "
+      + "Each task will generate different data than the other tasks in the same connector.";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
