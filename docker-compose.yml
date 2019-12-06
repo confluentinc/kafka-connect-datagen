@@ -56,7 +56,7 @@ services:
       - "moby:127.0.0.1"
 
   connect:
-    image: confluentinc/kafka-connect-datagen:0.1.1
+    image: confluentinc/kafka-connect-datagen:0.2.0
     build:
       context: .
       dockerfile: Dockerfile-confluenthub
