@@ -234,17 +234,6 @@ public class DatagenTask extends SourceTask {
       );
     }
 
-    // Partition number
-    Integer partition = null;
-    if (!config.getSchemaPartitionField().isEmpty()) {
-      Object p = randomAvroMessage.get(config.getSchemaPartitionField());
-      if (!(p instanceof Integer)) {
-        throw new ConnectException("Field specified in "
-            + DatagenConnectorConfig.SCHEMA_PARTITION_FIELD_CONF + " must be an integer");
-      }
-      partition = (Integer) p;
-    }
-
     // Re-seed the random each time so that we can save the seed to the source offsets.
     long seed = random.nextLong();
     random.setSeed(seed);
@@ -264,7 +253,6 @@ public class DatagenTask extends SourceTask {
         sourcePartition,
         sourceOffset,
         topic,
-        partition,
         KEY_SCHEMA,
         keyString,
         messageSchema,
