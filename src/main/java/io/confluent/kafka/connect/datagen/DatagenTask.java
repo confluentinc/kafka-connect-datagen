@@ -32,6 +32,8 @@ import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.connect.data.SchemaAndValue;
 import org.apache.kafka.connect.errors.ConnectException;
+import org.apache.kafka.connect.header.ConnectHeaders;
+import org.apache.kafka.connect.header.Header;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.apache.kafka.connect.data.Schema;
@@ -66,7 +68,7 @@ public class DatagenTask extends SourceTask {
   private AvroData avroData;
   private int taskId;
   private Map<String, Object> sourcePartition;
-  private int taskGeneration;
+  private long taskGeneration;
   private Random random;
 
   protected enum Quickstart {
@@ -204,16 +206,6 @@ public class DatagenTask extends SourceTask {
       }
     }
 
-    // Task ID field
-    if (!config.getSchemaTaskIdField().isEmpty()) {
-      randomAvroMessage.put(config.getSchemaTaskIdField(), taskId);
-    }
-
-    // Task Generation field
-    if (!config.getSchemaTaskGenerationField().isEmpty()) {
-      randomAvroMessage.put(config.getSchemaTaskGenerationField(), taskGeneration);
-    }
-
     // Key
     String keyString = "";
     if (!schemaKeyField.isEmpty()) {
@@ -242,21 +234,29 @@ public class DatagenTask extends SourceTask {
     // Essentially, the "next" state of the connector after this loop completes
     Map<String, Object> sourceOffset = new HashMap<>();
     // The next lifetime will be a member of the next generation.
-    sourceOffset.put(TASK_GENERATION, (long) (taskGeneration + 1));
+    sourceOffset.put(TASK_GENERATION, taskGeneration + 1);
     // We will have produced this record
     sourceOffset.put(CURRENT_ITERATION, count + 1);
     // This is the seed that we just re-seeded for our own next iteration.
     sourceOffset.put(RANDOM_SEED, seed);
+
+    final ConnectHeaders headers = new ConnectHeaders();
+    headers.addLong(TASK_GENERATION, taskGeneration);
+    headers.addLong(TASK_ID, taskId);
+    headers.addLong(CURRENT_ITERATION, count);
 
     final List<SourceRecord> records = new ArrayList<>();
     SourceRecord record = new SourceRecord(
         sourcePartition,
         sourceOffset,
         topic,
+        null,
         KEY_SCHEMA,
         keyString,
         messageSchema,
-        messageValue
+        messageValue,
+        null,
+        headers
     );
     records.add(record);
     count += records.size();

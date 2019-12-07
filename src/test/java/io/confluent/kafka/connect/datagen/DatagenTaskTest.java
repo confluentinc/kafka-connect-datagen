@@ -153,17 +153,12 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldSetTaskGeneration()  throws Exception {
-    // This co-opts some int fields in one of the schemas
-    config.put(DatagenConnectorConfig.SCHEMA_TASK_GENERATION_FIELD_CONF, "stars");
-    config.put(DatagenConnectorConfig.SCHEMA_TASK_ID_FIELD_CONF, "route_id");
-    // Run the task and assert that the records have the values we injected.
-    createTaskWith(Quickstart.RATINGS);
+  public void shouldInjectHeaders()  throws Exception {
     generateRecords();
     for (SourceRecord record : records) {
-      Struct struct = (Struct) record.value();
-      assertEquals(TASK_ID, struct.get("route_id"));
-      assertEquals(0, struct.get("stars"));
+      assertEquals(TASK_ID, record.headers().lastWithName(DatagenTask.TASK_ID).value());
+      assertEquals(0, record.headers().lastWithName(DatagenTask.TASK_GENERATION).value());
+      assertNotNull(record.headers().lastWithName(DatagenTask.CURRENT_ITERATION));
     }
   }
 
