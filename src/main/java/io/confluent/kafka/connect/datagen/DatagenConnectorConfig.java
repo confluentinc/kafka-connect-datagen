@@ -38,9 +38,6 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String SCHEMA_KEYFIELD_DOC = "Name of field to use as the message key";
   public static final String QUICKSTART_CONF = "quickstart";
   private static final String QUICKSTART_DOC = "Name of quickstart to use";
-  public static final String SCHEMA_PARTITION_FIELD_CONF = "schema.partition.field";
-  private static final String SCHEMA_PARTITION_FIELD_DOC = "Name of field to use as the partition "
-      + "number";
   public static final String SCHEMA_TASK_ID_FIELD_CONF = "schema.task.id.field";
   private static final String SCHEMA_TASK_ID_FIELD_DOC = "Name of field to inject into the record "
       + "with the integer task index which generated the record";
@@ -69,8 +66,6 @@ public class DatagenConnectorConfig extends AbstractConfig {
         .define(SCHEMA_FILENAME_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_FILENAME_DOC)
         .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC)
         .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC)
-        .define(SCHEMA_PARTITION_FIELD_CONF, Type.STRING, "", Importance.LOW,
-            SCHEMA_PARTITION_FIELD_DOC)
         .define(SCHEMA_TASK_ID_FIELD_CONF, Type.STRING, "", Importance.LOW,
             SCHEMA_TASK_ID_FIELD_DOC)
         .define(SCHEMA_TASK_GENERATION_FIELD_CONF, Type.STRING, "", Importance.LOW,
@@ -100,10 +95,6 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public String getQuickstart() {
     return this.getString(QUICKSTART_CONF);
-  }
-
-  public String getSchemaPartitionField() {
-    return this.getString(SCHEMA_PARTITION_FIELD_CONF);
   }
 
   public String getSchemaTaskIdField() {

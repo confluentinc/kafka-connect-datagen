@@ -157,12 +157,10 @@ public class DatagenTaskTest {
     // This co-opts some int fields in one of the schemas
     config.put(DatagenConnectorConfig.SCHEMA_TASK_GENERATION_FIELD_CONF, "stars");
     config.put(DatagenConnectorConfig.SCHEMA_TASK_ID_FIELD_CONF, "route_id");
-    config.put(DatagenConnectorConfig.SCHEMA_PARTITION_FIELD_CONF, "route_id");
     // Run the task and assert that the records have the values we injected.
     createTaskWith(Quickstart.RATINGS);
     generateRecords();
     for (SourceRecord record : records) {
-      assertEquals(TASK_ID, record.kafkaPartition().intValue());
       Struct struct = (Struct) record.value();
       assertEquals(TASK_ID, struct.get("route_id"));
       assertEquals(0, struct.get("stars"));
