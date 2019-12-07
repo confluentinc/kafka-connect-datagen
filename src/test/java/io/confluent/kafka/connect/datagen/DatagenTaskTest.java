@@ -154,10 +154,11 @@ public class DatagenTaskTest {
 
   @Test
   public void shouldInjectHeaders()  throws Exception {
+    createTaskWith(Quickstart.USERS);
     generateRecords();
     for (SourceRecord record : records) {
-      assertEquals(TASK_ID, record.headers().lastWithName(DatagenTask.TASK_ID).value());
-      assertEquals(0, record.headers().lastWithName(DatagenTask.TASK_GENERATION).value());
+      assertEquals((long) TASK_ID, record.headers().lastWithName(DatagenTask.TASK_ID).value());
+      assertEquals(0L, record.headers().lastWithName(DatagenTask.TASK_GENERATION).value());
       assertNotNull(record.headers().lastWithName(DatagenTask.CURRENT_ITERATION));
     }
   }
