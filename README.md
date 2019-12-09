@@ -212,6 +212,19 @@ If you are using Avro format for producing data to Kafka, here is the correspond
 
 If you are not using Avro format for producing data to Kafka, there will be no schema in Confluent Schema Registry.
 
+# Utility Headers
+
+The Datagen Connector will capture details about the record's generation in the headers of the records it produces.
+The following fields are populated:
+
+Header Key | Header Value
+-|-
+`task.generation` | Task generation number (starts at 0, incremented each time the task restarts)
+`task.id` | Task id number (0 up to `tasks.max` - 1)
+`current.iteration` | Record iteration number (starts at 0, incremented each time a record is generated)
+
+
+
 # Publishing Docker Images
 
 *Note: The following instructions are only relevant if you are an administrator of this repository and have push access to the https://hub.docker.com/r/cnfldemos/kafka-connect-datagen/ repository.  The local Docker daemon must be logged into a proper Docker Hub account.*
