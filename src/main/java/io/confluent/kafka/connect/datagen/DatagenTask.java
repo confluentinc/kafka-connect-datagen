@@ -111,6 +111,7 @@ public class DatagenTask extends SourceTask {
     maxRecords = config.getIterations();
     schemaFilename = config.getSchemaFilename();
     schemaKeyField = config.getSchemaKeyfield();
+    taskGeneration = 0;
     taskId = Integer.parseInt(props.get(TASK_ID));
     sourcePartition = Collections.singletonMap(TASK_ID, taskId);
 
