@@ -203,6 +203,7 @@ public class DatagenTaskTest {
   private void assertRecordsMatchSchemas() {
     for (SourceRecord record : records) {
       // Check the key
+      assertEquals(expectedKeyConnectSchema.name(), record.keySchema().name());
       assertEquals(expectedKeyConnectSchema, record.keySchema());
       if (expectedKeyConnectSchema != null) {
         assertTrue(isConnectInstance(record.key(), expectedKeyConnectSchema));
@@ -321,15 +322,15 @@ public class DatagenTaskTest {
     org.apache.avro.Schema expectedValueAvroSchema = loadAvroSchema(schemaResourceFilename);
     expectedValueConnectSchema = AVRO_DATA.toConnectSchema(expectedValueAvroSchema);
 
+    // Datagen defaults to an optional string key schema if a key field is not specified
+    expectedKeyConnectSchema = Schema.OPTIONAL_STRING_SCHEMA;
+
     if (idFieldName != null) {
       // Check that the Avro schema has the named field
       org.apache.avro.Schema expectedKeyAvroSchema = expectedValueAvroSchema.getField(idFieldName).schema();
       assertNotNull(expectedKeyAvroSchema);
       expectedKeyConnectSchema = AVRO_DATA.toConnectSchema(expectedKeyAvroSchema);
     }
-
-    // Right now, Datagen always uses non-null strings for the key!
-    expectedKeyConnectSchema = Schema.STRING_SCHEMA;
   }
 
   private org.apache.avro.Schema loadAvroSchema(String schemaFilename) {

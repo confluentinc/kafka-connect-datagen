@@ -46,7 +46,7 @@ public class DatagenTask extends SourceTask {
 
   static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
 
-  private static final Schema KEY_SCHEMA = Schema.STRING_SCHEMA;
+  private static final Schema DEFAULT_KEY_SCHEMA = Schema.OPTIONAL_STRING_SCHEMA;
   public static final String TASK_ID = "task.id";
   public static final String TASK_GENERATION = "task.generation";
   public static final String CURRENT_ITERATION = "current.iteration";
@@ -207,13 +207,12 @@ public class DatagenTask extends SourceTask {
     }
 
     // Key
-    String keyString = "";
+    SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
     if (!schemaKeyField.isEmpty()) {
-      SchemaAndValue schemaAndValue = avroData.toConnectData(
+      key = avroData.toConnectData(
           randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
           randomAvroMessage.get(schemaKeyField)
       );
-      keyString = schemaAndValue.value().toString();
     }
 
     // Value
@@ -251,8 +250,8 @@ public class DatagenTask extends SourceTask {
         sourceOffset,
         topic,
         null,
-        KEY_SCHEMA,
-        keyString,
+        key.schema(),
+        key.value(),
         messageSchema,
         messageValue,
         null,
