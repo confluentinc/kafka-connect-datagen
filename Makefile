@@ -8,7 +8,7 @@ SHELL=/bin/bash -o pipefail
 
 check-dependency = $(if $(shell command -v $(1)),,$(error Make sure $(1) is installed))
 
-CP_VERSION ?= 5.3.1
+CP_VERSION ?= 5.4.0
 OPERATOR_VERSION ?= 0
 
 KAFKA_CONNECT_DATAGEN_VERSION ?= 0.2.0
