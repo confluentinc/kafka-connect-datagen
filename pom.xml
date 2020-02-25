@@ -61,7 +61,7 @@
         <connection>scm:git:git://github.com/confluentinc/kafka-connect-datagen.git</connection>
         <developerConnection>scm:git:git@github.com:confluentinc/kafka-connect-datagen.git</developerConnection>
         <url>https://github.com/confluentinc/kafka-connect-datagen</url>
-        <tag>HEAD</tag>
+        <tag>0.3.x</tag>
     </scm>
 
     <developers>
