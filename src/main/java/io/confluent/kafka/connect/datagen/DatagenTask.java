@@ -206,14 +206,18 @@ public class DatagenTask extends SourceTask {
       }
     }
 
-    // Key
-    String keyString = "";
+    Object key;
+    Schema schema;
     if (!schemaKeyField.isEmpty()) {
       SchemaAndValue schemaAndValue = avroData.toConnectData(
           randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
           randomAvroMessage.get(schemaKeyField)
       );
-      keyString = schemaAndValue.value().toString();
+      key = schemaAndValue.value();
+      schema = schemaAndValue.schema();
+    } else {
+      key = "";
+      schema = KEY_SCHEMA;
     }
 
     // Value
@@ -251,8 +255,8 @@ public class DatagenTask extends SourceTask {
         sourceOffset,
         topic,
         null,
-        KEY_SCHEMA,
-        keyString,
+        schema,
+        key,
         messageSchema,
         messageValue,
         null,

@@ -327,9 +327,6 @@ public class DatagenTaskTest {
       assertNotNull(expectedKeyAvroSchema);
       expectedKeyConnectSchema = AVRO_DATA.toConnectSchema(expectedKeyAvroSchema);
     }
-
-    // Right now, Datagen always uses non-null strings for the key!
-    expectedKeyConnectSchema = Schema.STRING_SCHEMA;
   }
 
   private org.apache.avro.Schema loadAvroSchema(String schemaFilename) {
