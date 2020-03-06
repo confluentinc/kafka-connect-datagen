@@ -235,7 +235,7 @@ The [Makefile](Makefile) contains some default variables that affect the version
 
 ```bash
 CP_VERSION ?= 5.4.1
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.2.0
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.3.1
 OPERATOR_VERSION ?= 0 # Operator is a 'rev' version appended at the end of the CP version, like so: 5.4.1.0
 ```
 
