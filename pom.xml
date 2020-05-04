@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-parent</artifactId>
-        <version>5.4.1</version>
+        <version>5.5.0</version>
     </parent>
 
     <groupId>io.confluent.kafka.connect</groupId>
@@ -31,7 +31,7 @@
 
     <properties>
         <connect-runtime-version>2.0.0</connect-runtime-version>
-        <confluent.avro.generator.version>0.3.0</confluent.avro.generator.version>
+        <confluent.avro.generator.version>0.3.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
         <avro.version>1.8.1</avro.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
@@ -86,6 +86,11 @@
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-schema-registry-client</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-api</artifactId>
