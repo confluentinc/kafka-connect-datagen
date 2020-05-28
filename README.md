@@ -116,7 +116,7 @@ confluent-hub install target/components/packages/confluentinc-kafka-connect-data
 
 See all Kafka Connect [configuration parameters](https://docs.confluent.io/current/connect/managing/configuring.html).
 
-## Connector-specific Parameters
+## kafka-connect-datagen Specific Parameters
 
 Parameter | Description | Default
 -|-|-
@@ -130,6 +130,12 @@ Parameter | Description | Default
 ## Sample configurations
 
 See the [config](https://github.com/confluentinc/kafka-connect-datagen/tree/master/config) folder for sample configurations. 
+
+## Supported data formats
+
+Kafka Connect supports [Converters](https://docs.confluent.io/current/connect/userguide.html#connect-configuring-converters) which can be used to convert record key and value formats when reading from and writing to Kafka. As of the 5.5 release, Confluent Platform shipped JSON and Protobuf converters to go along with the existing Avro converter.
+
+For an example of using the the Protobuf converter with kafka-connect-datagen, see this [example configuration](config/connector_users_protobuf.config). Take note of the required use of the `SetSchemaMetadata` [Transformation](https://docs.confluent.io/current/connect/transforms/index.html) to address a known issue with compatibility of schema names used by kafka-connect-datagen and Protobuf.
 
 ## Use a bundled schema specifications
 
