@@ -116,7 +116,7 @@ confluent-hub install target/components/packages/confluentinc-kafka-connect-data
 
 See all Kafka Connect [configuration parameters](https://docs.confluent.io/current/connect/managing/configuring.html).
 
-## Connector-specific Parameters
+## kafka-connect-datagen Specific Parameters
 
 Parameter | Description | Default
 -|-|-
@@ -130,6 +130,12 @@ Parameter | Description | Default
 ## Sample configurations
 
 See the [config](https://github.com/confluentinc/kafka-connect-datagen/tree/master/config) folder for sample configurations. 
+
+## Supported data formats
+
+Kafka Connect supports [Converters](https://docs.confluent.io/current/connect/userguide.html#connect-configuring-converters) which can be used to convert record key and value formats when reading from and writing to Kafka. As of the 5.5 release, Confluent Platform packages Avro, JSON, and Protobuf converters (earlier versions package just Avro converters).
+
+For an example of using the the Protobuf converter with kafka-connect-datagen, see this [example configuration](config/connector_users_protobuf.config). Take note of the required use of the `SetSchemaMetadata` [Transformation](https://docs.confluent.io/current/connect/transforms/index.html) which addresses a compatibility issue between schema names used by kafka-connect-datagen and Protobuf. See the [Schema names are not compatible with Protobuf issue](https://github.com/confluentinc/kafka-connect-datagen/issues/62) for details.
 
 ## Use a bundled schema specifications
 
@@ -254,4 +260,3 @@ to override the CP Version and the Operator version, which may happen if Operato
 CP_VERSION=5.5.0 OPERATOR_VERSION=1 KAFKA_CONNECT_DATAGEN_VERSION=0.1.4 make push-cp-server-connect-operator-from-released
 ```
 which would result in a docker image tagged as: `cp-server-connect-operator-datagen:0.1.4-5.5.0.1` and pushed to DockerHub
-
