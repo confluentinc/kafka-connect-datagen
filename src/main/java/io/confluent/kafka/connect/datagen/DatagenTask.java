@@ -60,6 +60,7 @@ public class DatagenTask extends SourceTask {
   private long count = 0L;
   private String schemaFilename;
   private String schemaKeyField;
+  private String schemaString;
   private Quickstart quickstart;
   private Generator generator;
   private org.apache.avro.Schema avroSchema;
@@ -110,6 +111,7 @@ public class DatagenTask extends SourceTask {
     maxInterval = config.getMaxInterval();
     maxRecords = config.getIterations();
     schemaFilename = config.getSchemaFilename();
+    schemaString = config.getSchemaString();
     schemaKeyField = config.getSchemaKeyfield();
     taskGeneration = 0;
     taskId = Integer.parseInt(props.get(TASK_ID));
@@ -139,7 +141,8 @@ public class DatagenTask extends SourceTask {
         quickstart = Quickstart.valueOf(quickstartName.toUpperCase());
         if (quickstart != null) {
           schemaFilename = quickstart.getSchemaFilename();
-          schemaKeyField = quickstart.getSchemaKeyField();
+          schemaKeyField = schemaKeyField.equals("")
+              ? quickstart.getSchemaKeyField() : schemaKeyField;
           try {
             generator = new Generator.Builder()
                 .schemaStream(getClass().getClassLoader().getResourceAsStream(schemaFilename))
@@ -154,6 +157,12 @@ public class DatagenTask extends SourceTask {
       } catch (IllegalArgumentException e) {
         log.warn("Quickstart '{}' not found: ", quickstartName, e);
       }
+    } else if (schemaString != "") {
+      generator = new Generator.Builder()
+          .schemaString(schemaString)
+          .random(random)
+          .generation(count)
+          .build();
     } else {
       try {
         generator = new Generator.Builder()

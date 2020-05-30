@@ -32,6 +32,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
   public static final String ITERATIONS_CONF = "iterations";
   private static final String ITERATIONS_DOC = "Number of messages to send from each task, "
       + "or less than 1 for unlimited";
+  public static final String SCHEMA_STRING_CONF = "schema.string";
+  private static final String SCHEMA_STRING_DOC = "Schema as an avro schema json string";
   public static final String SCHEMA_FILENAME_CONF = "schema.filename";
   private static final String SCHEMA_FILENAME_DOC = "Filename of schema to use";
   public static final String SCHEMA_KEYFIELD_CONF = "schema.keyfield";
@@ -56,6 +58,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC)
         .define(MAXINTERVAL_CONF, Type.LONG, 500L, Importance.HIGH, MAXINTERVAL_DOC)
         .define(ITERATIONS_CONF, Type.INT, -1, Importance.HIGH, ITERATIONS_DOC)
+        .define(SCHEMA_STRING_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_STRING_DOC)
         .define(SCHEMA_FILENAME_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_FILENAME_DOC)
         .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC)
         .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC)
@@ -90,5 +93,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
     return this.getLong(RANDOM_SEED_CONF);
   }
 
+  public String getSchemaString() {
+    return this.getString(SCHEMA_STRING_CONF);
+  }
 }
 
