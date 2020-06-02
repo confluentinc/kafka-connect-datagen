@@ -21,7 +21,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +35,6 @@ import io.confluent.connect.avro.AvroData;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
@@ -51,7 +49,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -283,7 +280,14 @@ public class DatagenTaskTest {
     }
   }
 
+  private void dropSchemaSourceConfigs() {
+    config.remove(DatagenConnectorConfig.QUICKSTART_CONF);
+    config.remove(DatagenConnectorConfig.SCHEMA_FILENAME_CONF);
+    config.remove(DatagenConnectorConfig.SCHEMA_STRING_CONF);
+  }
+
   private void createTaskWith(DatagenTask.Quickstart quickstart) {
+    dropSchemaSourceConfigs();
     config.put(
         DatagenConnectorConfig.QUICKSTART_CONF,
         quickstart.name().toLowerCase(Locale.getDefault())
@@ -293,6 +297,7 @@ public class DatagenTaskTest {
   }
 
   private void createTaskWithSchema(String schemaResourceFilename, String idFieldName) {
+    dropSchemaSourceConfigs();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, schemaResourceFilename);
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, idFieldName);
     createTask();
@@ -300,6 +305,7 @@ public class DatagenTaskTest {
   }
 
   private void createTaskWithSchemaText(String schemaText, String keyField) {
+    dropSchemaSourceConfigs();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, schemaText);
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, keyField);
     createTask();
@@ -348,8 +354,7 @@ public class DatagenTaskTest {
   }
 
   private void loadKeyAndValueSchemasFromString(String schemaString, String keyFieldName) {
-    org.apache.avro.Schema avroSchema =
-        new Generator.Builder().schemaString(schemaString).build().schema();
+    org.apache.avro.Schema avroSchema = new org.apache.avro.Schema.Parser().parse(schemaString);
     loadKeyAndValueSchemas(avroSchema, keyFieldName);
   }
 

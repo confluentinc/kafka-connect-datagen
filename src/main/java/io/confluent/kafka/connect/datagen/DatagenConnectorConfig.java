@@ -22,6 +22,7 @@ import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.common.config.ConfigDef.Importance;
+import org.apache.kafka.common.config.ConfigException;
 
 public class DatagenConnectorConfig extends AbstractConfig {
 
@@ -33,7 +34,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String ITERATIONS_DOC = "Number of messages to send from each task, "
       + "or less than 1 for unlimited";
   public static final String SCHEMA_STRING_CONF = "schema.string";
-  private static final String SCHEMA_STRING_DOC = "Schema as an avro schema json string";
+  private static final String SCHEMA_STRING_DOC = "The literal JSON-encoded Avro schema to use";
   public static final String SCHEMA_FILENAME_CONF = "schema.filename";
   private static final String SCHEMA_FILENAME_DOC = "Filename of schema to use";
   public static final String SCHEMA_KEYFIELD_CONF = "schema.keyfield";
@@ -47,6 +48,16 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
+    if (getSchemaString().length() > 0) {
+      if (getSchemaFilename().length() > 0 || getQuickstart().length() > 0) {
+        throw new ConfigException(String.format(
+            "Cannot set %s with %s or %s.",
+            SCHEMA_STRING_CONF,
+            QUICKSTART_CONF,
+            SCHEMA_FILENAME_CONF
+        ));
+      }
+    }
   }
 
   public DatagenConnectorConfig(Map<String, String> parsedConfig) {
