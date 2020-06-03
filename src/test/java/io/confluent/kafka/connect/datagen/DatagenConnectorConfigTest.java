@@ -68,15 +68,15 @@ public class DatagenConnectorConfigTest {
   }
 
   @Test
-  public void shouldNotAllowSettingSchemaStringWithQuickstart() {
-    shouldOnlyAllowOneSchemaSource(
-        DatagenConnectorConfig.SCHEMA_STRING_CONF, DatagenConnectorConfig.QUICKSTART_CONF);
-  }
-
-  @Test
-  public void shouldNotAllowSettingSchemaStringWithSchemaFile() {
-    shouldOnlyAllowOneSchemaSource(
-        DatagenConnectorConfig.SCHEMA_STRING_CONF, DatagenConnectorConfig.SCHEMA_FILENAME_CONF);
+  public void shouldNotAllowRedundantSchemaSource() {
+    for (String k1 : SOURCES.keySet()) {
+      for (String k2 : SOURCES.keySet()) {
+        if (k1.equals(k2)) {
+          continue;
+        }
+        shouldOnlyAllowOneSchemaSource(k1, k2);
+      }
+    }
   }
 
   private void shouldOnlyAllowOneSchemaSource(String k1, String k2) {
@@ -90,7 +90,7 @@ public class DatagenConnectorConfigTest {
       fail("Expected config exception due to redundant schema sources");
     } catch (ConfigException e) {
       assertEquals(
-          "Cannot set schema.string with quickstart or schema.filename.",
+          "Must set exactly one of schema.string, quickstart, schema.filename",
           e.getMessage()
       );
     }

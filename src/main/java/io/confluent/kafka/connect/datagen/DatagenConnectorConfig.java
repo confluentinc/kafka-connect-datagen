@@ -16,6 +16,7 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.kafka.common.config.AbstractConfig;
@@ -48,15 +49,18 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
-    if (getSchemaString().length() > 0) {
-      if (getSchemaFilename().length() > 0 || getQuickstart().length() > 0) {
-        throw new ConfigException(String.format(
-            "Cannot set %s with %s or %s.",
-            SCHEMA_STRING_CONF,
-            QUICKSTART_CONF,
-            SCHEMA_FILENAME_CONF
-        ));
-      }
+    if (!exactlyOne(
+        getSchemaString().length() > 0,
+        getSchemaFilename().length() > 0,
+        getQuickstart().length() > 0
+    )) {
+      throw new ConfigException(String.format(
+          "Must set exactly one of "
+              + String.join(", ",
+              SCHEMA_STRING_CONF,
+              QUICKSTART_CONF,
+              SCHEMA_FILENAME_CONF)
+      ));
     }
   }
 
@@ -106,6 +110,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public String getSchemaString() {
     return this.getString(SCHEMA_STRING_CONF);
+  }
+
+  private boolean exactlyOne(Boolean ...conditions) {
+    return Arrays.stream(conditions).filter(c -> c).count() == 1;
   }
 }
 
