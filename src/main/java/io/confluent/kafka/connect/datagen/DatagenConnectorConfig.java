@@ -16,14 +16,14 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import java.util.Arrays;
+import com.google.common.collect.ImmutableList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.common.config.ConfigDef.Importance;
-import org.apache.kafka.common.config.ConfigException;
 
 public class DatagenConnectorConfig extends AbstractConfig {
 
@@ -49,19 +49,6 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
-    if (!exactlyOne(
-        getSchemaString().length() > 0,
-        getSchemaFilename().length() > 0,
-        getQuickstart().length() > 0
-    )) {
-      throw new ConfigException(String.format(
-          "Must set exactly one of "
-              + String.join(", ",
-              SCHEMA_STRING_CONF,
-              QUICKSTART_CONF,
-              SCHEMA_FILENAME_CONF)
-      ));
-    }
   }
 
   public DatagenConnectorConfig(Map<String, String> parsedConfig) {
@@ -112,8 +99,12 @@ public class DatagenConnectorConfig extends AbstractConfig {
     return this.getString(SCHEMA_STRING_CONF);
   }
 
-  private boolean exactlyOne(Boolean ...conditions) {
-    return Arrays.stream(conditions).filter(c -> c).count() == 1;
+  public static List<String> schemaSourceKeys() {
+    return ImmutableList.of(SCHEMA_STRING_CONF, SCHEMA_FILENAME_CONF, QUICKSTART_CONF);
+  }
+
+  public static boolean isExplicitlySetSchemaSource(String key, Object value) {
+    return schemaSourceKeys().contains(key) && !("".equals(value));
   }
 }
 
