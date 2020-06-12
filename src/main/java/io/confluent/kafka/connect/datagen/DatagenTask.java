@@ -16,6 +16,7 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class DatagenTask extends SourceTask {
   private long count = 0L;
   private String schemaFilename;
   private String schemaKeyField;
+  private String schemaString;
   private Quickstart quickstart;
   private Generator generator;
   private org.apache.avro.Schema avroSchema;
@@ -110,6 +112,7 @@ public class DatagenTask extends SourceTask {
     maxInterval = config.getMaxInterval();
     maxRecords = config.getIterations();
     schemaFilename = config.getSchemaFilename();
+    schemaString = config.getSchemaString();
     schemaKeyField = config.getSchemaKeyfield();
     taskGeneration = 0;
     taskId = Integer.parseInt(props.get(TASK_ID));
@@ -133,18 +136,20 @@ public class DatagenTask extends SourceTask {
       random.setSeed((Long) offset.get(RANDOM_SEED));
     }
 
+    Generator.Builder generatorBuilder = new Generator.Builder()
+        .random(random)
+        .generation(count);
     String quickstartName = config.getQuickstart();
     if (quickstartName != "") {
       try {
         quickstart = Quickstart.valueOf(quickstartName.toUpperCase());
         if (quickstart != null) {
           schemaFilename = quickstart.getSchemaFilename();
-          schemaKeyField = quickstart.getSchemaKeyField();
+          schemaKeyField = schemaKeyField.equals("")
+              ? quickstart.getSchemaKeyField() : schemaKeyField;
           try {
-            generator = new Generator.Builder()
+            generator = generatorBuilder
                 .schemaStream(getClass().getClassLoader().getResourceAsStream(schemaFilename))
-                .random(random)
-                .generation(count)
                 .build();
           } catch (IOException e) {
             throw new ConnectException("Unable to read the '"
@@ -154,16 +159,23 @@ public class DatagenTask extends SourceTask {
       } catch (IllegalArgumentException e) {
         log.warn("Quickstart '{}' not found: ", quickstartName, e);
       }
+    } else if (schemaString != "") {
+      generator = generatorBuilder.schemaString(schemaString).build();
     } else {
+      String err = "Unable to read the '" + schemaFilename + "' schema file";
       try {
-        generator = new Generator.Builder()
-            .schemaStream(new FileInputStream(schemaFilename))
-            .random(random)
-            .generation(count)
-            .build();
+        generator = generatorBuilder.schemaStream(new FileInputStream(schemaFilename)).build();
+      } catch (FileNotFoundException e) {
+        // also look in jars on the classpath
+        try {
+          generator = generatorBuilder
+              .schemaStream(DatagenTask.class.getClassLoader().getResourceAsStream(schemaFilename))
+              .build();
+        } catch (IOException inner) {
+          throw new ConnectException(err, e);
+        }
       } catch (IOException e) {
-        throw new ConnectException("Unable to read the '"
-            + schemaFilename + "' schema file", e);
+        throw new ConnectException(err, e);
       }
     }
 

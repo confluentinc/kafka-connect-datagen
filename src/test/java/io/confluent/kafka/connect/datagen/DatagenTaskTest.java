@@ -17,7 +17,10 @@
 package io.confluent.kafka.connect.datagen;
 
 import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,6 +47,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -123,6 +127,16 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
+    // Do the same thing with schema text
+    DatagenTask.Quickstart quickstart = Quickstart.PAGEVIEWS;
+    assertNotEquals(quickstart.getSchemaKeyField(), "pageid");
+    createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), "pageid");
+    generateRecords();
+    assertRecordsMatchSchemas();
+  }
+
+  @Test
   public void shouldRestoreFromSourceOffsets() throws Exception {
     // Give the task an arbitrary source offset
     sourceOffsets = new HashMap<>();
@@ -186,6 +200,11 @@ public class DatagenTaskTest {
 
     // Do the same thing with schema file
     createTaskWithSchema(quickstart.getSchemaFilename(), quickstart.getSchemaKeyField());
+    generateRecords();
+    assertRecordsMatchSchemas();
+
+    // Do the same thing with schema text
+    createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), quickstart.getSchemaKeyField());
     generateRecords();
     assertRecordsMatchSchemas();
   }
@@ -261,7 +280,14 @@ public class DatagenTaskTest {
     }
   }
 
+  private void dropSchemaSourceConfigs() {
+    config.remove(DatagenConnectorConfig.QUICKSTART_CONF);
+    config.remove(DatagenConnectorConfig.SCHEMA_FILENAME_CONF);
+    config.remove(DatagenConnectorConfig.SCHEMA_STRING_CONF);
+  }
+
   private void createTaskWith(DatagenTask.Quickstart quickstart) {
+    dropSchemaSourceConfigs();
     config.put(
         DatagenConnectorConfig.QUICKSTART_CONF,
         quickstart.name().toLowerCase(Locale.getDefault())
@@ -271,10 +297,19 @@ public class DatagenTaskTest {
   }
 
   private void createTaskWithSchema(String schemaResourceFilename, String idFieldName) {
+    dropSchemaSourceConfigs();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, schemaResourceFilename);
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, idFieldName);
     createTask();
     loadKeyAndValueSchemas(schemaResourceFilename, idFieldName);
+  }
+
+  private void createTaskWithSchemaText(String schemaText, String keyField) {
+    dropSchemaSourceConfigs();
+    config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, schemaText);
+    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, keyField);
+    createTask();
+    loadKeyAndValueSchemasFromString(schemaText, keyField);
   }
 
   private void createTask() {
@@ -318,19 +353,14 @@ public class DatagenTaskTest {
     task.start(config);
   }
 
+  private void loadKeyAndValueSchemasFromString(String schemaString, String keyFieldName) {
+    org.apache.avro.Schema avroSchema = new org.apache.avro.Schema.Parser().parse(schemaString);
+    loadKeyAndValueSchemas(avroSchema, keyFieldName);
+  }
+
   private void loadKeyAndValueSchemas(String schemaResourceFilename, String idFieldName) {
     org.apache.avro.Schema expectedValueAvroSchema = loadAvroSchema(schemaResourceFilename);
-    expectedValueConnectSchema = AVRO_DATA.toConnectSchema(expectedValueAvroSchema);
-
-    // Datagen defaults to an optional string key schema if a key field is not specified
-    expectedKeyConnectSchema = Schema.OPTIONAL_STRING_SCHEMA;
-
-    if (idFieldName != null) {
-      // Check that the Avro schema has the named field
-      org.apache.avro.Schema expectedKeyAvroSchema = expectedValueAvroSchema.getField(idFieldName).schema();
-      assertNotNull(expectedKeyAvroSchema);
-      expectedKeyConnectSchema = AVRO_DATA.toConnectSchema(expectedKeyAvroSchema);
-    }
+    loadKeyAndValueSchemas(expectedValueAvroSchema, idFieldName);
   }
 
   private org.apache.avro.Schema loadAvroSchema(String schemaFilename) {
@@ -343,5 +373,28 @@ public class DatagenTaskTest {
     } catch (IOException e) {
       throw new ConnectException("Unable to read the '" + schemaFilename + "' schema file", e);
     }
+  }
+
+  private void loadKeyAndValueSchemas(org.apache.avro.Schema expectedSchema, String idFieldName) {
+    expectedValueConnectSchema = AVRO_DATA.toConnectSchema(expectedSchema);
+
+    // Datagen defaults to an optional string key schema if a key field is not specified
+    expectedKeyConnectSchema = Schema.OPTIONAL_STRING_SCHEMA;
+
+    if (idFieldName != null) {
+      // Check that the Avro schema has the named field
+      org.apache.avro.Schema expectedKeyAvroSchema = expectedSchema.getField(idFieldName).schema();
+      assertNotNull(expectedKeyAvroSchema);
+      expectedKeyConnectSchema = AVRO_DATA.toConnectSchema(expectedKeyAvroSchema);
+    }
+  }
+
+  private String slurp(final String filename) {
+    final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filename);
+    if (inputStream == null) {
+      throw new RuntimeException("Could not find file " + filename);
+    }
+    return new BufferedReader(new InputStreamReader(inputStream)).lines()
+        .collect(Collectors.joining("\n"));
   }
 }
