@@ -123,6 +123,16 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForProductQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.PRODUCT);
+  }
+
+  @Test
+  public void shouldGenerateFilesForInventoryQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.INVENTORY);
+  }
+
+  @Test
   public void shouldRestoreFromSourceOffsets() throws Exception {
     // Give the task an arbitrary source offset
     sourceOffsets = new HashMap<>();
