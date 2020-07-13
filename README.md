@@ -126,7 +126,7 @@ Parameter | Description | Default
 `schema.string` | The literal JSON-encoded Avro schema to use. Cannot be set with `schema.filename` or `quickstart`
 `schema.filename` | Filename of schema to use. Cannot be set with `schema.string` or `quickstart`
 `schema.keyfield` | Name of field to use as the message key
-`quickstart` | Name of [quickstart](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources) to use. Cannot be set with `schema.string` or `schema.filename`
+`quickstart` | Name of [quickstart](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources) to use. Cannot be set with `schema.string` or `schema.filename`. Specify from the list provided [here](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L75-L84).
 
 ## Sample configurations
 
@@ -141,7 +141,7 @@ For an example of using the the Protobuf converter with kafka-connect-datagen, s
 ## Use a bundled schema specifications
 
 There are a few quickstart schema specifications bundled with `kafka-connect-datagen`, and they are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
-To use one of these bundled schema, refer to [this mapping](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L66-L73) and in the configuration file, set the parameter `quickstart` to the associated name.
+To use one of these bundled schema, refer to [this mapping](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L75-L84) and in the configuration file, set the parameter `quickstart` to the associated name.
 For example:
 
 ```bash
