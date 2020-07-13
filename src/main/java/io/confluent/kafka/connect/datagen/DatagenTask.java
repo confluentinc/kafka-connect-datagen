@@ -81,7 +81,9 @@ public class DatagenTask extends SourceTask {
     USERS("users_schema.avro", "userid"),
     USERS_("users_array_map_schema.avro", "userid"),
     PAGEVIEWS("pageviews_schema.avro", "viewtime"),
-    STOCK_TRADES("stock_trades_schema.avro", "symbol");
+    STOCK_TRADES("stock_trades_schema.avro", "symbol"),
+    INVENTORY("inventory.avro", "id"),
+    PRODUCT("product.avro", "id");
 
     private final String schemaFilename;
     private final String keyName;

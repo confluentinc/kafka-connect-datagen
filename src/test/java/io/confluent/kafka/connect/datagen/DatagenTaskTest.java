@@ -125,6 +125,14 @@ public class DatagenTaskTest {
   public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.STOCK_TRADES);
   }
+  public void shouldGenerateFilesForProductQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.PRODUCT);
+  }
+
+  @Test
+  public void shouldGenerateFilesForInventoryQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.INVENTORY);
+  }
 
   @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
