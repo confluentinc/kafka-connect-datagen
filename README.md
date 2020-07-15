@@ -138,7 +138,7 @@ Kafka Connect supports [Converters](https://docs.confluent.io/current/connect/us
 
 For an example of using the the Protobuf converter with kafka-connect-datagen, see this [example configuration](config/connector_users_protobuf.config). Take note of the required use of the `SetSchemaMetadata` [Transformation](https://docs.confluent.io/current/connect/transforms/index.html) which addresses a compatibility issue between schema names used by kafka-connect-datagen and Protobuf. See the [Schema names are not compatible with Protobuf issue](https://github.com/confluentinc/kafka-connect-datagen/issues/62) for details.
 
-## Use a bundled schema specifications
+## Use a bundled schema specification
 
 There are a few quickstart schema specifications bundled with `kafka-connect-datagen`, and they are listed in this [directory](https://github.com/confluentinc/kafka-connect-datagen/tree/master/src/main/resources).
 To use one of these bundled schema, refer to [this mapping](https://github.com/confluentinc/kafka-connect-datagen/blob/master/src/main/java/io/confluent/kafka/connect/datagen/DatagenTask.java#L66-L73) and in the configuration file, set the parameter `quickstart` to the associated name.
@@ -167,6 +167,12 @@ To define your own schema:
 ```
 
 _The custom schema can be used at runtime; it is not necessary to recompile the connector_.
+
+## Record keys
+
+You can control the keys that the connector publishes with its records via the `schema.keyfield` property. If it's set, the connector will look for a field with that name in the top-level Avro records that it generates, and use the value and schema of that field for the key of the message that it publishes to Kafka.
+
+Keys can be any type (`string`, `int`, `record`, etc.) and can also be nullable. If no `schema.keyfield` is provided, the key will be `null` with an optional string schema.
 
 # Confusion about schemas and Avro
 
