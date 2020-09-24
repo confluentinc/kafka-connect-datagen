@@ -2,7 +2,7 @@
 version: '2'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.0.0
+    image: confluentinc/cp-zookeeper:6.0.0
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -14,7 +14,7 @@ services:
       - "moby:127.0.0.1"
 
   kafka:
-    image: confluentinc/cp-enterprise-kafka:5.0.0
+    image: confluentinc/cp-enterprise-kafka:6.0.0
     hostname: kafka
     container_name: kafka
     ports:
@@ -41,7 +41,7 @@ services:
       - "moby:127.0.0.1"
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:5.0.0
+    image: confluentinc/cp-schema-registry:6.0.0
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
@@ -56,7 +56,7 @@ services:
       - "moby:127.0.0.1"
 
   connect:
-    image: confluentinc/kafka-connect-datagen:0.2.0
+    image: confluentinc/kafka-connect-datagen:0.3.3
     build:
       context: .
       dockerfile: Dockerfile-confluenthub
