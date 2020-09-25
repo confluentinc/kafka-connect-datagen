@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-parent</artifactId>
-        <version>5.5.0</version>
+        <version>6.0.0</version>
     </parent>
 
     <groupId>io.confluent.kafka.connect</groupId>
@@ -33,6 +33,7 @@
         <connect-runtime-version>2.0.0</connect-runtime-version>
         <confluent.avro.generator.version>0.3.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
+        <guava.version>29.0-jre</guava.version>
         <avro.version>1.8.1</avro.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
     </properties>
@@ -106,12 +107,23 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Use a repackaged version of log4j with security patches. Default log4j v1.2 is a transitive dependency of slf4j-log4j12, but it is excluded in common/pom.xml -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>confluent-log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>io.confluent.avro</groupId>
             <artifactId>avro-random-generator</artifactId>
