@@ -374,7 +374,7 @@ public class DatagenTaskTest {
   private org.apache.avro.Schema loadAvroSchema(String schemaFilename) {
     try {
       InputStream schemaStream = getClass().getClassLoader().getResourceAsStream(schemaFilename);
-      return org.apache.avro.Schema.Parser().parse(schemaStream);
+      return (new org.apache.avro.Schema.Parser()).parse(schemaStream);
     } catch (IOException e) {
       throw new ConnectException("Unable to read the '" + schemaFilename + "' schema file", e);
     }
