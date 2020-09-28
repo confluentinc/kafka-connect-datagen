@@ -14,7 +14,7 @@
 # Versions
 
 There are multiple [released versions](https://github.com/confluentinc/kafka-connect-datagen/releases) of this connector, starting with `0.1.0`.
-The instructions below use version `0.3.2` as an example, but you can substitute any of the other released versions.
+The instructions below use version `0.4.0` as an example, but you can substitute any of the other released versions.
 In fact, unless specified otherwise, we recommend using the latest released version to get all of the features and bug fixes.
 
 # Usage
@@ -28,7 +28,7 @@ Using the [Confluent Hub Client](https://docs.confluent.io/current/connect/manag
 To install a specific release version you can run: 
 
 ```bash
-confluent-hub install confluentinc/kafka-connect-datagen:0.3.2
+confluent-hub install confluentinc/kafka-connect-datagen:0.4.0
 ```
 
 or to install the latest released version:
@@ -40,12 +40,12 @@ confluent-hub install confluentinc/kafka-connect-datagen:latest
 ### Build connector from latest code
 
 Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
-Here we use `v0.3.2` to reference the git tag for the `0.3.2` version, but the same pattern works for all released versions.
+Here we use `v0.4.0` to reference the git tag for the `0.4.0` version, but the same pattern works for all released versions.
 
 ```bash
-git checkout v0.3.2
+git checkout v0.4.0
 mvn clean package
-confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.3.2.zip
+confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.4.0.zip
 ```
 
 ### Run connector in local install
@@ -70,7 +70,7 @@ You can create a Docker image packaged with the locally built source by running 
 make build-docker-from-local CP_VERSION=5.5.0
 ```
 
-This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.3.2-5.5.0`.
+This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.4.0-6.0.0`.
 
 Alternatively, you can install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/) into a Docker image by running:
 ```bash
@@ -80,9 +80,9 @@ make build-docker-from-released CP_VERSION=5.5.0
 The [Makefile](Makefile) contains some default variables that affect the version numbers of both the installed `kafka-connect-datagen` as well as the base Confluent Platform version.  The variables are located near the top of the [Makefile](Makefile) with the following names and current default values:
 
 ```bash
-CP_VERSION ?= 5.5.0
+CP_VERSION ?= 6.0.0
 
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.3.2
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.4.0
 ```
 These values can be overriden with variable declarations before the `make` command.  For example:
 
@@ -247,8 +247,8 @@ To release new versions of the Docker images to Dockerhub (https://hub.docker.co
 The [Makefile](Makefile) contains some default variables that affect the version numbers of both the installed `kafka-connect-datagen` as well as the base Confluent Platform version.  The variables are located near the top of the [Makefile](Makefile) with the following names and current default values:
 
 ```bash
-CP_VERSION ?= 5.5.0
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.3.2
+CP_VERSION ?= 6.0.0
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.4.0
 OPERATOR_VERSION ?= 0 # Operator is a 'rev' version appended at the end of the CP version, like so: 5.5.0.0
 ```
 
