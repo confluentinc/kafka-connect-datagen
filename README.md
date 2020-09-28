@@ -14,7 +14,7 @@
 # Versions
 
 There are multiple [released versions](https://github.com/confluentinc/kafka-connect-datagen/releases) of this connector, starting with `0.1.0`.
-The instructions below use version `0.4.1` as an example, but you can substitute any of the other released versions.
+The instructions below use version `0.4.0` as an example, but you can substitute any of the other released versions.
 In fact, unless specified otherwise, we recommend using the latest released version to get all of the features and bug fixes.
 
 # Usage
@@ -28,7 +28,7 @@ Using the [Confluent Hub Client](https://docs.confluent.io/current/connect/manag
 To install a specific release version you can run: 
 
 ```bash
-confluent-hub install confluentinc/kafka-connect-datagen:0.4.1
+confluent-hub install confluentinc/kafka-connect-datagen:0.4.0
 ```
 
 or to install the latest released version:
@@ -40,7 +40,7 @@ confluent-hub install confluentinc/kafka-connect-datagen:latest
 ### Build connector from latest code
 
 Alternatively, you may build and install the `kafka-connect-datagen` connector from latest code.
-Here we use `v0.4.1` to reference the git tag for the `0.4.1` version, but the same pattern works for all released versions.
+Here we use `v0.4.0` to reference the git tag for the `0.4.0` version, but the same pattern works for all released versions.
 
 ```bash
 git checkout v0.4.0
