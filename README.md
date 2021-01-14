@@ -100,15 +100,6 @@ docker-compose up -d --build
 curl -X POST -H "Content-Type: application/json" --data @config/connector_pageviews.config http://localhost:8083/connectors
 docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
 ```
-## Building
-
-To build the `kafka-connect-datagen` connector from latest code and install it to a local Confluent Platform, you can perform the following (here we use `v0.1.6` to reference the git tag for the `0.1.6` version, but the same pattern works for all released versions).
-
-```bash
-git checkout v0.1.6
-make package
-confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.6.zip
-```
 
 # Configuration
 
