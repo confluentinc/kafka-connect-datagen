@@ -187,8 +187,8 @@
                                 <ownerType>organization</ownerType>
                                 <ownerName>Confluent, Inc.</ownerName>
                                 <ownerUrl>https://confluent.io/</ownerUrl>
-                                <ownerLogo>logos/confluent.png</ownerLogo>
-
+                                <ownerLogo>logos/confluent-name.png</ownerLogo>
+                                <logo>logos/confluent.png</logo>
                                 <componentTypes>
                                     <componentType>source</componentType>
                                 </componentTypes>
