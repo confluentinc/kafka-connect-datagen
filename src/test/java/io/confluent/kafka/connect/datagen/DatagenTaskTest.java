@@ -35,6 +35,7 @@ import io.confluent.connect.avro.AvroData;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
@@ -125,6 +126,8 @@ public class DatagenTaskTest {
   public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.STOCK_TRADES);
   }
+
+  @Test
   public void shouldGenerateFilesForProductQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PRODUCT);
   }
@@ -199,6 +202,14 @@ public class DatagenTaskTest {
     } catch (ConnectException e) {
       // expected
     }
+  }
+
+  @Test(expected = ConfigException.class)
+  public void shouldFailIfSchemaKeyFieldNotPresentInSchema() throws Exception {
+    config.put(DatagenConnectorConfig.QUICKSTART_CONF, DatagenTask.Quickstart.USERS.name());
+    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
+    createTask();
+    generateRecords();
   }
 
   private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
