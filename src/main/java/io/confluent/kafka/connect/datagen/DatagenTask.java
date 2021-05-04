@@ -31,6 +31,7 @@ import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.connect.data.SchemaAndValue;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.header.ConnectHeaders;
@@ -182,6 +183,12 @@ public class DatagenTask extends SourceTask {
     }
 
     avroSchema = generator.schema();
+
+    if (!schemaKeyField.isEmpty() && avroSchema.getField(schemaKeyField) == null) {
+      throw new ConfigException(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, schemaKeyField,
+              "Schema does not contain the specified field");
+    }
+
     avroData = new AvroData(1);
     ksqlSchema = avroData.toConnectSchema(avroSchema);
   }
