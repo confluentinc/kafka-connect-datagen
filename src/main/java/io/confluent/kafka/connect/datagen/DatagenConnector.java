@@ -84,7 +84,6 @@ public class DatagenConnector extends SourceConnector {
   public Config validate(Map<String, String> connectorConfigs) {
     Config config = super.validate(connectorConfigs);
     boolean isSingleSchemaSource = validateSchemaSource(config);
-    boolean hasSchemaSourceErrors = hasSchemaSourceErrors(config);
 
     // skip further validations if any single config validations have failed
     try {
@@ -93,7 +92,7 @@ public class DatagenConnector extends SourceConnector {
       return config;
     }
 
-    if (isSingleSchemaSource && !hasSchemaSourceErrors) {
+    if (isSingleSchemaSource) {
       validateSchemaKeyField(config, this.config.getSchema());
     }
     return config;
@@ -120,20 +119,17 @@ public class DatagenConnector extends SourceConnector {
     return true;
   }
 
-  private boolean hasSchemaSourceErrors(Config config) {
-    return config.configValues().stream()
-            .filter(v -> DatagenConnectorConfig.isExplicitlySetSchemaSource(v.name(), v.value()))
-            .anyMatch(v -> v.errorMessages().size() > 0);
-  }
-
   private void validateSchemaKeyField(Config config, Schema schema) {
-    ConfigValue schemaKeyField = getConfigValue(config,
-            DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF);
+    ConfigValue schemaKeyField = getConfigValue(
+        config,
+        DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF
+    );
 
     if (schemaKeyField != null && !schemaKeyField.value().equals("")) {
       if (schema.getField((String) schemaKeyField.value()) == null) {
-        schemaKeyField.addErrorMessage("The schema does not contain the field provided in '"
-                + DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF + "'");
+        schemaKeyField.addErrorMessage(
+            "The schema does not contain the field provided in '"
+              + DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF + "'");
       }
     }
   }

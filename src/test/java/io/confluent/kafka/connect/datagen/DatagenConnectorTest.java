@@ -112,9 +112,9 @@ public class DatagenConnectorTest {
   public void shouldFailValidationWithMultipleSchemaSources() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
-            "{\"namespace\":\"ksql\",\"name\":\"test_schema\",\"type\":\"record\",\"fields\":" +
-                    "[{\"name\":\"id\",\"type\":{\"type\":\"long\",\"arg.properties\"" +
-                    ":{\"iteration\":{\"start\":0}}}}]}");
+            "{\"namespace\":\"ksql\",\"name\":\"test_schema\",\"type\":\"record\",\"fields\":"
+                + "[{\"name\":\"id\",\"type\":{\"type\":\"long\",\"arg.properties\""
+                + ":{\"iteration\":{\"start\":0}}}}]}");
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "product.avro");
     Config validated = connector.validate(config);
 
@@ -138,25 +138,37 @@ public class DatagenConnectorTest {
     }
   }
 
-  @Test(expected = ConfigException.class)
+  @Test
   public void shouldFailValidationWithInvalidSchemaString() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, "a schema");
-    new DatagenConnectorConfig(config);
+    Config validated = connector.validate(config);
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_STRING_CONF, 1)
+    );
   }
 
-  @Test(expected = ConfigException.class)
+  @Test
   public void shouldFailValidationWithInvalidFileName() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "a file name");
-    new DatagenConnectorConfig(config);
+    Config validated = connector.validate(config);
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, 1)
+    );
   }
 
-  @Test(expected = ConfigException.class)
+  @Test
   public void shouldFailValidationWithInvalidSchemaFile() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "invalid_users_schema.avro");
-    new DatagenConnectorConfig(config);
+    Config validated = connector.validate(config);
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, 1)
+    );
   }
 
   @Test
@@ -166,8 +178,45 @@ public class DatagenConnectorTest {
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
     Config validated = connector.validate(config);
     assertThat(
-            validated,
-            hasValidationError(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, 1)
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, 1)
+    );
+  }
+
+  @Test
+  public void shouldNotValidateSchemaKeyFieldWhenSchemaSourceFailsValidation() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "invalid_users_schema.avro");
+    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
+    Config validated = connector.validate(config);
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, 1)
+    );
+    assertThat(
+      validated,
+      hasNoValidationErrorsFor(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF)
+    );
+  }
+
+  @Test
+  public void shouldNotValidateSchemaKeyFieldWhenMultipleSchemaSourcesAreSet() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "product.avro");
+    config.put(DatagenConnectorConfig.QUICKSTART_CONF, "clickstream");
+    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
+    Config validated = connector.validate(config);
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, 1)
+    );
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.QUICKSTART_CONF, 1)
+    );
+    assertThat(
+      validated,
+      hasNoValidationErrorsFor(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF)
     );
   }
 

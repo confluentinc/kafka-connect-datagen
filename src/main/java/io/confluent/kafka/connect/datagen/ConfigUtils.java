@@ -16,7 +16,6 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,11 +26,6 @@ import org.apache.avro.SchemaParseException;
 import org.apache.kafka.common.config.ConfigException;
 
 public class ConfigUtils {
-  public static Schema getSchemaFromQuickstart(String quickstart) {
-    String schemaFilename = Quickstart.valueOf(quickstart.toUpperCase()).getSchemaFilename();
-    return getSchemaFromSchemaFileName(schemaFilename);
-  }
-
   public static Schema getSchemaFromSchemaString(String schemaString) {
     Schema.Parser schemaParser = new Parser();
     Schema schema;
@@ -53,10 +47,11 @@ public class ConfigUtils {
       try {
         if (DatagenTask.class.getClassLoader()
             .getResource(schemaFileName) == null) {
-          throw new ConfigException("Unable to parse the provided schema");
+          throw new ConfigException("Unable to find the schema file");
         }
-        schema = schemaParser.parse(DatagenTask.class.getClassLoader()
-          .getResourceAsStream(schemaFileName));
+        schema = schemaParser.parse(
+          DatagenTask.class.getClassLoader().getResourceAsStream(schemaFileName)
+        );
       } catch (SchemaParseException | IOException i) {
         throw new ConfigException("Unable to parse the provided schema");
       }
