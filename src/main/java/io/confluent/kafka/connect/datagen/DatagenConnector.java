@@ -129,7 +129,8 @@ public class DatagenConnector extends SourceConnector {
       if (schema.getField((String) schemaKeyField.value()) == null) {
         schemaKeyField.addErrorMessage(
             "The schema does not contain the field provided in '"
-              + DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF + "'");
+              + DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF + "'"
+        );
       }
     }
   }

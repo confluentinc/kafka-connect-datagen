@@ -164,8 +164,11 @@ public class DatagenConnectorConfig extends AbstractConfig {
         return;
       }
       if (!Quickstart.configValues.contains(((String) value).toLowerCase())) {
-        throw new ConfigException(String.format("%s must be one out of %s",
-          name, String.join(",", DatagenTask.Quickstart.configValues)));
+        throw new ConfigException(String.format(
+                "%s must be one out of %s",
+                name,
+                String.join(",", DatagenTask.Quickstart.configValues)
+        ));
       }
     }
   }
