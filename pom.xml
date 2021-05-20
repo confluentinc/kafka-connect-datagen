@@ -25,7 +25,7 @@
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-datagen</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
@@ -63,7 +63,7 @@
         <connection>scm:git:git://github.com/confluentinc/kafka-connect-datagen.git</connection>
         <developerConnection>scm:git:git@github.com:confluentinc/kafka-connect-datagen.git</developerConnection>
         <url>https://github.com/confluentinc/kafka-connect-datagen</url>
-        <tag>v0.5.0</tag>
+        <tag>0.5.x</tag>
     </scm>
 
     <developers>
