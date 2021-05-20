@@ -204,14 +204,6 @@ public class DatagenTaskTest {
     }
   }
 
-  @Test(expected = ConfigException.class)
-  public void shouldFailIfSchemaKeyFieldNotPresentInSchema() throws Exception {
-    config.put(DatagenConnectorConfig.QUICKSTART_CONF, DatagenTask.Quickstart.USERS.name());
-    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
-    createTask();
-    generateRecords();
-  }
-
   private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
     createTaskWith(quickstart);
     generateRecords();

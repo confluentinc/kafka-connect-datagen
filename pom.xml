@@ -36,6 +36,9 @@
         <guava.version>29.0-jre</guava.version>
         <avro.version>1.8.1</avro.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
+            See https://github.com/confluentinc/common/pull/332 for details -->
+        <dependency.check.version>6.1.6</dependency.check.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
