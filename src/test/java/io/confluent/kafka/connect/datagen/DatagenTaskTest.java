@@ -113,8 +113,18 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForUsersOptionalQuickstart() throws Exception {
+    generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS_OPTIONAL);
+  }
+
+  @Test
   public void shouldGenerateFilesForUsers2Quickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS_);
+  }
+
+  @Test
+  public void shouldGenerateFilesForUsers2OptionalQuickstart() throws Exception {
+    generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS_ARRAY_OPTIONAL);
   }
 
   @Test
@@ -143,6 +153,16 @@ public class DatagenTaskTest {
     DatagenTask.Quickstart quickstart = Quickstart.PAGEVIEWS;
     assertNotEquals(quickstart.getSchemaKeyField(), "pageid");
     createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), "pageid");
+    generateRecords();
+    assertRecordsMatchSchemas();
+  }
+
+  @Test
+  public void shouldUseConfiguredOptionalKeyFieldForQuickstartIfProvided() throws Exception {
+    // Do the same thing with schema text
+    DatagenTask.Quickstart quickstart = Quickstart.USERS_ARRAY_OPTIONAL;
+    assertNotEquals(quickstart.getSchemaKeyField(), "age");
+    createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), "age");
     generateRecords();
     assertRecordsMatchSchemas();
   }

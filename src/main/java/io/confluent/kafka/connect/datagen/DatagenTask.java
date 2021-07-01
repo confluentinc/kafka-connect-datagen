@@ -75,6 +75,8 @@ public class DatagenTask extends SourceTask {
     RATINGS("ratings_schema.avro", "rating_id"),
     USERS("users_schema.avro", "userid"),
     USERS_("users_array_map_schema.avro", "userid"),
+    USERS_OPTIONAL("users_schema_optional.avro", "userid"),
+    USERS_ARRAY_OPTIONAL("users_array_map_schema_optional.avro", "userid"),
     PAGEVIEWS("pageviews_schema.avro", "viewtime"),
     STOCK_TRADES("stock_trades_schema.avro", "symbol"),
     INVENTORY("inventory.avro", "id"),
@@ -188,10 +190,15 @@ public class DatagenTask extends SourceTask {
     // Key
     SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
     if (!schemaKeyField.isEmpty()) {
-      key = avroData.toConnectData(
-          randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
-          randomAvroMessage.get(schemaKeyField)
-      );
+      if (randomAvroMessage.get(schemaKeyField) != null) {
+        key = avroData.toConnectData(
+            randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
+            randomAvroMessage.get(schemaKeyField)
+        );
+      } else {
+        key = new SchemaAndValue(avroData.toConnectSchema(randomAvroMessage.getSchema()
+            .getField(schemaKeyField).schema()), null);
+      }
     }
 
     // Value
