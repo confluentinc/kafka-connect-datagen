@@ -1,0 +1,48 @@
+{
+        "namespace": "io.datagen.example",
+        "name": "syslog",
+        "type": "record",
+        "fields": [
+
+                {"name":"name","type":["null"]},
+                {"name":"version","type":["null"]},
+                {"name":"tag","type":["null"]},
+                {"name":"extension","type":["null"]},
+                {"name":"severity","type":["null"]},
+                {"name":"appName","type":["null"]},
+                {"name":"processId","type":["null"]},
+                {"name":"messageId","type":["null"]},
+                {"name":"structuredData","type":["null"]},
+                {"name":"deviceVendor","type":["null"]},
+                {"name":"deviceProduct","type":["null"]},
+                {"name":"deviceVersion","type":["null"]},
+                {"name":"deviceEventClassId","type":["null"]},
+                {"name":"receivedDate","type":["null"]},
+
+                {"name": "type", "type": {
+                    "type": "string",
+                    "arg.properties": {
+                    "options": [
+                      "RFC3164"
+                    ]
+                   }
+                }},
+                {"name": "message", "type": {
+                  "type": "string",
+                  "arg.properties": {
+                    "options": [
+                      "Logon successful",
+                      "Logon failed",
+                      "User test connected to website https://localhost:8080/index.html",
+                      "Monitoring disabled by user test"
+                    ]
+                   }
+                }},
+                {"name": "host", "type": {
+                    "type": "string",
+                    "arg.properties": {
+                        "regex": "host[1-9]{1,1}"
+                    }
+                }}
+      ]
+}

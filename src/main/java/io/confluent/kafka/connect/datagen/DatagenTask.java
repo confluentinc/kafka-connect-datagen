@@ -78,6 +78,8 @@ public class DatagenTask extends SourceTask {
     PAGEVIEWS("pageviews_schema.avro", "viewtime"),
     STOCK_TRADES("stock_trades_schema.avro", "symbol"),
     INVENTORY("inventory.avro", "id"),
+    DEVICE("device.avro", "device_ip"),
+    SYSLOG("syslog.avro", "host"),
     PRODUCT("product.avro", "id");
 
     static final Set<String> configValues = new HashSet<>();
