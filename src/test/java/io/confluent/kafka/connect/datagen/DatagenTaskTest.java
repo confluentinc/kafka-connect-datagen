@@ -138,6 +138,21 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForCreditCardsQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.CREDIT_CARDS);
+  }
+
+  @Test
+  public void shouldGenerateFilesForTransactionsQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.TRANSACTIONS);
+  }
+
+  @Test
+  public void shouldGenerateFilesForStoresQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.STORES);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     DatagenTask.Quickstart quickstart = Quickstart.PAGEVIEWS;
