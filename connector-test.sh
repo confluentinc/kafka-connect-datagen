@@ -1,33 +1,28 @@
 #!/bin/bash
+set -e
 
-confluent local destroy
+confluent local destroy || true
 mvn clean package || exit 1
 rm -fr $CONFLUENT_HOME/share/confluent-hub-components/confluentinc-kafka-connect-datagen
-confluent-hub install --no-prompt target/components/packages/confluentinc-kafka-connect-datagen-0.5.1-SNAPSHOT.zip
+confluent-hub install --no-prompt target/components/packages/confluentinc-kafka-connect-datagen-*.zip
 confluent local services connect start
 sleep 10
 
 confluent local services connect status
-confluent local services connect connector config datagen-credit-cards --config config/connector_credit_cards.config
-confluent local services connect connector config datagen-stores --config config/connector_stores.config
-confluent local services connect connector config datagen-transactions --config config/connector_transactions.config
-confluent local services connect connector config datagen-purchases --config config/connector_purchases.config
-confluent local services connect connector config datagen-product --config config/connector_product.config
-confluent local services connect connector status
 
+connectors="credit_cards stores transactions purchases product"
+
+for connector in $connectors; do
+    confluent local services connect connector config datagen-$connector --config config/connector_${connector}.config
+done
+
+confluent local services connect connector status
 echo
-echo "credit-cards:"
-confluent local services kafka consume credit-cards --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
-echo
-echo "stores:"
-confluent local services kafka consume stores --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
-echo
-echo "transactions:"
-confluent local services kafka consume transactions --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
-echo
-echo "purchases:"
-confluent local services kafka consume purchases --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
-echo
-echo "product:"
-confluent local services kafka consume product --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
+
+for connector in $connectors; do
+    echo
+    echo $connector:
+    confluent local services kafka consume $connector --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
+done
+
 confluent local destroy
