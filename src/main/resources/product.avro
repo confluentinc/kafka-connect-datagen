@@ -17,9 +17,8 @@
                          "options": [
                            "boots",
                            "shirt",
-                           "coffee",
                            "knife",
-                           "pot",
+                           "saucepan",
                            "table",
                            "chair",
                            "clock",
@@ -28,6 +27,7 @@
                            "thermometer",
                            "scarf",
                            "doormat",
+                           "vase",
                            "clippers",
                            "game",
                            "towels"

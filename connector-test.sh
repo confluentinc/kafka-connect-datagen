@@ -12,7 +12,7 @@ confluent local services connect connector config datagen-credit-cards --config 
 confluent local services connect connector config datagen-stores --config config/connector_stores.config
 confluent local services connect connector config datagen-transactions --config config/connector_transactions.config
 confluent local services connect connector config datagen-purchases --config config/connector_purchases.config
-confluent local services connect connector config datagen-products --config config/connector_product.config
+confluent local services connect connector config datagen-product --config config/connector_product.config
 confluent local services connect connector status
 
 echo
@@ -28,6 +28,6 @@ echo
 echo "purchases:"
 confluent local services kafka consume purchases --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 echo
-echo "products:"
-confluent local services kafka consume products --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
+echo "product:"
+confluent local services kafka consume product --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 confluent local destroy

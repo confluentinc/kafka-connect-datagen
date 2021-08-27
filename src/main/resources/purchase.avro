@@ -29,11 +29,11 @@
                     }
                  }},
                  {"name": "total", "type": {
-                      "type": "double",
+                      "type": "long",
                        "arg.properties": {
                          "range": {
-                            "min": 5.0,
-                            "max": 500.0
+                            "min": 5,
+                            "max": 500
                          }
                      }
                  }}
