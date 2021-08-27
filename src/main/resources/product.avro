@@ -13,11 +13,26 @@
                 }},
                 {"name": "name", "type": {
                     "type": "string",
-                    "arg.properties": {
-                        "iteration": {
-                            "start": 0
-                        }
-                    }
+                       "arg.properties": {
+                         "options": [
+                           "boots",
+                           "shirt",
+                           "coffee",
+                           "knife",
+                           "pot",
+                           "table",
+                           "chair",
+                           "clock",
+                           "frame",
+                           "guitar",
+                           "thermometer",
+                           "scarf",
+                           "doormat",
+                           "clippers",
+                           "game",
+                           "towels"
+                         ]
+                       }
                 }},
                 {"name": "description", "type": {
                     "type": "string",
@@ -28,12 +43,13 @@
                     }
                  }},
                  {"name": "price", "type": {
-                    "type": "double",
+                    "type": "long",
                      "arg.properties": {
-                      "iteration": {
-                          "start": 0
-                          }
-                       }
+                        "range": {
+                            "min": 2,
+                            "max": 20
+                        }
+                     }
                   }}
         ]
 }
