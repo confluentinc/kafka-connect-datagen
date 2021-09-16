@@ -8,43 +8,54 @@
                   "type": "int"
                 },
                 {
+                  "name": "ein",
+                  "type": "string"
+                },
+                {
                   "name": "city",
                   "type": "string"
                 },
                 {
-                  "name": "country",
+                  "name": "state",
                   "type": "string"
                 }
          ],
          "arg.properties": {
            "options": [
                 { "store_id": 1,
+                  "ein": "00-1111111",
                   "city": "Raleigh",
-                  "country": "US"
+                  "state": "NC"
                 },
                 { "store_id": 2,
+                  "ein": "00-1111112",
                   "city": "Chicago",
-                  "country": "US"
+                  "state": "IL"
                 },
                 { "store_id": 3,
-                  "city": "Mexico City",
-                  "country": "Mexico"
+                  "ein": "00-1111113",
+                  "city": "Sacramento",
+                  "state": "CA"
                 },
                 { "store_id": 4,
-                  "city": "Toronto",
-                  "country": "Canada"
+                  "ein": "00-1111114",
+                  "city": "Austin",
+                  "state": "TX"
                 },
                 { "store_id": 5,
-                  "city": "Paris",
-                  "country": "France"
+                  "ein": "00-1111115",
+                  "city": "Boston",
+                  "state": "MA"
                 },
                 { "store_id": 6,
-                  "city": "London",
-                  "country": "UK"
+                  "ein": "00-1111116",
+                  "city": "Atlanta",
+                  "state": "GA"
                 },
                 { "store_id": 7,
-                  "city": "Milan",
-                  "country": "Italy"
+                  "ein": "00-1111117",
+                  "city": "Lexington",
+                  "state": "SC"
                 }
             ]
          }
