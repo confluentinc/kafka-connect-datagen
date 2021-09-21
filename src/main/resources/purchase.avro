@@ -34,6 +34,16 @@
                          ]
                        }
                 }},
+                {"name":"quantity",
+                  "type":{
+                     "type":"long",
+                     "arg.properties":{
+                        "range":{
+                           "min":1,
+                           "max":10
+                        }
+                     }
+                 }},
                  {"name": "price_per_unit", "type": {
                     "type": "bytes",
                     "logicalType": "decimal",
