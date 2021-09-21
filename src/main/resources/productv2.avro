@@ -43,13 +43,16 @@
                     }
                  }},
                  {"name": "price", "type": {
-                    "type": "long",
-                     "arg.properties": {
+                    "type": "bytes",
+                    "logicalType": "decimal",
+                    "precision": 4,
+                    "scale": 2,
+                    "arg.properties": {
                         "range": {
-                            "min": 2,
-                            "max": 20
+                            "min": 10.00,
+                            "max": 50.00
                         }
-                     }
+                    }
                   }}
         ]
 }
