@@ -10,7 +10,7 @@ sleep 10
 
 confluent local services connect status
 
-connectors="credit_cards stores transactions purchases productv2"
+connectors="credit_cards stores transactions purchases"
 
 for connector in $connectors; do
     confluent local services connect connector config datagen-$connector --config config/connector_${connector}.config

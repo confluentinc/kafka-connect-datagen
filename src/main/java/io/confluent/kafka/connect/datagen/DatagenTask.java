@@ -79,7 +79,6 @@ public class DatagenTask extends SourceTask {
     STOCK_TRADES("stock_trades_schema.avro", "symbol"),
     INVENTORY("inventory.avro", "id"),
     PRODUCT("product.avro", "id"),
-    PRODUCTV2("productv2.avro", "id"),
     PURCHASES("purchase.avro", "id"),
     TRANSACTIONS("transactions.avro", "transaction_id"),
     STORES("stores.avro", "store_id"),

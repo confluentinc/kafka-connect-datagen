@@ -1,5 +1,5 @@
 {
-        "namespace": "ksql",
+        "namespace": "datagen.example",
         "name": "purchase",
         "type": "record",
         "fields": [
@@ -11,31 +11,40 @@
                         }
                     }
                 }},
-                {"name": "quantity", "type": {
-                    "type": "long",
+                {"name": "item_type", "type": {
+                    "type": "string",
+                       "arg.properties": {
+                         "options": [
+                           "boots",
+                           "shirt",
+                           "knife",
+                           "saucepan",
+                           "table",
+                           "chair",
+                           "clock",
+                           "frame",
+                           "guitar",
+                           "thermometer",
+                           "scarf",
+                           "doormat",
+                           "vase",
+                           "clippers",
+                           "game",
+                           "towels"
+                         ]
+                       }
+                }},
+                 {"name": "price_per_unit", "type": {
+                    "type": "bytes",
+                    "logicalType": "decimal",
+                    "precision": 4,
+                    "scale": 2,
                     "arg.properties": {
                         "range": {
-                            "min": 1,
-                            "max": 20
+                            "min": 10.00,
+                            "max": 50.00
                         }
                     }
-                }},
-                {"name": "productid", "type": {
-                    "type": "long",
-                    "arg.properties": {
-                      "iteration": {
-                          "start": 0
-                      }
-                    }
-                 }},
-                 {"name": "total", "type": {
-                      "type": "long",
-                       "arg.properties": {
-                         "range": {
-                            "min": 5,
-                            "max": 500
-                         }
-                     }
-                 }}
+                  }}
         ]
 }

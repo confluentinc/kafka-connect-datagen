@@ -132,11 +132,6 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldGenerateFilesForProductv2Quickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PRODUCTV2);
-  }
-
-  @Test
   public void shouldGenerateFilesForPurchaseQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PURCHASES);
   }
