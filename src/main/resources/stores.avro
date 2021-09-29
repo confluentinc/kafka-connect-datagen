@@ -8,10 +8,6 @@
                   "type": "int"
                 },
                 {
-                  "name": "ein",
-                  "type": "string"
-                },
-                {
                   "name": "city",
                   "type": "string"
                 },
@@ -23,37 +19,30 @@
          "arg.properties": {
            "options": [
                 { "store_id": 1,
-                  "ein": "00-1111111",
                   "city": "Raleigh",
                   "state": "NC"
                 },
                 { "store_id": 2,
-                  "ein": "00-1111112",
                   "city": "Chicago",
                   "state": "IL"
                 },
                 { "store_id": 3,
-                  "ein": "00-1111113",
                   "city": "Sacramento",
                   "state": "CA"
                 },
                 { "store_id": 4,
-                  "ein": "00-1111114",
                   "city": "Austin",
                   "state": "TX"
                 },
                 { "store_id": 5,
-                  "ein": "00-1111115",
                   "city": "Boston",
                   "state": "MA"
                 },
                 { "store_id": 6,
-                  "ein": "00-1111116",
                   "city": "Atlanta",
                   "state": "GA"
                 },
                 { "store_id": 7,
-                  "ein": "00-1111117",
                   "city": "Lexington",
                   "state": "SC"
                 }
