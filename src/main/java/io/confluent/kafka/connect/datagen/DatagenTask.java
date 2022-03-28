@@ -83,7 +83,7 @@ public class DatagenTask extends SourceTask {
     TRANSACTIONS("transactions.avro", "transaction_id"),
     STORES("stores.avro", "store_id"),
     CREDIT_CARDS("credit_cards.avro", "card_id"),
-    CAMPAIGN_FINANCE("campaign_finance.avro", "candidate_id");
+    CAMPAIGN_FINANCE("campaign_finance.avro", "cand_id");
 
     static final Set<String> configValues = new HashSet<>();
 

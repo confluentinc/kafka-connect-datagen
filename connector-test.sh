@@ -23,7 +23,7 @@ echo
 for connector in $connectors; do
     echo
     echo $connector:
-    confluent local services kafka consume $connector --max-messages 5 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
+    confluent local services kafka consume $connector --max-messages 10 --property print.key=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --from-beginning
 done
 
 confluent local destroy
