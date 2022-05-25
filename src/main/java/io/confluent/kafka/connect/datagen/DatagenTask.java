@@ -240,6 +240,7 @@ public class DatagenTask extends SourceTask {
         null,
         headers
     );
+    log.info("Let us log a record here: " + record.toString());
     records.add(record);
     count += records.size();
     return records;
