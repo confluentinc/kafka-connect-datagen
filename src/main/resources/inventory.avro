@@ -12,19 +12,21 @@
                     }
                 }},
                 {"name": "quantity", "type": {
-                    "type": "long",
+                    "type": "int",
                     "arg.properties": {
-                        "iteration": {
-                            "start": 0
+                        "range": {
+                            "min": -100,
+                            "max": 100
                         }
                     }
                 }},
                 {"name": "productid", "type": {
                     "type": "long",
                     "arg.properties": {
-                      "iteration": {
-                          "start": 0
-                      }
+                        "range": {
+                            "min": 10000000001,
+                            "max": 10000000016
+                        }
                     }
                  }}
         ]

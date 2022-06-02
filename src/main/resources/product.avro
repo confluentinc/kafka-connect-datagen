@@ -3,37 +3,105 @@
         "name": "product",
         "type": "record",
         "fields": [
-                {"name": "id", "type": {
-                    "type": "long",
-                    "arg.properties": {
-                        "iteration": {
-                            "start": 0
-                        }
-                    }
-                }},
-                {"name": "name", "type": {
-                    "type": "string",
-                    "arg.properties": {
-                        "iteration": {
-                            "start": 0
-                        }
-                    }
-                }},
-                {"name": "description", "type": {
-                    "type": "string",
-                    "arg.properties": {
-                      "iteration": {
-                          "start": 0
-                      }
-                    }
-                 }},
-                 {"name": "price", "type": {
-                    "type": "double",
-                     "arg.properties": {
-                      "iteration": {
-                          "start": 0
-                          }
-                       }
-                  }}
-        ]
+                {
+                  "name": "id",
+                  "type": "long"
+                },
+                {
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "name": "description",
+                  "type": "string"
+                },
+                {
+                  "name": "price",
+                  "type": "double"
+                }
+         ],
+         "arg.properties": {
+           "options": [
+                { "id": 10000000001,
+                  "name": "boots",
+                  "description": "Brown knee-high boots",
+                  "price": 32.50
+                },
+                { "id": 10000000002,
+                  "name": "shirt",
+                  "description": "Red long sleeve shirt",
+                  "price": 18.26
+                },
+                { "id": 10000000003,
+                  "name": "knife",
+                  "description": "Black paring knife",
+                  "price": 27.01
+                },
+                { "id": 10000000004,
+                  "name": "saucepan",
+                  "description": "Stainless steel saucepan",
+                  "price": 26.25
+                },
+                { "id": 10000000005,
+                  "name": "table",
+                  "description": "Round breakfast table",
+                  "price": 47.32
+                },
+                { "id": 10000000006,
+                  "name": "chair",
+                  "description": "Lowback wooden chair",
+                  "price": 29.25
+                },
+                { "id": 10000000007,
+                  "name": "clock",
+                  "description": "Square analog clock",
+                  "price": 9.27
+                },
+                { "id": 10000000008,
+                  "name": "frame",
+                  "description": "Large picture frame",
+                  "price": 10.05
+                },
+                { "id": 10000000009,
+                  "name": "guitar",
+                  "description": "Classical full-sized guitar",
+                  "price": 134.25
+                },
+                { "id": 10000000010,
+                  "name": "thermometer",
+                  "description": "Digital thermometer",
+                  "price": 19.50
+                },
+                { "id": 10000000011,
+                  "name": "scarf",
+                  "description": "Cashmere silver scarf",
+                  "price": 26.00
+                },
+                { "id": 10000000012,
+                  "name": "doormat",
+                  "description": "Outdoor welcome doormat",
+                  "price": 24.50
+                },
+                { "id": 10000000013,
+                  "name": "vase",
+                  "description": "White ceramic vase",
+                  "price": 18.00
+                },
+                { "id": 10000000014,
+                  "name": "clippers",
+                  "description": "Mens clippers",
+                  "price": 46.50
+                },
+                { "id": 10000000015,
+                  "name": "game",
+                  "description": "Settlers of Catan",
+                  "price": 44.28
+                },
+                { "id": 10000000016,
+                  "name": "towels",
+                  "description": "Black hand towel",
+                  "price": 8.64
+                }
+            ]
+         }
 }
