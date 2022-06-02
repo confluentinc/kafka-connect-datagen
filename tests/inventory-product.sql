@@ -25,9 +25,9 @@ SELECT
   p.id AS product_id,
   SUM(i.quantity) AS item_quantity
 FROM inventory_stream i
-  LEFT JOIN product_stream p
-  WITHIN 1 HOUR
-  ON i.productid = p.id
+LEFT JOIN product_stream p
+WITHIN 1 HOUR
+ON i.productid = p.id
 GROUP BY p.id
 EMIT CHANGES;
 
