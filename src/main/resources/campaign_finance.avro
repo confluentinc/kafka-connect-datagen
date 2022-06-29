@@ -12,7 +12,7 @@
                         }
                   }
                 }},
-                {"name": "cand_id", "type": {
+                {"name": "candidate_id", "type": {
                     "type": "string",
                     "arg.properties": {
                         "regex": "[A-Z][1-9]{8,8}"
