@@ -1,0 +1,293 @@
+{
+  "namespace": "datagen.github",
+  "name": "github_collaborators",
+  "type": "record",
+  "fields": [
+    {
+      "name": "type",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "COLLABORATORS"
+          ]
+        }
+      }
+    },
+    {
+      "name": "createdAt",
+      "type": {
+        "type": "long",
+        "arg.properties": {
+          "iteration": {
+            "start": 1657053439000,
+            "step": 30000
+          }
+        }
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "data_record",
+        "fields": [
+          {
+            "name": "login",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "user[1-9]{2}"
+              }
+            }
+          },
+          {
+            "name": "id",
+            "type": {
+              "type": "long",
+              "arg.properties": {
+                "iteration": {
+                  "start": 829002,
+                  "step": 20
+                }
+              }
+            }
+          },
+          {
+            "name": "node_id",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "[a-zA-Z0-9]{40}="
+              }
+            }
+          },
+          {
+            "name": "avatar_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://avatars\\.githubusercontent\\.com/u/[a-z]{8}"
+              }
+            }
+          },
+          {
+            "name": "gravatar_id",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "[a-z]{8}"
+              }
+            }
+          },
+          {
+            "name": "url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}"
+              }
+            }
+          },
+          {
+            "name": "html_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://github\\.com/org[1-9]{2}"
+              }
+            }
+          },
+          {
+            "name": "followers_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/followers"
+              }
+            }
+          },
+          {
+            "name": "following_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/following\\{/other_user\\}"
+              }
+            }
+          },
+          {
+            "name": "gists_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/gists\\{/gist_id\\}"
+              }
+            }
+          },
+          {
+            "name": "starred_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/starred\\{/owner\\}\\{/repo\\}"
+              }
+            }
+          },
+          {
+            "name": "subscriptions_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/subscriptions"
+              }
+            }
+          },
+          {
+            "name": "organizations_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/orgs"
+              }
+            }
+          },
+          {
+            "name": "repos_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/repos"
+              }
+            }
+          },
+          {
+            "name": "events_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/events\\{/privacy\\}"
+              }
+            }
+          },
+          {
+            "name": "received_events_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/users/org[1-9]{2}/received_events"
+              }
+            }
+          },
+          {
+            "name": "type",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "User"
+              }
+            }
+          },
+          {
+            "name": "site_admin",
+            "type":{
+              "type": "boolean",
+              "arg.properties": {
+                "options": [
+                  false
+                ]
+              }
+            }
+          },
+          {
+            "name": "permissions",
+            "type": {
+              "type": "record",
+              "name": "permissions_object",
+              "fields": [
+                {
+                  "name": "admin",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        true,
+                        false
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "maintain",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        true,
+                        false
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "push",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        true,
+                        false
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "triage",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        true,
+                        false
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "pull",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        true,
+                        false
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "role_name",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "write"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "id",
+      "type":{
+        "type": "string",
+        "arg.properties": {
+          "regex": "[0-9]{20}"
+        }
+      }
+    }
+  ]
+}

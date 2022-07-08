@@ -68,21 +68,31 @@ public class DatagenTask extends SourceTask {
   private Random random;
 
   protected enum Quickstart {
-    CLICKSTREAM_CODES("clickstream_codes_schema.avro", "code"),
-    CLICKSTREAM("clickstream_schema.avro", "ip"),
-    CLICKSTREAM_USERS("clickstream_users_schema.avro", "user_id"),
-    ORDERS("orders_schema.avro", "orderid"),
-    RATINGS("ratings_schema.avro", "rating_id"),
-    USERS("users_schema.avro", "userid"),
-    USERS_("users_array_map_schema.avro", "userid"),
-    PAGEVIEWS("pageviews_schema.avro", "viewtime"),
-    STOCK_TRADES("stock_trades_schema.avro", "symbol"),
-    INVENTORY("inventory.avro", "id"),
-    PRODUCT("product.avro", "id"),
-    PURCHASES("purchase.avro", "id"),
-    TRANSACTIONS("transactions.avro", "transaction_id"),
-    STORES("stores.avro", "store_id"),
-    CREDIT_CARDS("credit_cards.avro", "card_id");
+    CLICKSTREAM_CODES("clickstream_codes_schema.avsc", "code"),
+    CLICKSTREAM("clickstream_schema.avsc", "ip"),
+    CLICKSTREAM_USERS("clickstream_users_schema.avsc", "user_id"),
+    ORDERS("orders_schema.avsc", "orderid"),
+    RATINGS("ratings_schema.avsc", "rating_id"),
+    USERS("users_schema.avsc", "userid"),
+    USERS_("users_array_map_schema.avsc", "userid"),
+    PAGEVIEWS("pageviews_schema.avsc", "viewtime"),
+    STOCK_TRADES("stock_trades_schema.avsc", "symbol"),
+    INVENTORY("inventory.avsc", "id"),
+    PRODUCT("product.avsc", "id"),
+    PURCHASES("purchase.avsc", "id"),
+    TRANSACTIONS("transactions.avsc", "transaction_id"),
+    STORES("stores.avsc", "store_id"),
+    CREDIT_CARDS("credit_cards.avsc", "card_id"),
+    GITHUB_ASSIGNEES("github/assignees.avsc", "id"),
+    GITHUB_COLLABORATORS("github/collaborators.avsc", "id"),
+    GITHUB_COMMENTS("github/comments.avsc", "id"),
+    GITHUB_COMMITS("github/commits.avsc", "id"),
+    GITHUB_ISSUES("github/issues.avsc", "id"),
+    GITHUB_PULL_REQUESTS("github/pull_requests.avsc", "id"),
+    GITHUB_RELEASES("github/releases.avsc", "id"),
+    GITHUB_REVIEW_COMMENTS("github/review_comments.avsc", "id"),
+    GITHUB_REVIEWS("github/reviews.avsc", "id"),
+    GITHUB_STARGAZERS("github/stargazers.avsc", "id");
 
     static final Set<String> configValues = new HashSet<>();
 
