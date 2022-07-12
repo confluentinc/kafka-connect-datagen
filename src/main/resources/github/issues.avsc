@@ -1,0 +1,1057 @@
+{
+  "namespace": "datagen.github",
+  "name": "github_issues",
+  "type": "record",
+  "fields": [
+    {
+      "name": "type",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "ISSUES"
+          ]
+        }
+      }
+    },
+    {
+      "name": "createdAt",
+      "type": {
+        "type": "long",
+        "arg.properties": {
+          "iteration": {
+            "start": 1657053439000,
+            "step": 30000
+          }
+        }
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "data_record",
+        "fields": [
+          {
+            "name": "url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}"
+              }
+            }
+          },
+          {
+            "name": "repository_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}"
+              }
+            }
+          },
+          {
+            "name": "labels_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}/labels\\{/name\\}"
+              }
+            }
+          },
+          {
+            "name": "comments_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}/comments"
+              }
+            }
+          },
+          {
+            "name": "events_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}/events"
+              }
+            }
+          },
+          {
+            "name": "html_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://github\\.com/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}"
+              }
+            }
+          },
+          {
+            "name": "id",
+            "type": {
+              "type": "long",
+              "arg.properties": {
+                "iteration": {
+                  "start": 9878922932,
+                  "step": 20
+                }
+              }
+            }
+          },
+          {
+            "name": "node_id",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "[a-zA-Z0-9_]{40}"
+              }
+            }
+          },
+          {
+            "name": "number",
+            "type": {
+              "type": "int",
+              "arg.properties": {
+                "iteration": {
+                  "start": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "title",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "Title [1-9]{20}"
+              }
+            }
+          },
+          {
+            "name": "user",
+            "type": {
+              "type": "record",
+              "name": "user_object",
+              "fields": [
+                {
+                  "name": "login",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "user[1-9]{2}"
+                    }
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "type": "long",
+                    "arg.properties": {
+                      "iteration": {
+                        "start": 829002,
+                        "step": 20
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "node_id",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "[a-zA-Z0-9]{40}="
+                    }
+                  }
+                },
+                {
+                  "name": "avatar_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://avatars\\.githubusercontent\\.com/u/[a-z]{8}"
+                    }
+                  }
+                },
+                {
+                  "name": "gravatar_id",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "[a-z]{8}"
+                    }
+                  }
+                },
+                {
+                  "name": "url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}"
+                    }
+                  }
+                },
+                {
+                  "name": "html_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://github\\.com/org[1-9]{2}"
+                    }
+                  }
+                },
+                {
+                  "name": "followers_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/followers"
+                    }
+                  }
+                },
+                {
+                  "name": "following_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/following\\{/other_user\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "gists_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/gists\\{/gist_id\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "starred_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/starred\\{/owner\\}\\{/repo\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "subscriptions_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/subscriptions"
+                    }
+                  }
+                },
+                {
+                  "name": "organizations_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/orgs"
+                    }
+                  }
+                },
+                {
+                  "name": "repos_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/repos"
+                    }
+                  }
+                },
+                {
+                  "name": "events_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/events\\{/privacy\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "received_events_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/received_events"
+                    }
+                  }
+                },
+                {
+                  "name": "type",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "User"
+                    }
+                  }
+                },
+                {
+                  "name": "site_admin",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        false
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "labels",
+            "type": {
+              "type": "array",
+              "items": {
+                "name": "labels_object",
+                "type": "record",
+                "fields": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "type": "long",
+                      "arg.properties": {
+                        "iteration": {
+                          "start": 4300024000,
+                          "step": 1000
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "node_id",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "[a-zA-Z0-9]{40}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/labels/enhancement"
+                      }
+                    }
+                  },
+                  {
+                    "name": "name",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "options": [
+                          "enhancement",
+                          "bug",
+                          "documentation"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "default",
+                    "type":{
+                      "type": "boolean",
+                      "arg.properties": {
+                        "options": [
+                          true,
+                          false
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "description",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "Description [1-9]{2}"
+                      }
+                    }
+                  }
+                ]
+              },
+              "arg.properties": {
+                "length": 2
+              }
+            }
+          },
+          {
+            "name": "state",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "options": [
+                  "open",
+                  "closed"
+                ]
+              }
+            }
+          },
+          {
+            "name": "locked",
+            "type":{
+              "type": "boolean",
+              "arg.properties": {
+                "options": [
+                  true,
+                  false
+                ]
+              }
+            }
+          },
+          {
+            "name": "assignee",
+            "type": {
+              "type": "record",
+              "name": "assignee_object",
+              "fields": [
+                {
+                  "name": "login",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "user[1-9]{2}"
+                    }
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "type": "long",
+                    "arg.properties": {
+                      "iteration": {
+                        "start": 829002,
+                        "step": 20
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "node_id",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "[a-zA-Z0-9]{40}="
+                    }
+                  }
+                },
+                {
+                  "name": "avatar_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://avatars\\.githubusercontent\\.com/u/[a-z]{8}"
+                    }
+                  }
+                },
+                {
+                  "name": "gravatar_id",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "[a-z]{8}"
+                    }
+                  }
+                },
+                {
+                  "name": "url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}"
+                    }
+                  }
+                },
+                {
+                  "name": "html_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://github\\.com/org[1-9]{2}"
+                    }
+                  }
+                },
+                {
+                  "name": "followers_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/followers"
+                    }
+                  }
+                },
+                {
+                  "name": "following_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/following\\{/other_user\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "gists_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/gists\\{/gist_id\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "starred_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/starred\\{/owner\\}\\{/repo\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "subscriptions_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/subscriptions"
+                    }
+                  }
+                },
+                {
+                  "name": "organizations_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/orgs"
+                    }
+                  }
+                },
+                {
+                  "name": "repos_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/repos"
+                    }
+                  }
+                },
+                {
+                  "name": "events_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/events\\{/privacy\\}"
+                    }
+                  }
+                },
+                {
+                  "name": "received_events_url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/users/org[1-9]{2}/received_events"
+                    }
+                  }
+                },
+                {
+                  "name": "type",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "User"
+                    }
+                  }
+                },
+                {
+                  "name": "site_admin",
+                  "type":{
+                    "type": "boolean",
+                    "arg.properties": {
+                      "options": [
+                        false
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "assignees",
+            "type": {
+              "type": "array",
+              "items": {
+                "name": "assignees_object",
+                "type": "record",
+                "fields": [
+                  {
+                    "name": "login",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "user[1-9]{2}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "id",
+                    "type": {
+                      "type": "long",
+                      "arg.properties": {
+                        "iteration": {
+                          "start": 829002,
+                          "step": 20
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "node_id",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "[a-zA-Z0-9]{40}="
+                      }
+                    }
+                  },
+                  {
+                    "name": "avatar_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://avatars\\.githubusercontent\\.com/u/[a-z]{8}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "gravatar_id",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "[a-z]{8}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "html_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://github\\.com/org[1-9]{2}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "followers_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/followers"
+                      }
+                    }
+                  },
+                  {
+                    "name": "following_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/following\\{/other_user\\}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "gists_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/gists\\{/gist_id\\}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "starred_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/starred\\{/owner\\}\\{/repo\\}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "subscriptions_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/subscriptions"
+                      }
+                    }
+                  },
+                  {
+                    "name": "organizations_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/orgs"
+                      }
+                    }
+                  },
+                  {
+                    "name": "repos_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/repos"
+                      }
+                    }
+                  },
+                  {
+                    "name": "events_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/events\\{/privacy\\}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "received_events_url",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "https://api\\.github\\.com/users/org[1-9]{2}/received_events"
+                      }
+                    }
+                  },
+                  {
+                    "name": "type",
+                    "type":{
+                      "type": "string",
+                      "arg.properties": {
+                        "regex": "User"
+                      }
+                    }
+                  },
+                  {
+                    "name": "site_admin",
+                    "type":{
+                      "type": "boolean",
+                      "arg.properties": {
+                        "options": [
+                          false
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "arg.properties": {
+                "length": 2
+              }
+            }
+          },
+          {
+            "name": "milestone",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "arg.properties": {
+                  "options": [
+                    ""
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "comments",
+            "type":{
+              "type": "int",
+              "arg.properties": {
+                "options": [
+                  0,
+                  1,
+                  2,
+                  4,
+                  8
+                ]
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": {
+              "type": "long",
+              "arg.properties": {
+                "iteration": {
+                  "start": 1657053439000,
+                  "step": 30000
+                }
+              }
+            }
+          },
+          {
+            "name": "updated_at",
+            "type": {
+              "type": "long",
+              "arg.properties": {
+                "iteration": {
+                  "start": 1657053439000,
+                  "step": 30000
+                }
+              }
+            }
+          },
+          {
+            "name": "closed_at",
+            "type": [
+              "null",
+              {
+                "type": "long",
+                "arg.properties": {
+                  "iteration": {
+                    "start": 1657053439000,
+                    "step": 30000
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "author_association",
+            "type": {
+              "type": "string",
+              "arg.properties": {
+                "options": [
+                  "OWNER",
+                  "COLLABORATOR"
+                ]
+              }
+            }
+          },
+          {
+            "name": "active_lock_reason",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "arg.properties": {
+                  "options": [
+                    ""
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "body",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "Body [0-9]{3}"
+              }
+            }
+          },
+          {
+            "name": "reactions",
+            "type": {
+              "type": "record",
+              "name": "reactions_object",
+              "fields": [
+                {
+                  "name": "url",
+                  "type":{
+                    "type": "string",
+                    "arg.properties": {
+                      "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}/reactions"
+                    }
+                  }
+                },
+                {
+                  "name": "total_count",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        2,
+                        4,
+                        8,
+                        16
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "plus1",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "minus1",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "laugh",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "hooray",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "confused",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "heart",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "rocket",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "eyes",
+                  "type": {
+                    "type": "int",
+                    "arg.properties": {
+                      "options": [
+                        0,
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "timeline_url",
+            "type":{
+              "type": "string",
+              "arg.properties": {
+                "regex": "https://api\\.github\\.com/repos/org[1-9]{2}/repo[1-9]{2}/issues/[1-9]{2}/timeline"
+              }
+            }
+          },
+          {
+            "name": "performed_via_github_app",
+            "type": [
+              "null",
+              {
+                "type": "boolean",
+                "arg.properties": {
+                  "options": [
+                    true,
+                    false
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "state_reason",
+            "type": [
+              "null",
+              {
+                "type": "string",
+                "arg.properties": {
+                  "options": [
+                    ""
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "id",
+      "type":{
+        "type": "string",
+        "arg.properties": {
+          "regex": "[1-9][0-9]{8}"
+        }
+      }
+    }
+  ]
+}

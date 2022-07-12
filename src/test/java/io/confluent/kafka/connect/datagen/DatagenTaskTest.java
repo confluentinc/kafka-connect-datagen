@@ -157,6 +157,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForGitHubCommitsQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.GITHUB_COMMITS);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     DatagenTask.Quickstart quickstart = Quickstart.PAGEVIEWS;
