@@ -155,6 +155,10 @@ public class DatagenTaskTest {
   public void shouldGenerateFilesForStoresQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.STORES);
   }
+  @Test
+  public void shouldGenerateFilesForCampaignFinanceQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.CAMPAIGN_FINANCE);
+  }
 
   @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
