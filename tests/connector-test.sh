@@ -13,7 +13,6 @@ sleep 10
 confluent local services connect status
 
 connectors="credit_cards stores transactions purchases inventory product campaign_finance"
-connectors="campaign_finance"
 
 for connector in $connectors; do
     confluent local services connect connector config datagen-$connector --config ${DIR}/../config/connector_${connector}.config
