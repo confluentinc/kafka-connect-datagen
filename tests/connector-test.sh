@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
 confluent local destroy || true
-mvn -f ../pom.xml clean package || exit 1
+mvn -f ${DIR}/../pom.xml clean package || exit 1
 rm -fr $CONFLUENT_HOME/share/confluent-hub-components/confluentinc-kafka-connect-datagen
-confluent-hub install --no-prompt ../target/components/packages/confluentinc-kafka-connect-datagen-*.zip
+confluent-hub install --no-prompt ${DIR}/../target/components/packages/confluentinc-kafka-connect-datagen-*.zip
 confluent local services connect start
 sleep 10
 
@@ -14,7 +16,7 @@ connectors="credit_cards stores transactions purchases inventory product campaig
 connectors="campaign_finance"
 
 for connector in $connectors; do
-    confluent local services connect connector config datagen-$connector --config ../config/connector_${connector}.config
+    confluent local services connect connector config datagen-$connector --config ${DIR}/../config/connector_${connector}.config
 done
 
 confluent local services connect connector status
