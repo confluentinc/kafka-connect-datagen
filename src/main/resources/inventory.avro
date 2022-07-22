@@ -12,7 +12,7 @@
                     }
                 }},
                 {"name": "quantity", "type": {
-                    "type": "int",
+                    "type": "long",
                     "arg.properties": {
                         "range": {
                             "min": -100,
