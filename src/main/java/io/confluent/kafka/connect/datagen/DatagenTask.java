@@ -66,7 +66,7 @@ public class DatagenTask extends SourceTask {
   private String schemaKeyField;
   private Generator generator;
   private org.apache.avro.Schema avroSchema;
-  private org.apache.kafka.connect.data.Schema ksqlSchema;
+  private Schema ksqlSchema;
   private AvroData avroData;
   private int taskId;
   private Map<String, Object> sourcePartition;
@@ -184,7 +184,7 @@ public class DatagenTask extends SourceTask {
     }
 
     // Value
-    final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
+    final Schema messageSchema = avroData.toConnectSchema(avroSchema);
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
     if (maxRecords > 0 && count >= maxRecords) {
@@ -258,20 +258,20 @@ public class DatagenTask extends SourceTask {
   public void stop() {
   }
 
-  private org.apache.kafka.connect.data.Schema getOptionalSchema(
-      final org.apache.kafka.connect.data.Schema schema
+  private Schema getOptionalSchema(
+      final Schema schema
   ) {
     switch (schema.type()) {
       case BOOLEAN:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_BOOLEAN_SCHEMA;
+        return Schema.OPTIONAL_BOOLEAN_SCHEMA;
       case INT32:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_INT32_SCHEMA;
+        return Schema.OPTIONAL_INT32_SCHEMA;
       case INT64:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_INT64_SCHEMA;
+        return Schema.OPTIONAL_INT64_SCHEMA;
       case FLOAT64:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_FLOAT64_SCHEMA;
+        return Schema.OPTIONAL_FLOAT64_SCHEMA;
       case STRING:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_STRING_SCHEMA;
+        return Schema.OPTIONAL_STRING_SCHEMA;
       case ARRAY:
         return SchemaBuilder.array(getOptionalSchema(schema.valueSchema())).optional().build();
       case MAP:
@@ -294,7 +294,7 @@ public class DatagenTask extends SourceTask {
   }
 
   private Object getOptionalValue(
-      final org.apache.kafka.connect.data.Schema schema,
+      final Schema schema,
       final Object value
   ) {
     switch (schema.type()) {
