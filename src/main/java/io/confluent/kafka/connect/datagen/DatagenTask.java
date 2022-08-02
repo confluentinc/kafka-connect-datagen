@@ -87,7 +87,7 @@ public class DatagenTask extends SourceTask {
     STORES("stores.avro", "store_id"),
     CREDIT_CARDS("credit_cards.avro", "card_id");
 
-    static final Set<String> configValues;
+    private static final Set<String> configValues;
 
     static {
       ImmutableSet.Builder<String> immutableSetBuilder = ImmutableSet.builder();
@@ -104,6 +104,10 @@ public class DatagenTask extends SourceTask {
     Quickstart(String schemaFilename, String keyName) {
       this.schemaFilename = schemaFilename;
       this.keyName = keyName;
+    }
+
+    public static Set<String> configValues() {
+      return configValues;
     }
 
     public String getSchemaFilename() {
