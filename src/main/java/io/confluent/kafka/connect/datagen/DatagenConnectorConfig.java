@@ -49,6 +49,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String RANDOM_SEED_DOC = "Numeric seed for generating random data. "
       + "Two connectors started with the same seed will deterministically produce the same data. "
       + "Each task will generate different data than the other tasks in the same connector.";
+  private static final String GENERATE_TIMEOUT_CONF = "generate.timeout";
+  private static final String GENERATE_TIMEOUT_DOC = "Timeout for random message generation";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
@@ -90,7 +92,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
           Importance.HIGH,
           QUICKSTART_DOC
         )
-        .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC);
+        .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC)
+        .define(GENERATE_TIMEOUT_CONF, Type.LONG, null, Importance.LOW, GENERATE_TIMEOUT_DOC);
   }
 
   public String getKafkaTopic() {
@@ -129,6 +132,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public String getSchemaString() {
     return this.getString(SCHEMA_STRING_CONF);
+  }
+
+  public Long getGenerateTimeout() {
+    return this.getLong(GENERATE_TIMEOUT_CONF);
   }
 
   public Schema getSchema() {
