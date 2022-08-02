@@ -298,8 +298,8 @@ public class DatagenTask extends SourceTask {
       case ARRAY:
         final List<?> list = (List<?>) value;
         return list.stream()
-                   .map(listItem -> getOptionalValue(schema.valueSchema(), listItem))
-                   .collect(Collectors.toList());
+          .map(listItem -> getOptionalValue(schema.valueSchema(), listItem))
+          .collect(Collectors.toList());
       case MAP:
         final Map<?, ?> map = (Map<?, ?>) value;
         return map.entrySet().stream()
