@@ -174,20 +174,7 @@ public class DatagenTask extends SourceTask {
       }
     }
     final GenericRecord randomAvroMessage = generateRecord();
-
-    final List<Object> genericRowValues = new ArrayList<>();
-    for (org.apache.avro.Schema.Field field : avroSchema.getFields()) {
-      final Object value = randomAvroMessage.get(field.name());
-      if (value instanceof Record) {
-        final Record record = (Record) value;
-        final Object ksqlValue = avroData.toConnectData(record.getSchema(), record).value();
-        Object optionValue = getOptionalValue(ksqlSchema.field(field.name()).schema(), ksqlValue);
-        genericRowValues.add(optionValue);
-      } else {
-        genericRowValues.add(value);
-      }
-    }
-
+    
     // Key
     SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
     if (!schemaKeyField.isEmpty()) {
