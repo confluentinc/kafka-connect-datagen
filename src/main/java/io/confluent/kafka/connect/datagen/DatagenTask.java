@@ -19,6 +19,7 @@ package io.confluent.kafka.connect.datagen;
 import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -90,12 +91,13 @@ public class DatagenTask extends SourceTask {
     STORES("stores.avro", "store_id"),
     CREDIT_CARDS("credit_cards.avro", "card_id");
 
-    static final Set<String> configValues = new HashSet<>();
+    static final Set<String> configValues;
 
     static {
-      for (Quickstart q : Quickstart.values()) {
-        configValues.add(q.name().toLowerCase());
-      }
+      configValues = Arrays.stream(Quickstart.values())
+        .map(Quickstart::name)
+        .map(String::toLowerCase)
+        .collect(Collectors.toSet());
     }
 
     private final String schemaFilename;
