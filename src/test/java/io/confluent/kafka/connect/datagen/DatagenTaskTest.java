@@ -44,7 +44,9 @@ import org.apache.kafka.connect.source.SourceTaskContext;
 import org.apache.kafka.connect.storage.OffsetStorageReader;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -60,6 +62,9 @@ public class DatagenTaskTest {
   private static final int TASK_ID = 0;
 
   private static final AvroData AVRO_DATA = new AvroData(20);
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   private Map<String, String> config;
   private DatagenTask task;
@@ -223,6 +228,36 @@ public class DatagenTaskTest {
     }
   }
 
+  /**
+   * <p>
+   *   This test is non-deterministic. This test might fail in case avro-random-generator library
+   *   updates/changes its underlying implementation.
+   * </p>
+   * @throws Exception
+   */
+  @Test
+  public void shouldFailToGenerateComplexRegexWithTimeout() throws Exception {
+    createTaskWithSchemaAndTimeout("regex_schema_timeout.avro", "regex_key", "100");
+    expectedException.expect(ConnectException.class);
+    expectedException.expectMessage("Record generation timed out");
+    generateRecords();
+  }
+
+  /**
+   * <p>
+   *   This test is non-deterministic. This test might fail in case avro-random-generator library
+   *   updates/changes its underlying implementation.
+   * </p>
+   * @throws Exception
+   */
+  @Test
+  public void shouldFailToGenerateComplexRegexWithStackOverflow() throws Exception {
+    createTaskWithSchemaAndTimeout("regex_schema_stackoverflow.avro", "regex_key", "100");
+    expectedException.expect(ConnectException.class);
+    expectedException.expectMessage("Unable to generate random record");
+    generateRecords();
+  }
+  
   private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
     createTaskWith(quickstart);
     generateRecords();
@@ -335,6 +370,17 @@ public class DatagenTaskTest {
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, idFieldName);
     createTask();
     loadKeyAndValueSchemas(schemaResourceFilename, idFieldName);
+  }
+
+  private void createTaskWithSchemaAndTimeout(String schemaResourceFile, String idFieldName,
+    String timeout) {
+    dropSchemaSourceConfigs();
+    config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, schemaResourceFile);
+    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, idFieldName);
+    config.put(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF, timeout);
+    createTask();
+    loadKeyAndValueSchemas(schemaResourceFile, idFieldName);
+
   }
 
   private void createTaskWithSchemaText(String schemaText, String keyField) {

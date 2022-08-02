@@ -49,7 +49,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String RANDOM_SEED_DOC = "Numeric seed for generating random data. "
       + "Two connectors started with the same seed will deterministically produce the same data. "
       + "Each task will generate different data than the other tasks in the same connector.";
-  private static final String GENERATE_TIMEOUT_CONF = "generate.timeout";
+  public static final String GENERATE_TIMEOUT_CONF = "generate.timeout";
   private static final String GENERATE_TIMEOUT_DOC = "Timeout in milliseconds for random message "
       + "generation";
 
