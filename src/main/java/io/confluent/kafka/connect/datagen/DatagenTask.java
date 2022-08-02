@@ -26,6 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
@@ -51,6 +57,7 @@ public class DatagenTask extends SourceTask {
   public static final String CURRENT_ITERATION = "current.iteration";
   public static final String RANDOM_SEED = "random.seed";
 
+  private final ExecutorService generateExecutor = Executors.newSingleThreadExecutor();
 
   private DatagenConnectorConfig config;
   private String topic;
@@ -166,15 +173,7 @@ public class DatagenTask extends SourceTask {
         return null;
       }
     }
-
-    final Object generatedObject = generator.generate();
-    if (!(generatedObject instanceof GenericRecord)) {
-      throw new RuntimeException(String.format(
-          "Expected Avro Random Generator to return instance of GenericRecord, found %s instead",
-          generatedObject.getClass().getName()
-      ));
-    }
-    final GenericRecord randomAvroMessage = (GenericRecord) generatedObject;
+    final GenericRecord randomAvroMessage = generateRecord();
 
     final List<Object> genericRowValues = new ArrayList<>();
     for (org.apache.avro.Schema.Field field : avroSchema.getFields()) {
@@ -243,6 +242,30 @@ public class DatagenTask extends SourceTask {
     records.add(record);
     count += records.size();
     return records;
+  }
+
+  private GenericRecord generateRecord() throws DatagenException {
+    Future<Object> generatedObjectFuture = generateExecutor.submit(generator::generate);
+    Long timeout = config.getGenerateTimeout();
+    Object generatedObject;
+    try {
+      if (timeout == null) {
+        generatedObject = generatedObjectFuture.get();
+      } else {
+        generatedObject = generatedObjectFuture.get(timeout, TimeUnit.MILLISECONDS);
+      }
+    } catch (InterruptedException | ExecutionException e) {
+      throw new DatagenException("Unable to generate random record", e);
+    } catch (TimeoutException e) {
+      throw new DatagenException("Record generation timed out", e);
+    }
+    if (!(generatedObject instanceof GenericRecord)) {
+      throw new DatagenException(String.format(
+        "Expected Avro Random Generator to return instance of GenericRecord, found %s instead",
+        generatedObject.getClass().getName()
+      ));
+    }
+    return (GenericRecord) generatedObject;
   }
 
   @Override
