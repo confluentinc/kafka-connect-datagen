@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class DatagenTask extends SourceTask {
 
-  static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
+  private static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
 
   private static final Schema DEFAULT_KEY_SCHEMA = Schema.OPTIONAL_STRING_SCHEMA;
   public static final String TASK_ID = "task.id";
