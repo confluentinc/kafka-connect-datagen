@@ -16,6 +16,7 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import com.google.common.collect.ImmutableSet;
 import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaAndValue;
@@ -90,10 +90,12 @@ public class DatagenTask extends SourceTask {
     static final Set<String> configValues;
 
     static {
-      configValues = Arrays.stream(Quickstart.values())
+      ImmutableSet.Builder<String> immutableSetBuilder = ImmutableSet.builder();
+      Arrays.stream(Quickstart.values())
         .map(Quickstart::name)
         .map(String::toLowerCase)
-        .collect(Collectors.toSet());
+        .forEach(immutableSetBuilder::add);
+      configValues = immutableSetBuilder.build();
     }
 
     private final String schemaFilename;
