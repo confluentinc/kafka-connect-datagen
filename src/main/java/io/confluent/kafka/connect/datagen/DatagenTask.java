@@ -162,7 +162,7 @@ public class DatagenTask extends SourceTask {
   }
 
   @Override
-  public List<SourceRecord> poll() throws InterruptedException {
+  public List<SourceRecord> poll() throws ConnectException {
 
     if (maxInterval > 0) {
       try {
@@ -230,7 +230,7 @@ public class DatagenTask extends SourceTask {
     return records;
   }
 
-  private GenericRecord generateRecord() throws DatagenTaskException {
+  private GenericRecord generateRecord() throws ConnectException {
     Future<Object> generatedObjectFuture = generateExecutor.submit(generator::generate);
     Long timeout = config.getGenerateTimeout();
     Object generatedObject;
@@ -241,12 +241,12 @@ public class DatagenTask extends SourceTask {
         generatedObject = generatedObjectFuture.get(timeout, TimeUnit.MILLISECONDS);
       }
     } catch (InterruptedException | ExecutionException e) {
-      throw new DatagenTaskException("Unable to generate random record", e);
+      throw new ConnectException("Unable to generate random record", e);
     } catch (TimeoutException e) {
-      throw new DatagenTaskException("Record generation timed out", e);
+      throw new ConnectException("Record generation timed out", e);
     }
     if (!(generatedObject instanceof GenericRecord)) {
-      throw new DatagenTaskException(String.format(
+      throw new ConnectException(String.format(
         "Expected Avro Random Generator to return instance of GenericRecord, found %s instead",
         generatedObject.getClass().getName()
       ));
