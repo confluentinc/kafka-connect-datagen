@@ -257,7 +257,7 @@ public class DatagenTaskTest {
     expectedException.expectMessage("Unable to generate random record");
     generateRecords();
   }
-  
+
   private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
     createTaskWith(quickstart);
     generateRecords();
