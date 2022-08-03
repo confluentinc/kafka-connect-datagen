@@ -220,6 +220,30 @@ public class DatagenConnectorTest {
     );
   }
 
+  @Test
+  public void shouldAllowSettingGenerateTimeoutInRange() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF, "100");
+    Config validated = connector.validate(config);
+    assertThat(validated, hasNoValidationErrorsFor(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF));
+  }
+
+  @Test
+  public void shouldNotAllowSettingGenerateTimeoutNegative() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF, "-1");
+    Config validated = connector.validate(config);
+    assertThat(validated, hasValidationError(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF, 1));
+  }
+
+  @Test
+  public void shouldNotAllowSettingGenerateTimeoutOutOfRange() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF, "70000");
+    Config validated = connector.validate(config);
+    assertThat(validated, hasValidationError(DatagenConnectorConfig.GENERATE_TIMEOUT_CONF, 1));
+  }
+
   protected void assertTaskConfigs(int maxTasks) {
     List<Map<String, String>> taskConfigs = connector.taskConfigs(maxTasks);
     assertEquals(maxTasks, taskConfigs.size());
