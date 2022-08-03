@@ -216,6 +216,9 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
     @Override
     public void ensureValid(String name, Object value) {
+      if (value == null) {
+        return;
+      }
       Long longValue = (Long) value;
       if (longValue > 0 && longValue <= 60000L) {
         return;
