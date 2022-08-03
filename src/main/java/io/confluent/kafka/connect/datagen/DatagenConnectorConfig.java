@@ -93,8 +93,17 @@ public class DatagenConnectorConfig extends AbstractConfig {
           Importance.HIGH,
           QUICKSTART_DOC
         )
-        .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC)
-        .define(GENERATE_TIMEOUT_CONF, Type.LONG, null, Importance.LOW, GENERATE_TIMEOUT_DOC);
+        .define(RANDOM_SEED_CONF,
+          Type.LONG,
+          null,
+          Importance.LOW,
+          RANDOM_SEED_DOC)
+        .define(GENERATE_TIMEOUT_CONF,
+          Type.LONG,
+          null,
+          new GenerateTimeoutValidator(),
+          Importance.LOW,
+          GENERATE_TIMEOUT_DOC);
   }
 
   public String getKafkaTopic() {
@@ -200,6 +209,18 @@ public class DatagenConnectorConfig extends AbstractConfig {
         return;
       }
       ConfigUtils.getSchemaFromSchemaFileName((String) value);
+    }
+  }
+
+  private static class GenerateTimeoutValidator implements Validator {
+
+    @Override
+    public void ensureValid(String name, Object value) {
+      Long longValue = (Long) value;
+      if (longValue > 0 && longValue <= 60000L) {
+        return;
+      }
+      throw new ConfigException(name + " must be in the range [1, 60,000] ms");
     }
   }
 }
