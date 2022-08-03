@@ -219,11 +219,11 @@ public class DatagenConnectorConfig extends AbstractConfig {
       if (value == null) {
         return;
       }
-      Long longValue = (Long) value;
+      long longValue = (Long) value;
       if (longValue > 0 && longValue <= 60000L) {
         return;
       }
-      throw new ConfigException(name + " must be in the range [1, 60,000] ms");
+      throw new ConfigException(name + " must be in the range [1, 60000] ms");
     }
   }
 }
