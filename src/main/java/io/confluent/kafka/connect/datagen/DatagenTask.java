@@ -245,8 +245,10 @@ public class DatagenTask extends SourceTask {
         generatedObject = generatedObjectFuture.get(timeout, TimeUnit.MILLISECONDS);
       }
     } catch (InterruptedException | ExecutionException e) {
+      generatedObjectFuture.cancel(true);
       throw new ConnectException("Unable to generate random record", e);
     } catch (TimeoutException e) {
+      generatedObjectFuture.cancel(true);
       throw new ConnectException("Record generation timed out", e);
     }
     if (!(generatedObject instanceof GenericRecord)) {
