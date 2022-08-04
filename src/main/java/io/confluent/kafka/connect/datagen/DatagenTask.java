@@ -260,5 +260,6 @@ public class DatagenTask extends SourceTask {
 
   @Override
   public void stop() {
+    generateExecutor.shutdown();
   }
 }
