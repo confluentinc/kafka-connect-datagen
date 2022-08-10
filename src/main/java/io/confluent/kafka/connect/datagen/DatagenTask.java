@@ -166,7 +166,7 @@ public class DatagenTask extends SourceTask {
   }
 
   @Override
-  public List<SourceRecord> poll() throws ConnectException {
+  public List<SourceRecord> poll() {
 
     if (maxInterval > 0) {
       try {
@@ -234,7 +234,7 @@ public class DatagenTask extends SourceTask {
     return records;
   }
 
-  private GenericRecord generateRecord() throws ConnectException {
+  private GenericRecord generateRecord() {
     Future<Object> generatedObjectFuture = generateExecutor.submit(generator::generate);
     Long timeout = config.getGenerateTimeout();
     Object generatedObject;
