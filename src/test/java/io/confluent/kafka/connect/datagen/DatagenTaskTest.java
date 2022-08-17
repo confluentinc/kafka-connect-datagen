@@ -176,7 +176,7 @@ public class DatagenTaskTest {
 
   @Test
   public void shouldGenerateFilesForUsers2Quickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.USERS_);
+    generateAndValidateRecordsFor(Quickstart.USERS_ARRAY_MAP);
   }
 
   @Test
