@@ -16,7 +16,6 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,17 +82,17 @@ public class DatagenTaskTest {
 
   @Test
   public void shouldGenerateFilesForClickstreamCodesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.CLICKSTREAM_CODES);
+    generateAndValidateRecordsFor(Quickstart.CLICKSTREAM_CODES);
   }
 
   @Test
   public void shouldGenerateFilesForClickstreamUsersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.CLICKSTREAM_USERS);
+    generateAndValidateRecordsFor(Quickstart.CLICKSTREAM_USERS);
   }
 
   @Test
   public void shouldGenerateFilesForClickstreamQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.CLICKSTREAM);
+    generateAndValidateRecordsFor(Quickstart.CLICKSTREAM);
   }
 
   @Test
@@ -162,32 +161,32 @@ public class DatagenTaskTest {
 
   @Test
   public void shouldGenerateFilesForOrdersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.ORDERS);
+    generateAndValidateRecordsFor(Quickstart.ORDERS);
   }
 
   @Test
   public void shouldGenerateFilesForRatingsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.RATINGS);
+    generateAndValidateRecordsFor(Quickstart.RATINGS);
   }
 
   @Test
   public void shouldGenerateFilesForUsersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS);
+    generateAndValidateRecordsFor(Quickstart.USERS);
   }
 
   @Test
   public void shouldGenerateFilesForUsers2Quickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS_);
+    generateAndValidateRecordsFor(Quickstart.USERS_);
   }
 
   @Test
   public void shouldGenerateFilesForPageviewsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.PAGEVIEWS);
+    generateAndValidateRecordsFor(Quickstart.PAGEVIEWS);
   }
 
   @Test
   public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.STOCK_TRADES);
+    generateAndValidateRecordsFor(Quickstart.STOCK_TRADES);
   }
 
   @Test
@@ -227,7 +226,7 @@ public class DatagenTaskTest {
   @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
-    DatagenTask.Quickstart quickstart = Quickstart.PAGEVIEWS;
+    Quickstart quickstart = Quickstart.PAGEVIEWS;
     assertNotEquals(quickstart.getSchemaKeyField(), "pageid");
     createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), "pageid");
     generateRecords();
@@ -278,7 +277,7 @@ public class DatagenTaskTest {
   @Test
   public void shouldFailToGenerateMoreRecordsThanSpecified() throws Exception {
     // Generate the expected number of records
-    createTaskWith(DatagenTask.Quickstart.USERS);
+    createTaskWith(Quickstart.USERS);
     generateRecords();
     assertRecordsMatchSchemas();
 
@@ -291,7 +290,7 @@ public class DatagenTaskTest {
     }
   }
 
-  private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
+  private void generateAndValidateRecordsFor(Quickstart quickstart) throws Exception {
     createTaskWith(quickstart);
     generateRecords();
     assertRecordsMatchSchemas();
@@ -393,7 +392,7 @@ public class DatagenTaskTest {
     config.remove(DatagenConnectorConfig.SCHEMA_STRING_CONF);
   }
 
-  private void createTaskWith(DatagenTask.Quickstart quickstart) {
+  private void createTaskWith(Quickstart quickstart) {
     dropSchemaSourceConfigs();
     config.put(
         DatagenConnectorConfig.QUICKSTART_CONF,

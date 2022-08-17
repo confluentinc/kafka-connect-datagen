@@ -16,7 +16,6 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class DatagenConnectorTest {
     config.put(DatagenConnectorConfig.KAFKA_TOPIC_CONF, TOPIC);
     config.put(DatagenConnectorConfig.ITERATIONS_CONF, Integer.toString(NUM_MESSAGES));
     config.put(DatagenConnectorConfig.MAXINTERVAL_CONF, Integer.toString(MAX_INTERVAL_MS));
-    config.put(DatagenConnectorConfig.QUICKSTART_CONF, DatagenTask.Quickstart.USERS.name());
+    config.put(DatagenConnectorConfig.QUICKSTART_CONF, Quickstart.USERS.name());
     connector = new DatagenConnector();
   }
 
