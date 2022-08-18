@@ -224,6 +224,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForFleetMgmtDescriptionQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_DESCRIPTION);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
