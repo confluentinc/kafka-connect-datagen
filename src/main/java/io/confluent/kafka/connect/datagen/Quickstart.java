@@ -42,7 +42,8 @@ enum Quickstart {
   FLEET_MGMT_LOCATION("fleet_mgmt_location.avro", "vehicle_id"),
   FLEET_MGMT_SENSORS("fleet_mgmt_sensors.avro", "vehicle_id"),
   PIZZA_ORDERS("pizza_orders.avro", "store_id"),
-  PIZZA_ORDERS_COMPLETED("pizza_orders_completed.avro", "store_id");
+  PIZZA_ORDERS_COMPLETED("pizza_orders_completed.avro", "store_id"),
+  PIZZA_ORDERS_CANCELLED("pizza_orders_cancelled.avro", "store_id");
 
   private static final Set<String> configValues;
 

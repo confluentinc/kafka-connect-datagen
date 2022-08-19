@@ -253,6 +253,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForPizzaOrdersCancelledQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS_CANCELLED);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
