@@ -278,6 +278,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForGamingPlayersQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.GAMING_PLAYERS);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
