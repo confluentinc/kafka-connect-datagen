@@ -1,0 +1,809 @@
+{
+    "namespace": "pizza_orders",
+    "name": "pizza_orders",
+    "type": "record",
+    "fields": [
+        {
+            "name": "store_id",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "range": {
+                        "min": 1,
+                        "max": 10
+                    }
+                }
+            }
+        },
+        {
+            "name": "store_order_id",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "iteration": {
+                        "start": 1000,
+                        "step": 1
+                    }
+                }
+            }
+        },
+        {
+            "name": "coupon_code",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "range": {
+                        "min": 1000,
+                        "max": 2000
+                    }
+                }
+            }
+        },
+        {
+            "name": "date",
+            "type": {
+                "type": "int",
+                "logicalType": "date",
+                "arg.properties": {
+                    "range": {
+                        "min": 18000,
+                        "max": 19000
+                    }
+                }
+            }
+        },
+        {
+            "name": "status",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "options": [
+                        "accepted"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "order_lines",
+            "type": {
+                "type": "array",
+                "items": {
+                    "name": "order_line",
+                    "type": "record",
+                    "arg.properties": {
+                        "options": [
+                            {
+                                "product_id": 66,
+                                "category": "calzone",
+                                "quantity": 4,
+                                "unit_price": 18.78,
+                                "net_price": 75.12
+                            },
+                            {
+                                "product_id": 71,
+                                "category": "salad",
+                                "quantity": 4,
+                                "unit_price": 4.8999999999999995,
+                                "net_price": 19.599999999999998
+                            },
+                            {
+                                "product_id": 79,
+                                "category": "pizza",
+                                "quantity": 3,
+                                "unit_price": 19.610000000000003,
+                                "net_price": 58.83000000000001
+                            },
+                            {
+                                "product_id": 38,
+                                "category": "calzone",
+                                "quantity": 2,
+                                "unit_price": 13.049999999999999,
+                                "net_price": 26.099999999999998
+                            },
+                            {
+                                "product_id": 26,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 17.37,
+                                "net_price": 17.37
+                            },
+                            {
+                                "product_id": 66,
+                                "category": "calzone",
+                                "quantity": 3,
+                                "unit_price": 24.630000000000003,
+                                "net_price": 73.89000000000001
+                            },
+                            {
+                                "product_id": 62,
+                                "category": "desert",
+                                "quantity": 3,
+                                "unit_price": 21.14,
+                                "net_price": 63.42
+                            },
+                            {
+                                "product_id": 68,
+                                "category": "salad",
+                                "quantity": 3,
+                                "unit_price": 21.130000000000003,
+                                "net_price": 63.39000000000001
+                            },
+                            {
+                                "product_id": 72,
+                                "category": "salad",
+                                "quantity": 2,
+                                "unit_price": 8.459999999999999,
+                                "net_price": 16.919999999999998
+                            },
+                            {
+                                "product_id": 55,
+                                "category": "calzone",
+                                "quantity": 2,
+                                "unit_price": 3.6,
+                                "net_price": 7.2
+                            },
+                            {
+                                "product_id": 77,
+                                "category": "pizza",
+                                "quantity": 4,
+                                "unit_price": 19.01,
+                                "net_price": 76.04
+                            },
+                            {
+                                "product_id": 60,
+                                "category": "pizza",
+                                "quantity": 3,
+                                "unit_price": 1.49,
+                                "net_price": 4.47
+                            },
+                            {
+                                "product_id": 8,
+                                "category": "desert",
+                                "quantity": 3,
+                                "unit_price": 23.330000000000002,
+                                "net_price": 69.99000000000001
+                            },
+                            {
+                                "product_id": 91,
+                                "category": "calzone",
+                                "quantity": 4,
+                                "unit_price": 11.24,
+                                "net_price": 44.96
+                            },
+                            {
+                                "product_id": 78,
+                                "category": "pizza",
+                                "quantity": 2,
+                                "unit_price": 11.45,
+                                "net_price": 22.9
+                            },
+                            {
+                                "product_id": 27,
+                                "category": "desert",
+                                "quantity": 3,
+                                "unit_price": 22.020000000000003,
+                                "net_price": 66.06
+                            },
+                            {
+                                "product_id": 58,
+                                "category": "salad",
+                                "quantity": 1,
+                                "unit_price": 9.879999999999999,
+                                "net_price": 9.879999999999999
+                            },
+                            {
+                                "product_id": 9,
+                                "category": "desert",
+                                "quantity": 4,
+                                "unit_price": 24.69,
+                                "net_price": 98.76
+                            },
+                            {
+                                "product_id": 77,
+                                "category": "salad",
+                                "quantity": 1,
+                                "unit_price": 12.62,
+                                "net_price": 12.62
+                            },
+                            {
+                                "product_id": 27,
+                                "category": "wings",
+                                "quantity": 3,
+                                "unit_price": 2.21,
+                                "net_price": 6.63
+                            },
+                            {
+                                "product_id": 4,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 19.040000000000003,
+                                "net_price": 19.040000000000003
+                            },
+                            {
+                                "product_id": 48,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 16.380000000000003,
+                                "net_price": 16.380000000000003
+                            },
+                            {
+                                "product_id": 26,
+                                "category": "desert",
+                                "quantity": 5,
+                                "unit_price": 9.24,
+                                "net_price": 46.2
+                            },
+                            {
+                                "product_id": 75,
+                                "category": "pizza",
+                                "quantity": 5,
+                                "unit_price": 16.09,
+                                "net_price": 80.45
+                            },
+                            {
+                                "product_id": 33,
+                                "category": "salad",
+                                "quantity": 3,
+                                "unit_price": 10.879999999999999,
+                                "net_price": 32.64
+                            },
+                            {
+                                "product_id": 45,
+                                "category": "calzone",
+                                "quantity": 5,
+                                "unit_price": 22.64,
+                                "net_price": 113.2
+                            },
+                            {
+                                "product_id": 65,
+                                "category": "desert",
+                                "quantity": 5,
+                                "unit_price": 2.63,
+                                "net_price": 13.149999999999999
+                            },
+                            {
+                                "product_id": 52,
+                                "category": "wings",
+                                "quantity": 1,
+                                "unit_price": 5.68,
+                                "net_price": 5.68
+                            },
+                            {
+                                "product_id": 23,
+                                "category": "pizza",
+                                "quantity": 3,
+                                "unit_price": 5.489999999999999,
+                                "net_price": 16.47
+                            },
+                            {
+                                "product_id": 67,
+                                "category": "desert",
+                                "quantity": 1,
+                                "unit_price": 3.02,
+                                "net_price": 3.02
+                            },
+                            {
+                                "product_id": 71,
+                                "category": "desert",
+                                "quantity": 4,
+                                "unit_price": 16.69,
+                                "net_price": 66.76
+                            },
+                            {
+                                "product_id": 69,
+                                "category": "salad",
+                                "quantity": 3,
+                                "unit_price": 17.07,
+                                "net_price": 51.21
+                            },
+                            {
+                                "product_id": 41,
+                                "category": "pizza",
+                                "quantity": 4,
+                                "unit_price": 11.549999999999999,
+                                "net_price": 46.199999999999996
+                            },
+                            {
+                                "product_id": 44,
+                                "category": "wings",
+                                "quantity": 2,
+                                "unit_price": 6.59,
+                                "net_price": 13.18
+                            },
+                            {
+                                "product_id": 66,
+                                "category": "wings",
+                                "quantity": 2,
+                                "unit_price": 16.540000000000003,
+                                "net_price": 33.080000000000005
+                            },
+                            {
+                                "product_id": 8,
+                                "category": "calzone",
+                                "quantity": 5,
+                                "unit_price": 12.07,
+                                "net_price": 60.35
+                            },
+                            {
+                                "product_id": 43,
+                                "category": "salad",
+                                "quantity": 5,
+                                "unit_price": 13.9,
+                                "net_price": 69.5
+                            },
+                            {
+                                "product_id": 13,
+                                "category": "calzone",
+                                "quantity": 5,
+                                "unit_price": 20.3,
+                                "net_price": 101.5
+                            },
+                            {
+                                "product_id": 65,
+                                "category": "salad",
+                                "quantity": 5,
+                                "unit_price": 16.610000000000003,
+                                "net_price": 83.05000000000001
+                            },
+                            {
+                                "product_id": 48,
+                                "category": "desert",
+                                "quantity": 1,
+                                "unit_price": 4.18,
+                                "net_price": 4.18
+                            },
+                            {
+                                "product_id": 59,
+                                "category": "calzone",
+                                "quantity": 3,
+                                "unit_price": 5.739999999999999,
+                                "net_price": 17.22
+                            },
+                            {
+                                "product_id": 42,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 15.65,
+                                "net_price": 15.65
+                            },
+                            {
+                                "product_id": 22,
+                                "category": "calzone",
+                                "quantity": 5,
+                                "unit_price": 2.79,
+                                "net_price": 13.95
+                            },
+                            {
+                                "product_id": 47,
+                                "category": "pizza",
+                                "quantity": 2,
+                                "unit_price": 15.35,
+                                "net_price": 30.7
+                            },
+                            {
+                                "product_id": 72,
+                                "category": "salad",
+                                "quantity": 5,
+                                "unit_price": 24.970000000000002,
+                                "net_price": 124.85000000000001
+                            },
+                            {
+                                "product_id": 60,
+                                "category": "salad",
+                                "quantity": 1,
+                                "unit_price": 2.85,
+                                "net_price": 2.85
+                            },
+                            {
+                                "product_id": 58,
+                                "category": "desert",
+                                "quantity": 1,
+                                "unit_price": 1.24,
+                                "net_price": 1.24
+                            },
+                            {
+                                "product_id": 88,
+                                "category": "calzone",
+                                "quantity": 4,
+                                "unit_price": 24.00,
+                                "net_price": 96.00
+                            },
+                            {
+                                "product_id": 98,
+                                "category": "wings",
+                                "quantity": 1,
+                                "unit_price": 6.659999999999999,
+                                "net_price": 6.659999999999999
+                            },
+                            {
+                                "product_id": 37,
+                                "category": "pizza",
+                                "quantity": 3,
+                                "unit_price": 14.62,
+                                "net_price": 43.86
+                            },
+                            {
+                                "product_id": 37,
+                                "category": "calzone",
+                                "quantity": 3,
+                                "unit_price": 14.209999999999999,
+                                "net_price": 42.629999999999995
+                            },
+                            {
+                                "product_id": 54,
+                                "category": "wings",
+                                "quantity": 1,
+                                "unit_price": 18.880000000000003,
+                                "net_price": 18.880000000000003
+                            },
+                            {
+                                "product_id": 52,
+                                "category": "wings",
+                                "quantity": 3,
+                                "unit_price": 9.469999999999999,
+                                "net_price": 28.409999999999997
+                            },
+                            {
+                                "product_id": 80,
+                                "category": "wings",
+                                "quantity": 1,
+                                "unit_price": 13.389999999999999,
+                                "net_price": 13.389999999999999
+                            },
+                            {
+                                "product_id": 6,
+                                "category": "pizza",
+                                "quantity": 3,
+                                "unit_price": 13.639999999999999,
+                                "net_price": 40.919999999999995
+                            },
+                            {
+                                "product_id": 95,
+                                "category": "wings",
+                                "quantity": 1,
+                                "unit_price": 24.900000000000002,
+                                "net_price": 24.900000000000002
+                            },
+                            {
+                                "product_id": 60,
+                                "category": "pizza",
+                                "quantity": 5,
+                                "unit_price": 7.63,
+                                "net_price": 38.15
+                            },
+                            {
+                                "product_id": 81,
+                                "category": "wings",
+                                "quantity": 4,
+                                "unit_price": 20.310000000000002,
+                                "net_price": 81.24000000000001
+                            },
+                            {
+                                "product_id": 42,
+                                "category": "desert",
+                                "quantity": 1,
+                                "unit_price": 6.609999999999999,
+                                "net_price": 6.609999999999999
+                            },
+                            {
+                                "product_id": 6,
+                                "category": "salad",
+                                "quantity": 4,
+                                "unit_price": 7.659999999999999,
+                                "net_price": 30.639999999999997
+                            },
+                            {
+                                "product_id": 36,
+                                "category": "calzone",
+                                "quantity": 4,
+                                "unit_price": 3.23,
+                                "net_price": 12.92
+                            },
+                            {
+                                "product_id": 27,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 8.639999999999999,
+                                "net_price": 8.639999999999999
+                            },
+                            {
+                                "product_id": 97,
+                                "category": "salad",
+                                "quantity": 5,
+                                "unit_price": 6.33,
+                                "net_price": 31.65
+                            },
+                            {
+                                "product_id": 95,
+                                "category": "salad",
+                                "quantity": 4,
+                                "unit_price": 14.889999999999999,
+                                "net_price": 59.559999999999995
+                            },
+                            {
+                                "product_id": 89,
+                                "category": "pizza",
+                                "quantity": 1,
+                                "unit_price": 8.81,
+                                "net_price": 8.81
+                            },
+                            {
+                                "product_id": 97,
+                                "category": "desert",
+                                "quantity": 3,
+                                "unit_price": 16.03,
+                                "net_price": 48.09
+                            },
+                            {
+                                "product_id": 25,
+                                "category": "salad",
+                                "quantity": 4,
+                                "unit_price": 3.17,
+                                "net_price": 12.68
+                            },
+                            {
+                                "product_id": 42,
+                                "category": "wings",
+                                "quantity": 2,
+                                "unit_price": 5.47,
+                                "net_price": 10.94
+                            },
+                            {
+                                "product_id": 7,
+                                "category": "salad",
+                                "quantity": 2,
+                                "unit_price": 18.25,
+                                "net_price": 36.5
+                            },
+                            {
+                                "product_id": 4,
+                                "category": "wings",
+                                "quantity": 4,
+                                "unit_price": 16.46,
+                                "net_price": 65.84
+                            },
+                            {
+                                "product_id": 78,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 2.15,
+                                "net_price": 2.15
+                            },
+                            {
+                                "product_id": 71,
+                                "category": "calzone",
+                                "quantity": 1,
+                                "unit_price": 22.3,
+                                "net_price": 22.3
+                            },
+                            {
+                                "product_id": 80,
+                                "category": "desert",
+                                "quantity": 5,
+                                "unit_price": 12.69,
+                                "net_price": 63.449999999999996
+                            },
+                            {
+                                "product_id": 83,
+                                "category": "salad",
+                                "quantity": 1,
+                                "unit_price": 1.6600000000000001,
+                                "net_price": 1.6600000000000001
+                            },
+                            {
+                                "product_id": 44,
+                                "category": "desert",
+                                "quantity": 4,
+                                "unit_price": 18.18,
+                                "net_price": 72.72
+                            },
+                            {
+                                "product_id": 43,
+                                "category": "calzone",
+                                "quantity": 4,
+                                "unit_price": 2.01,
+                                "net_price": 8.04
+                            },
+                            {
+                                "product_id": 91,
+                                "category": "calzone",
+                                "quantity": 3,
+                                "unit_price": 13.06,
+                                "net_price": 39.18
+                            },
+                            {
+                                "product_id": 55,
+                                "category": "wings",
+                                "quantity": 2,
+                                "unit_price": 22.1,
+                                "net_price": 44.2
+                            },
+                            {
+                                "product_id": 88,
+                                "category": "wings",
+                                "quantity": 1,
+                                "unit_price": 5.33,
+                                "net_price": 5.33
+                            },
+                            {
+                                "product_id": 10,
+                                "category": "desert",
+                                "quantity": 2,
+                                "unit_price": 8.68,
+                                "net_price": 17.36
+                            },
+                            {
+                                "product_id": 76,
+                                "category": "salad",
+                                "quantity": 2,
+                                "unit_price": 1.3900000000000001,
+                                "net_price": 2.7800000000000002
+                            },
+                            {
+                                "product_id": 13,
+                                "category": "salad",
+                                "quantity": 5,
+                                "unit_price": 17.69,
+                                "net_price": 88.45
+                            },
+                            {
+                                "product_id": 27,
+                                "category": "salad",
+                                "quantity": 4,
+                                "unit_price": 9.219999999999999,
+                                "net_price": 36.879999999999995
+                            },
+                            {
+                                "product_id": 94,
+                                "category": "wings",
+                                "quantity": 3,
+                                "unit_price": 7.159999999999999,
+                                "net_price": 21.479999999999997
+                            },
+                            {
+                                "product_id": 89,
+                                "category": "desert",
+                                "quantity": 1,
+                                "unit_price": 20.200000000000003,
+                                "net_price": 20.200000000000003
+                            },
+                            {
+                                "product_id": 4,
+                                "category": "wings",
+                                "quantity": 4,
+                                "unit_price": 3.52,
+                                "net_price": 14.08
+                            },
+                            {
+                                "product_id": 97,
+                                "category": "desert",
+                                "quantity": 4,
+                                "unit_price": 6.619999999999999,
+                                "net_price": 26.479999999999997
+                            },
+                            {
+                                "product_id": 57,
+                                "category": "desert",
+                                "quantity": 2,
+                                "unit_price": 20.44,
+                                "net_price": 40.88
+                            },
+                            {
+                                "product_id": 6,
+                                "category": "desert",
+                                "quantity": 4,
+                                "unit_price": 10.59,
+                                "net_price": 42.36
+                            },
+                            {
+                                "product_id": 86,
+                                "category": "salad",
+                                "quantity": 3,
+                                "unit_price": 24.6,
+                                "net_price": 73.80000000000001
+                            },
+                            {
+                                "product_id": 85,
+                                "category": "salad",
+                                "quantity": 3,
+                                "unit_price": 11.83,
+                                "net_price": 35.49
+                            },
+                            {
+                                "product_id": 95,
+                                "category": "wings",
+                                "quantity": 3,
+                                "unit_price": 15.27,
+                                "net_price": 45.81
+                            },
+                            {
+                                "product_id": 18,
+                                "category": "calzone",
+                                "quantity": 3,
+                                "unit_price": 11.25,
+                                "net_price": 33.75
+                            },
+                            {
+                                "product_id": 85,
+                                "category": "wings",
+                                "quantity": 3,
+                                "unit_price": 13.53,
+                                "net_price": 40.589999999999996
+                            },
+                            {
+                                "product_id": 13,
+                                "category": "wings",
+                                "quantity": 4,
+                                "unit_price": 16.580000000000002,
+                                "net_price": 66.32000000000001
+                            },
+                            {
+                                "product_id": 12,
+                                "category": "salad",
+                                "quantity": 5,
+                                "unit_price": 9.19,
+                                "net_price": 45.949999999999996
+                            },
+                            {
+                                "product_id": 21,
+                                "category": "pizza",
+                                "quantity": 1,
+                                "unit_price": 13.65,
+                                "net_price": 13.65
+                            },
+                            {
+                                "product_id": 14,
+                                "category": "desert",
+                                "quantity": 2,
+                                "unit_price": 18.32,
+                                "net_price": 36.64
+                            },
+                            {
+                                "product_id": 7,
+                                "category": "calzone",
+                                "quantity": 5,
+                                "unit_price": 23.880000000000003,
+                                "net_price": 119.4
+                            },
+                            {
+                                "product_id": 71,
+                                "category": "pizza",
+                                "quantity": 1,
+                                "unit_price": 22.520000000000003,
+                                "net_price": 22.520000000000003
+                            }
+                        ]
+                    },
+                    "fields": [
+                        {
+                            "name": "product_id",
+                            "type": "int"
+                        },
+                        {
+                            "name": "category",
+                            "type": "string"
+                        },
+                        {
+                            "name": "quantity",
+                            "type": "int"
+                        },
+                        {
+                            "name": "unit_price",
+                            "type": "double"
+                        },
+                        {
+                            "name": "net_price",
+                            "type": "double"
+                        }
+                    ]
+                },
+                "arg.properties": {
+                    "length": {
+                        "min": 1,
+                        "max": 5
+                    }
+                }
+            }
+        }
+    ]
+}
