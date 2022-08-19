@@ -44,7 +44,8 @@ enum Quickstart {
   PIZZA_ORDERS("pizza_orders.avro", "store_id"),
   PIZZA_ORDERS_COMPLETED("pizza_orders_completed.avro", "store_id"),
   PIZZA_ORDERS_CANCELLED("pizza_orders_cancelled.avro", "store_id"),
-  INSURANCE_OFFERS("insurance_offers.avro", "offer_id");
+  INSURANCE_OFFERS("insurance_offers.avro", "offer_id"),
+  INSURANCE_CUSTOMERS("insurance_customers.avro", "customer_id");
 
   private static final Set<String> configValues;
 
