@@ -258,6 +258,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForInsuranceOffersQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.INSURANCE_OFFERS);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
