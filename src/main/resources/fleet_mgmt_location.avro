@@ -1,0 +1,56 @@
+{
+    "namespace": "fleet_mgmt",
+    "name": "fleet_mgmt_location",
+    "type": "record",
+    "fields": [
+        {
+            "name": "vehicle_id",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "range": {
+                        "min": 1000,
+                        "max": 9999
+                    }
+                }
+            }
+        },
+        {
+            "name": "latitude",
+            "type": {
+                "type": "double",
+                "arg.properties": {
+                    "range": {
+                        "min": -50,
+                        "max": 70
+                    }
+                }
+            }
+        },
+        {
+            "name": "longitude",
+            "type": {
+                "type": "double",
+                "arg.properties": {
+                    "range": {
+                        "min": -175,
+                        "max": 175
+                    }
+                }
+            }
+        },
+        {
+            "name": "timestamp",
+            "type": {
+                "type": "long",
+                "logicalType": "timestamp-millis",
+                "arg.properties": {
+                    "range": {
+                        "min": 1609459200000,
+                        "max": 1640995199000
+                    }
+                }
+            }
+        }
+    ]
+}

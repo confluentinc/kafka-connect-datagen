@@ -38,7 +38,8 @@ enum Quickstart {
   STORES("stores.avro", "store_id"),
   CREDIT_CARDS("credit_cards.avro", "card_id"),
   CAMPAIGN_FINANCE("campaign_finance.avro", "candidate_id"),
-  FLEET_MGMT_DESCRIPTION("fleet_mgmt_description.avro", "vehicle_id");
+  FLEET_MGMT_DESCRIPTION("fleet_mgmt_description.avro", "vehicle_id"),
+  FLEET_MGMT_LOCATION("fleet_mgmt_location.avro", "vehicle_id");
 
   private static final Set<String> configValues;
 

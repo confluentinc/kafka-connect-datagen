@@ -33,11 +33,14 @@ import io.confluent.connect.avro.AvroData;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.apache.kafka.connect.data.ConnectSchema;
 import org.apache.kafka.connect.data.Decimal;
 import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
+import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTaskContext;
 import org.apache.kafka.connect.storage.OffsetStorageReader;
@@ -230,6 +233,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForFleetMgmtLocationQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_LOCATION);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
@@ -346,50 +354,12 @@ public class DatagenTaskTest {
   }
 
   private boolean isConnectInstance(Object value, Schema expected) {
-    if (expected.isOptional() && value == null) {
-      return true;
+    try {
+      ConnectSchema.validateValue(expected, value);
+    } catch (DataException e) {
+      return false;
     }
-    switch (expected.type()) {
-      case BOOLEAN:
-        return value instanceof Boolean;
-      case BYTES:
-        if (Decimal.LOGICAL_NAME.equals(expected.name())) {
-          return value instanceof BigDecimal;
-        }
-        return value instanceof byte[];
-      case INT8:
-        return value instanceof Byte;
-      case INT16:
-        return value instanceof Short;
-      case INT32:
-        return value instanceof Integer;
-      case INT64:
-        return value instanceof Long;
-      case FLOAT32:
-        return value instanceof Float;
-      case FLOAT64:
-        return value instanceof Double;
-      case STRING:
-        return value instanceof String;
-      case ARRAY:
-        return value instanceof List;
-      case MAP:
-        return value instanceof Map;
-      case STRUCT:
-        if (value instanceof Struct) {
-          Struct struct = (Struct) value;
-          for (Field field : expected.fields()) {
-            Object fieldValue = struct.get(field.name());
-            if (!isConnectInstance(fieldValue, field.schema())) {
-              return false;
-            }
-          }
-          return true;
-        }
-        return false;
-      default:
-        throw new IllegalArgumentException("Unexpected enum schema");
-    }
+    return true;
   }
 
   private void dropSchemaSourceConfigs() {
