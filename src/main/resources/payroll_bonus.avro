@@ -1,7 +1,7 @@
 {
     "type": "record",
     "namespace": "payroll",
-    "name": "payroll_employee_location",
+    "name": "payroll_bonus",
     "fields": [
         {
             "name": "employee_id",
@@ -16,35 +16,26 @@
             }
         },
         {
-            "name": "lab",
-            "type": {
-                "type": "string",
-                "arg.properties": {
-                    "regex": "lab-\\d{1}"
-                }
-            }
-        },
-        {
-            "name": "department_id",
+            "name": "bonus",
             "type": {
                 "type": "int",
                 "arg.properties": {
                     "range": {
-                        "min": 1,
-                        "max": 10
+                        "min": 10,
+                        "max": 50
                     }
                 }
             }
         },
         {
-            "name": "arrival_date",
+            "name": "timestamp",
             "type": {
-                "type": "int",
-                "logicalType": "date",
+                "type": "long",
+                "logicalType": "timestamp-millis",
                 "arg.properties": {
                     "range": {
-                        "min": 18000,
-                        "max": 19000
+                        "min": 1609459200000,
+                        "max": 1640995199000
                     }
                 }
             }
