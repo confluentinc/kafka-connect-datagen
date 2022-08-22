@@ -293,6 +293,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForPayrollEmployeeLocationQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.PAYROLL_EMPLOYEE_LOCATION);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;

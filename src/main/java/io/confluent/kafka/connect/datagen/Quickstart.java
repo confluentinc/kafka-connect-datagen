@@ -50,7 +50,8 @@ enum Quickstart {
   GAMING_GAMES("gaming_games.avro", "id"),
   GAMING_PLAYERS("gaming_players.avro", "player_id"),
   GAMING_PLAYER_ACTIVITY("gaming_player_activity.avro", "player_id"),
-  PAYROLL_EMPLOYEE("payroll_employee.avro", "employee_id");
+  PAYROLL_EMPLOYEE("payroll_employee.avro", "employee_id"),
+  PAYROLL_EMPLOYEE_LOCATION("payroll_employee_location.avro", "employee_id");
 
   private static final Set<String> configValues;
 
