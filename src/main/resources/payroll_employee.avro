@@ -1,0 +1,293 @@
+{
+    "type": "record",
+    "namespace": "payroll",
+    "name": "payroll_employee",
+    "fields": [
+        {
+            "name": "employee_id",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "iteration": {
+                        "start": 1000,
+                        "step": 1
+                    }
+                }
+            }
+        },
+        {
+            "name": "first_name",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "options": [
+                        "Frieda",
+                        "Cherrita",
+                        "Matt",
+                        "Dulciana",
+                        "Germayne",
+                        "Brenna",
+                        "Gerhardt",
+                        "Hayley",
+                        "Winny",
+                        "Bonnibelle",
+                        "Lionel",
+                        "Trev",
+                        "Lena",
+                        "Benton",
+                        "Avis",
+                        "Marchall",
+                        "Adele",
+                        "Barnett",
+                        "Frieda",
+                        "Pattin",
+                        "Kalila",
+                        "Giacobo",
+                        "Rozalin",
+                        "Egon",
+                        "Owen",
+                        "Fernando",
+                        "Carleton",
+                        "Kata",
+                        "Rossie",
+                        "Stephanie",
+                        "Robyn",
+                        "Tilda",
+                        "Nolan",
+                        "Jori",
+                        "Benito",
+                        "Zechariah",
+                        "Chelsae",
+                        "Jeremy",
+                        "Derk",
+                        "Constantin",
+                        "Fitz",
+                        "Essy",
+                        "Gene",
+                        "Nikolai",
+                        "Gustave",
+                        "Simona",
+                        "Cort",
+                        "Sibyl",
+                        "Andriette",
+                        "Shaughn",
+                        "Nathaniel",
+                        "Charley",
+                        "Cirstoforo",
+                        "Hyacinthia",
+                        "Dur",
+                        "Gay",
+                        "Livvie",
+                        "Aldrich",
+                        "Riva",
+                        "Johanna",
+                        "Trent",
+                        "Aryn",
+                        "Byrann",
+                        "Gerda",
+                        "Sonnie",
+                        "Vergil",
+                        "Lurline",
+                        "Geoff",
+                        "Zea",
+                        "Leif",
+                        "Quint",
+                        "Talbot",
+                        "Sheridan",
+                        "Camile",
+                        "Marcel",
+                        "Lea",
+                        "Lucais",
+                        "Zeb",
+                        "Nertie",
+                        "Babara",
+                        "Electra",
+                        "Jere",
+                        "Cyril",
+                        "Isadora",
+                        "Caria",
+                        "Karena",
+                        "Haywood",
+                        "Winslow",
+                        "Alis",
+                        "Marietta",
+                        "Emilee",
+                        "Faye",
+                        "Shannah",
+                        "West",
+                        "Chryste",
+                        "Trumann",
+                        "Anatollo",
+                        "Konstanze",
+                        "Raychel",
+                        "Heindrick"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "last_name",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "options": [
+                        "Baldi",
+                        "Gallaccio",
+                        "Cleugh",
+                        "Murfill",
+                        "Streetley",
+                        "Woolfall",
+                        "Tenbrug",
+                        "Tuma",
+                        "Cadigan",
+                        "Macek",
+                        "Byneth",
+                        "Roper",
+                        "MacFadzean",
+                        "Allcorn",
+                        "Moyler",
+                        "Rochewell",
+                        "Bohl",
+                        "Mcall",
+                        "Pirrone",
+                        "Eringey",
+                        "Fewings",
+                        "Beuscher",
+                        "Hair",
+                        "Beagan",
+                        "Strotton",
+                        "Rosensaft",
+                        "Gwyther",
+                        "Coll",
+                        "Hobben",
+                        "Gookey",
+                        "Milazzo",
+                        "O'Lunney",
+                        "Kidney",
+                        "Ottiwill",
+                        "Graveson",
+                        "Wrate",
+                        "Napton",
+                        "Heffernon",
+                        "McAviy",
+                        "Mears",
+                        "Ballin",
+                        "Bettles",
+                        "Klemt",
+                        "Arnopp",
+                        "Westhofer",
+                        "Mayhow",
+                        "Bainbridge",
+                        "Vockins",
+                        "Gaze",
+                        "De",
+                        "Hallowell",
+                        "Dudill",
+                        "Joblin",
+                        "Kinastan",
+                        "Lasselle",
+                        "Chadburn",
+                        "Hawyes",
+                        "MacVay",
+                        "Rossant",
+                        "Reichartz",
+                        "Gantlett",
+                        "Haskell",
+                        "Barock",
+                        "Cleugher",
+                        "Guildford",
+                        "Borge",
+                        "Rocco",
+                        "Eddy",
+                        "Leighton",
+                        "Baden",
+                        "Bidgod",
+                        "Cashell",
+                        "Foulsham",
+                        "Shrimplin",
+                        "Nayshe",
+                        "Murrish",
+                        "Midson",
+                        "Rylatt",
+                        "Zuker",
+                        "Henderson",
+                        "Ridgley",
+                        "Standingford",
+                        "Yellowlea",
+                        "Peegrem",
+                        "Smewings",
+                        "Kauffman",
+                        "Snowball",
+                        "Starcks",
+                        "Ponton",
+                        "Lezemere",
+                        "Broadbridge",
+                        "Beaument",
+                        "Beatson",
+                        "Doy",
+                        "Wren",
+                        "Labba",
+                        "Beckwith",
+                        "Dunsford",
+                        "Roset",
+                        "Ravenscroft"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "age",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "range": {
+                        "min": 30,
+                        "max": 50
+                    }
+                }
+            }
+        },
+        {
+            "name": "ssn",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "regex": "[0-9]{3}-[0-9]{2}-[0-9]{4}"
+                }
+            }
+        },
+        {
+            "name": "hourly_rate",
+            "type": {
+                "type": "int",
+                "arg.properties": {
+                    "range": {
+                        "min": 8,
+                        "max": 25
+                    }
+                }
+            }
+        },
+        {
+            "name": "gender",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "options": [
+                        "male",
+                        "female"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "email",
+            "type": {
+                "type": "string",
+                "arg.properties": {
+                    "regex": "[a-z]{4}[@]mycompany[.]com"
+                }
+            }
+        }
+    ]
+}
