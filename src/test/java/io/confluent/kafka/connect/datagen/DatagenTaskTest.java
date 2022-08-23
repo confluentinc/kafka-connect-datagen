@@ -303,6 +303,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForSysLogsLogsQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.SYSLOG_LOGS);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
