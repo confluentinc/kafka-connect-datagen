@@ -53,7 +53,8 @@ enum Quickstart {
   PAYROLL_EMPLOYEE("payroll_employee.avro", "employee_id"),
   PAYROLL_EMPLOYEE_LOCATION("payroll_employee_location.avro", "employee_id"),
   PAYROLL_BONUS("payroll_bonus.avro", "employee_id"),
-  SYSLOG_LOGS("syslog_logs.avro", "host");
+  SYSLOG_LOGS("syslog_logs.avro", "host"),
+  DEVICE_INFORMATION("device_information.avro", "device_ip");
 
   private static final Set<String> configValues;
 

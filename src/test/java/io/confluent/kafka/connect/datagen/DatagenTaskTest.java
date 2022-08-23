@@ -308,6 +308,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForDeviceInformationQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.DEVICE_INFORMATION);
+  }
+
+  @Test
   public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
