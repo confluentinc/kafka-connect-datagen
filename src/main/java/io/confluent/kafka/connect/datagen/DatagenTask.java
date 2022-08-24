@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2018 Confluent Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 package io.confluent.kafka.connect.datagen;
 
@@ -71,7 +71,7 @@ public class DatagenTask extends SourceTask {
   private int taskId;
   private Map<String, Object> sourcePartition;
   private long taskGeneration;
-  private Random random;
+  private final Random random = new Random();
 
   protected enum Quickstart {
     CLICKSTREAM_CODES("clickstream_codes_schema.avro", "code"),
@@ -121,7 +121,6 @@ public class DatagenTask extends SourceTask {
     taskId = Integer.parseInt(props.get(TASK_ID));
     sourcePartition = Collections.singletonMap(TASK_ID, taskId);
 
-    random = new Random();
     if (config.getRandomSeed() != null) {
       random.setSeed(config.getRandomSeed());
       // Each task will now deterministically advance it's random source
