@@ -49,6 +49,9 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String RANDOM_SEED_DOC = "Numeric seed for generating random data. "
       + "Two connectors started with the same seed will deterministically produce the same data. "
       + "Each task will generate different data than the other tasks in the same connector.";
+  public static final String GENERATE_TIMEOUT_CONF = "generate.timeout";
+  private static final String GENERATE_TIMEOUT_DOC = "Timeout in milliseconds for random message "
+      + "generation. This timeout can be configured for upto 1 minute, i.e 60000ms";
 
   public DatagenConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
@@ -90,7 +93,17 @@ public class DatagenConnectorConfig extends AbstractConfig {
           Importance.HIGH,
           QUICKSTART_DOC
         )
-        .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC);
+        .define(RANDOM_SEED_CONF,
+          Type.LONG,
+          null,
+          Importance.LOW,
+          RANDOM_SEED_DOC)
+        .define(GENERATE_TIMEOUT_CONF,
+          Type.LONG,
+          null,
+          new GenerateTimeoutValidator(),
+          Importance.LOW,
+          GENERATE_TIMEOUT_DOC);
   }
 
   public String getKafkaTopic() {
@@ -131,6 +144,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
     return this.getString(SCHEMA_STRING_CONF);
   }
 
+  public Long getGenerateTimeout() {
+    return this.getLong(GENERATE_TIMEOUT_CONF);
+  }
+
   public Schema getSchema() {
     String quickstart = getQuickstart();
     if (quickstart != null && !quickstart.isEmpty()) {
@@ -163,11 +180,11 @@ public class DatagenConnectorConfig extends AbstractConfig {
       if (((String) value).isEmpty()) {
         return;
       }
-      if (!Quickstart.configValues.contains(((String) value).toLowerCase())) {
+      if (!Quickstart.configValues().contains(((String) value).toLowerCase())) {
         throw new ConfigException(String.format(
                 "%s must be one out of %s",
                 name,
-                String.join(",", DatagenTask.Quickstart.configValues)
+                String.join(",", DatagenTask.Quickstart.configValues())
         ));
       }
     }
@@ -192,6 +209,21 @@ public class DatagenConnectorConfig extends AbstractConfig {
         return;
       }
       ConfigUtils.getSchemaFromSchemaFileName((String) value);
+    }
+  }
+
+  private static class GenerateTimeoutValidator implements Validator {
+
+    @Override
+    public void ensureValid(String name, Object value) {
+      if (value == null) {
+        return;
+      }
+      long longValue = (Long) value;
+      if (longValue > 0 && longValue <= 60000L) {
+        return;
+      }
+      throw new ConfigException(name + " must be in the range [1, 60000] ms");
     }
   }
 }

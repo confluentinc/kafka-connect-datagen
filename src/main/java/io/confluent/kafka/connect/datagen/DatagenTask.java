@@ -16,24 +16,26 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import com.google.common.collect.ImmutableSet;
 import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.avro.generic.GenericData.Record;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaAndValue;
-import org.apache.kafka.connect.data.SchemaBuilder;
-import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.header.ConnectHeaders;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -43,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 public class DatagenTask extends SourceTask {
 
-  static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
+  private static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
 
   private static final Schema DEFAULT_KEY_SCHEMA = Schema.OPTIONAL_STRING_SCHEMA;
   public static final String TASK_ID = "task.id";
@@ -51,6 +53,7 @@ public class DatagenTask extends SourceTask {
   public static final String CURRENT_ITERATION = "current.iteration";
   public static final String RANDOM_SEED = "random.seed";
 
+  private final ExecutorService generateExecutor = Executors.newSingleThreadExecutor();
 
   private DatagenConnectorConfig config;
   private String topic;
@@ -60,7 +63,7 @@ public class DatagenTask extends SourceTask {
   private String schemaKeyField;
   private Generator generator;
   private org.apache.avro.Schema avroSchema;
-  private org.apache.kafka.connect.data.Schema ksqlSchema;
+  private Schema ksqlSchema;
   private AvroData avroData;
   private int taskId;
   private Map<String, Object> sourcePartition;
@@ -85,12 +88,15 @@ public class DatagenTask extends SourceTask {
     CREDIT_CARDS("credit_cards.avro", "card_id"),
     CAMPAIGN_FINANCE("campaign_finance.avro", "candidate_id");
 
-    static final Set<String> configValues = new HashSet<>();
+    private static final Set<String> configValues;
 
     static {
-      for (Quickstart q : Quickstart.values()) {
-        configValues.add(q.name().toLowerCase());
-      }
+      ImmutableSet.Builder<String> immutableSetBuilder = ImmutableSet.builder();
+      Arrays.stream(Quickstart.values())
+        .map(Quickstart::name)
+        .map(String::toLowerCase)
+        .forEach(immutableSetBuilder::add);
+      configValues = immutableSetBuilder.build();
     }
 
     private final String schemaFilename;
@@ -99,6 +105,10 @@ public class DatagenTask extends SourceTask {
     Quickstart(String schemaFilename, String keyName) {
       this.schemaFilename = schemaFilename;
       this.keyName = keyName;
+    }
+
+    public static Set<String> configValues() {
+      return configValues;
     }
 
     public String getSchemaFilename() {
@@ -156,7 +166,7 @@ public class DatagenTask extends SourceTask {
   }
 
   @Override
-  public List<SourceRecord> poll() throws InterruptedException {
+  public List<SourceRecord> poll() {
 
     if (maxInterval > 0) {
       try {
@@ -166,29 +176,8 @@ public class DatagenTask extends SourceTask {
         return null;
       }
     }
-
-    final Object generatedObject = generator.generate();
-    if (!(generatedObject instanceof GenericRecord)) {
-      throw new RuntimeException(String.format(
-          "Expected Avro Random Generator to return instance of GenericRecord, found %s instead",
-          generatedObject.getClass().getName()
-      ));
-    }
-    final GenericRecord randomAvroMessage = (GenericRecord) generatedObject;
-
-    final List<Object> genericRowValues = new ArrayList<>();
-    for (org.apache.avro.Schema.Field field : avroSchema.getFields()) {
-      final Object value = randomAvroMessage.get(field.name());
-      if (value instanceof Record) {
-        final Record record = (Record) value;
-        final Object ksqlValue = avroData.toConnectData(record.getSchema(), record).value();
-        Object optionValue = getOptionalValue(ksqlSchema.field(field.name()).schema(), ksqlValue);
-        genericRowValues.add(optionValue);
-      } else {
-        genericRowValues.add(value);
-      }
-    }
-
+    final GenericRecord randomAvroMessage = generateRecord();
+    
     // Key
     SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
     if (!schemaKeyField.isEmpty()) {
@@ -199,7 +188,7 @@ public class DatagenTask extends SourceTask {
     }
 
     // Value
-    final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
+    final Schema messageSchema = avroData.toConnectSchema(avroSchema);
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
     if (maxRecords > 0 && count >= maxRecords) {
@@ -245,83 +234,34 @@ public class DatagenTask extends SourceTask {
     return records;
   }
 
+  private GenericRecord generateRecord() {
+    Future<Object> generatedObjectFuture = generateExecutor.submit(generator::generate);
+    Long timeout = config.getGenerateTimeout();
+    Object generatedObject;
+    try {
+      if (timeout == null) {
+        generatedObject = generatedObjectFuture.get();
+      } else {
+        generatedObject = generatedObjectFuture.get(timeout, TimeUnit.MILLISECONDS);
+      }
+    } catch (InterruptedException | ExecutionException e) {
+      generatedObjectFuture.cancel(true);
+      throw new ConnectException("Unable to generate random record", e);
+    } catch (TimeoutException e) {
+      generatedObjectFuture.cancel(true);
+      throw new ConnectException("Record generation timed out", e);
+    }
+    if (!(generatedObject instanceof GenericRecord)) {
+      throw new ConnectException(String.format(
+        "Expected Avro Random Generator to return instance of GenericRecord, found %s instead",
+        generatedObject.getClass().getName()
+      ));
+    }
+    return (GenericRecord) generatedObject;
+  }
+
   @Override
   public void stop() {
-  }
-
-  private org.apache.kafka.connect.data.Schema getOptionalSchema(
-      final org.apache.kafka.connect.data.Schema schema
-  ) {
-    switch (schema.type()) {
-      case BOOLEAN:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_BOOLEAN_SCHEMA;
-      case INT32:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_INT32_SCHEMA;
-      case INT64:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_INT64_SCHEMA;
-      case FLOAT64:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_FLOAT64_SCHEMA;
-      case STRING:
-        return org.apache.kafka.connect.data.Schema.OPTIONAL_STRING_SCHEMA;
-      case ARRAY:
-        return SchemaBuilder.array(getOptionalSchema(schema.valueSchema())).optional().build();
-      case MAP:
-        return SchemaBuilder.map(
-            getOptionalSchema(schema.keySchema()),
-            getOptionalSchema(schema.valueSchema())
-        ).optional().build();
-      case STRUCT:
-        final SchemaBuilder schemaBuilder = SchemaBuilder.struct();
-        for (Field field : schema.fields()) {
-          schemaBuilder.field(
-              field.name(),
-              getOptionalSchema(field.schema())
-          );
-        }
-        return schemaBuilder.optional().build();
-      default:
-        throw new ConnectException("Unsupported type: " + schema);
-    }
-  }
-
-  private Object getOptionalValue(
-      final org.apache.kafka.connect.data.Schema schema,
-      final Object value
-  ) {
-    switch (schema.type()) {
-      case BOOLEAN:
-      case INT32:
-      case INT64:
-      case FLOAT64:
-      case STRING:
-        return value;
-      case ARRAY:
-        final List<?> list = (List<?>) value;
-        return list.stream()
-                   .map(listItem -> getOptionalValue(schema.valueSchema(), listItem))
-                   .collect(Collectors.toList());
-      case MAP:
-        final Map<?, ?> map = (Map<?, ?>) value;
-        return map.entrySet().stream()
-            .collect(Collectors.toMap(
-                k -> getOptionalValue(schema.keySchema(), k),
-                v -> getOptionalValue(schema.valueSchema(), v)
-            ));
-      case STRUCT:
-        final Struct struct = (Struct) value;
-        final Struct optionalStruct = new Struct(getOptionalSchema(schema));
-        for (Field field : schema.fields()) {
-          optionalStruct.put(
-              field.name(),
-              getOptionalValue(
-                  field.schema(),
-                  struct.get(field.name())
-              )
-          );
-        }
-        return optionalStruct;
-      default:
-        throw new ConnectException("Invalid value schema: " + schema + ", value = " + value);
-    }
+    generateExecutor.shutdown();
   }
 }

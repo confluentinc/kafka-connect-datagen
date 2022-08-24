@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "regex_record",
+  "fields":
+    [
+      {
+        "name": "regex_key",
+        "type":
+          {
+            "type": "string",
+            "arg.properties": {
+              "regex": "(.{1,6})( *, *(.{1,6})){0,12}"
+            }
+          }
+      }
+    ]
+}

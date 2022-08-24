@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "regex_record",
+  "fields":
+    [
+      {
+        "name": "regex_key",
+        "type":
+          {
+            "type": "string",
+            "arg.properties": {
+              "regex": "\\S+_a+/",
+              "length": 100
+            }
+          }
+      }
+    ]
+}
