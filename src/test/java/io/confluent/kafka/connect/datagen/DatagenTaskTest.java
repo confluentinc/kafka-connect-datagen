@@ -93,6 +93,11 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForPersonQuickstart() throws Exception {
+    generateAndValidateRecordsFor(DatagenTask.Quickstart.PERSON);
+  }
+
+  @Test
   public void shouldGenerateFilesForOrdersQuickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.ORDERS);
   }

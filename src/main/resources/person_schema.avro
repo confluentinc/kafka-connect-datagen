@@ -1,0 +1,62 @@
+{
+  "connect.name": "simple.avro.SimplePersonAvro",
+  "fields": [
+    {
+      "name": "person",
+      "type": {
+        "items": {
+          "connect.name": "simple.avro.Person",
+          "fields": [
+            {
+              "default": null,
+              "name": "name",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "default": null,
+              "name": "age",
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          ],
+          "name": "Person",
+          "type": "record"
+        },
+        "type": "array"
+      }
+    },
+    {
+      "default": null,
+      "name": "father",
+      "type": [
+        "null",
+        {
+          "connect.name": "simple.avro.Parent",
+          "fields": [
+            {
+              "default": null,
+              "name": "greatGrandParents",
+              "type": [
+                "null",
+                {
+                  "items": "Person",
+                  "type": "array"
+                }
+              ]
+            }
+          ],
+          "name": "Parent",
+          "type": "record"
+        }
+      ]
+    }
+  ],
+  "name": "SimplePersonAvro",
+  "namespace": "simple.avro",
+  "type": "record"
+}

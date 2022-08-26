@@ -81,7 +81,8 @@ public class DatagenTask extends SourceTask {
     PAGEVIEWS("pageviews_schema.avro", "viewtime"),
     STOCK_TRADES("stock_trades_schema.avro", "symbol"),
     INVENTORY("inventory.avro", "id"),
-    PRODUCT("product.avro", "id");
+    PRODUCT("product.avro", "id"),
+    PERSON("person_schema.avro", "person");
 
     private final String schemaFilename;
     private final String keyName;
@@ -306,6 +307,10 @@ public class DatagenTask extends SourceTask {
       final org.apache.kafka.connect.data.Schema schema,
       final Object value
   ) {
+    if (value == null) {
+      return null;
+    }
+
     switch (schema.type()) {
       case BOOLEAN:
       case INT32:
