@@ -288,6 +288,10 @@ public class DatagenTask extends SourceTask {
       final org.apache.kafka.connect.data.Schema schema,
       final Object value
   ) {
+    if (value == null) {
+      return null;
+    }
+
     switch (schema.type()) {
       case BOOLEAN:
       case INT32:
