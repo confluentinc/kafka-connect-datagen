@@ -97,6 +97,70 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForPersonQuickstart() throws Exception {
+    String personSchema = "{\n" +
+            "  \"name\": \"SimplePersonAvro\",\n" +
+            "  \"type\": \"record\",\n" +
+            "  \"namespace\": \"simple.avro\",\n" +
+            "  \"fields\": [\n" +
+            "    {\n" +
+            "      \"name\": \"person\",\n" +
+            "      \"type\": {\n" +
+            "        \"type\": \"array\",\n" +
+            "        \"items\": {\n" +
+            "          \"name\": \"Person\",\n" +
+            "          \"type\": \"record\",\n" +
+            "          \"fields\": [\n" +
+            "            {\n" +
+            "              \"name\": \"name\",\n" +
+            "              \"type\": [\n" +
+            "                \"null\",\n" +
+            "                \"string\"\n" +
+            "              ],\n" +
+            "              \"default\": null\n" +
+            "            },\n" +
+            "            {\n" +
+            "              \"name\": \"age\",\n" +
+            "              \"type\": [\n" +
+            "                \"null\",\n" +
+            "                \"string\"\n" +
+            "              ],\n" +
+            "              \"default\": null\n" +
+            "            }\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      }\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"name\": \"father\",\n" +
+            "      \"default\": null,\n" +
+            "      \"type\": [\n" +
+            "        \"null\",\n" +
+            "        {\n" +
+            "          \"name\": \"Parent\",\n" +
+            "          \"type\": \"record\",\n" +
+            "          \"fields\": [\n" +
+            "            {\n" +
+            "              \"name\": \"greatGrandParents\",\n" +
+            "              \"default\": null,\n" +
+            "              \"type\": [\n" +
+            "                \"null\",\n" +
+            "                {\n" +
+            "                  \"type\": \"array\",\n" +
+            "                  \"items\": \"simple.avro.Person\"\n" +
+            "                }\n" +
+            "              ]\n" +
+            "            }\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
+    generateAndValidateRecordsForSchemaString(personSchema, "person");
+  }
+
+  @Test
   public void shouldGenerateFilesForOrdersQuickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.ORDERS);
   }
@@ -239,6 +303,12 @@ public class DatagenTaskTest {
 
     // Do the same thing with schema text
     createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), quickstart.getSchemaKeyField());
+    generateRecords();
+    assertRecordsMatchSchemas();
+  }
+
+  private void generateAndValidateRecordsForSchemaString(String schemaString, String keyField) throws Exception {
+    createTaskWithSchemaText(schemaString, keyField);
     generateRecords();
     assertRecordsMatchSchemas();
   }
