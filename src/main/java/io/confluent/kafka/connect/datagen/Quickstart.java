@@ -28,7 +28,7 @@ enum Quickstart {
   ORDERS("orders_schema.avro", "orderid"),
   RATINGS("ratings_schema.avro", "rating_id"),
   USERS("users_schema.avro", "userid"),
-  USERS_ARRAY_MAP("users_array_map_schema.avro", "userid"),
+  USERS_("users_array_map_schema.avro", "userid"),
   PAGEVIEWS("pageviews_schema.avro", "viewtime"),
   STOCK_TRADES("stock_trades_schema.avro", "symbol"),
   INVENTORY("inventory.avro", "id"),

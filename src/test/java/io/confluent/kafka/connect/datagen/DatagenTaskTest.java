@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,10 +34,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.kafka.connect.data.ConnectSchema;
-import org.apache.kafka.connect.data.Decimal;
-import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -179,7 +175,7 @@ public class DatagenTaskTest {
 
   @Test
   public void shouldGenerateFilesForUsers2Quickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.USERS_ARRAY_MAP);
+    generateAndValidateRecordsFor(Quickstart.USERS_);
   }
 
   @Test
