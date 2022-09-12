@@ -18,6 +18,8 @@ package io.confluent.kafka.connect.datagen;
 
 import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
+
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
@@ -50,6 +53,9 @@ public class DatagenTask extends SourceTask {
   public static final String TASK_GENERATION = "task.generation";
   public static final String CURRENT_ITERATION = "current.iteration";
   public static final String RANDOM_SEED = "random.seed";
+
+  private final ExecutorService executor = Executors.newSingleThreadExecutor();
+  private static final Duration timeout = Duration.ofMillis(100);
 
 
   private DatagenConnectorConfig config;
@@ -167,7 +173,14 @@ public class DatagenTask extends SourceTask {
       }
     }
 
-    final Object generatedObject = generator.generate();
+    final Object generatedObject;
+    Future<Object> generatedObjectFuture = executor.submit(() -> generator.generate());
+    try {
+      generatedObject = generatedObjectFuture.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+    } catch (TimeoutException | ExecutionException | InterruptedException ex) {
+      throw new ConnectException("Task failed with error", ex);
+    }
+
     if (!(generatedObject instanceof GenericRecord)) {
       throw new RuntimeException(String.format(
           "Expected Avro Random Generator to return instance of GenericRecord, found %s instead",
