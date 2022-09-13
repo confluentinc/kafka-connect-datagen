@@ -43,6 +43,8 @@ import org.apache.kafka.connect.storage.OffsetStorageReader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -67,251 +69,88 @@ class DatagenTaskTest {
   private Map<String, Object> sourceOffsets;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     config = new HashMap<>();
     records = new ArrayList<>();
     sourceOffsets = null;
   }
 
   @AfterEach
-  void tearDown() throws Exception {
+  void tearDown() {
     task.stop();
     task = null;
   }
 
-  @Test
-  void shouldGenerateFilesForClickstreamCodesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CLICKSTREAM_CODES);
+  @ParameterizedTest
+  @EnumSource(Quickstart.class)
+  void shouldGenerateFilesForQuickstart(Quickstart quickstart) throws Exception {
+    generateAndValidateRecordsFor(quickstart);
   }
 
   @Test
-  void shouldGenerateFilesForClickstreamUsersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CLICKSTREAM_USERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForClickstreamQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CLICKSTREAM);
-  }
-
-  @Test
-  void shouldGenerateFilesForPersonQuickstart() throws Exception {
+  void shouldGenerateFilesForPersonSchema() throws Exception {
     String personSchema = "{\n" +
-            "  \"name\": \"SimplePersonAvro\",\n" +
-            "  \"type\": \"record\",\n" +
-            "  \"namespace\": \"simple.avro\",\n" +
-            "  \"fields\": [\n" +
-            "    {\n" +
-            "      \"name\": \"person\",\n" +
-            "      \"type\": {\n" +
-            "        \"type\": \"array\",\n" +
-            "        \"items\": {\n" +
-            "          \"name\": \"Person\",\n" +
-            "          \"type\": \"record\",\n" +
-            "          \"fields\": [\n" +
-            "            {\n" +
-            "              \"name\": \"name\",\n" +
-            "              \"type\": [\n" +
-            "                \"null\",\n" +
-            "                \"string\"\n" +
-            "              ],\n" +
-            "              \"default\": null\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"name\": \"age\",\n" +
-            "              \"type\": [\n" +
-            "                \"null\",\n" +
-            "                \"string\"\n" +
-            "              ],\n" +
-            "              \"default\": null\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        }\n" +
-            "      }\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"name\": \"father\",\n" +
-            "      \"default\": null,\n" +
-            "      \"type\": [\n" +
-            "        \"null\",\n" +
-            "        {\n" +
-            "          \"name\": \"Parent\",\n" +
-            "          \"type\": \"record\",\n" +
-            "          \"fields\": [\n" +
-            "            {\n" +
-            "              \"name\": \"greatGrandParents\",\n" +
-            "              \"default\": null,\n" +
-            "              \"type\": [\n" +
-            "                \"null\",\n" +
-            "                {\n" +
-            "                  \"type\": \"array\",\n" +
-            "                  \"items\": \"simple.avro.Person\"\n" +
-            "                }\n" +
-            "              ]\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        }\n" +
-            "      ]\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+      "  \"name\": \"SimplePersonAvro\",\n" +
+      "  \"type\": \"record\",\n" +
+      "  \"namespace\": \"simple.avro\",\n" +
+      "  \"fields\": [\n" +
+      "    {\n" +
+      "      \"name\": \"person\",\n" +
+      "      \"type\": {\n" +
+      "        \"type\": \"array\",\n" +
+      "        \"items\": {\n" +
+      "          \"name\": \"Person\",\n" +
+      "          \"type\": \"record\",\n" +
+      "          \"fields\": [\n" +
+      "            {\n" +
+      "              \"name\": \"name\",\n" +
+      "              \"type\": [\n" +
+      "                \"null\",\n" +
+      "                \"string\"\n" +
+      "              ],\n" +
+      "              \"default\": null\n" +
+      "            },\n" +
+      "            {\n" +
+      "              \"name\": \"age\",\n" +
+      "              \"type\": [\n" +
+      "                \"null\",\n" +
+      "                \"string\"\n" +
+      "              ],\n" +
+      "              \"default\": null\n" +
+      "            }\n" +
+      "          ]\n" +
+      "        }\n" +
+      "      }\n" +
+      "    },\n" +
+      "    {\n" +
+      "      \"name\": \"father\",\n" +
+      "      \"default\": null,\n" +
+      "      \"type\": [\n" +
+      "        \"null\",\n" +
+      "        {\n" +
+      "          \"name\": \"Parent\",\n" +
+      "          \"type\": \"record\",\n" +
+      "          \"fields\": [\n" +
+      "            {\n" +
+      "              \"name\": \"greatGrandParents\",\n" +
+      "              \"default\": null,\n" +
+      "              \"type\": [\n" +
+      "                \"null\",\n" +
+      "                {\n" +
+      "                  \"type\": \"array\",\n" +
+      "                  \"items\": \"simple.avro.Person\"\n" +
+      "                }\n" +
+      "              ]\n" +
+      "            }\n" +
+      "          ]\n" +
+      "        }\n" +
+      "      ]\n" +
+      "    }\n" +
+      "  ]\n" +
+      "}";
     generateAndValidateRecordsForSchemaString(personSchema, "person");
   }
 
-  @Test
-  void shouldGenerateFilesForOrdersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.ORDERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForRatingsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.RATINGS);
-  }
-
-  @Test
-  void shouldGenerateFilesForUsersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.USERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForUsers2Quickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.USERS_);
-  }
-
-  @Test
-  void shouldGenerateFilesForPageviewsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PAGEVIEWS);
-  }
-
-  @Test
-  void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.STOCK_TRADES);
-  }
-
-  @Test
-  void shouldGenerateFilesForProductQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PRODUCT);
-  }
-
-  @Test
-  void shouldGenerateFilesForPurchaseQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PURCHASES);
-  }
-
-  @Test
-  void shouldGenerateFilesForInventoryQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.INVENTORY);
-  }
-
-  @Test
-  void shouldGenerateFilesForCreditCardsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CREDIT_CARDS);
-  }
-
-  @Test
-  void shouldGenerateFilesForTransactionsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.TRANSACTIONS);
-  }
-
-  @Test
-  void shouldGenerateFilesForStoresQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.STORES);
-  }
-  
-  @Test
-  void shouldGenerateFilesForCampaignFinanceQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CAMPAIGN_FINANCE);
-  }
-
-  @Test
-  void shouldGenerateFilesForFleetMgmtDescriptionQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_DESCRIPTION);
-  }
-
-  @Test
-  void shouldGenerateFilesForFleetMgmtLocationQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_LOCATION);
-  }
-
-  @Test
-  void shouldGenerateFilesForFleetMgmtSensorsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_SENSORS);
-  }
-
-  @Test
-  void shouldGenerateFilesForPizzaOrdersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForPizzaOrdersCompletedQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS_COMPLETED);
-  }
-
-  @Test
-  void shouldGenerateFilesForPizzaOrdersCancelledQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS_CANCELLED);
-  }
-
-  @Test
-  void shouldGenerateFilesForInsuranceOffersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.INSURANCE_OFFERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForInsuranceCustomersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.INSURANCE_CUSTOMERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForInsuranceCustomerActivityQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.INSURANCE_CUSTOMER_ACTIVITY);
-  }
-
-  @Test
-  void shouldGenerateFilesForGamingGamesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.GAMING_GAMES);
-  }
-
-  @Test
-  void shouldGenerateFilesForGamingPlayersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.GAMING_PLAYERS);
-  }
-
-  @Test
-  void shouldGenerateFilesForGamingPlayerActivityQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.GAMING_PLAYER_ACTIVITY);
-  }
-
-  @Test
-  void shouldGenerateFilesForPayrollEmployeeQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PAYROLL_EMPLOYEE);
-  }
-
-  @Test
-  void shouldGenerateFilesForPayrollEmployeeLocationQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PAYROLL_EMPLOYEE_LOCATION);
-  }
-
-  @Test
-  void shouldGenerateFilesForPayrollBonusQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PAYROLL_BONUS);
-  }
-
-  @Test
-  void shouldGenerateFilesForSysLogsLogsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.SYSLOG_LOGS);
-  }
-
-  @Test
-  void shouldGenerateFilesForDeviceInformationQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.DEVICE_INFORMATION);
-  }
-
-  @Test
-  void shouldGenerateFilesForSiemLogsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.SIEM_LOGS);
-  }
 
   @Test
   void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
