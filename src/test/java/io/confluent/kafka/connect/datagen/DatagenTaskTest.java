@@ -40,17 +40,17 @@ import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTaskContext;
 import org.apache.kafka.connect.storage.OffsetStorageReader;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class DatagenTaskTest {
+class DatagenTaskTest {
 
   private static final String TOPIC = "my-topic";
   private static final int NUM_MESSAGES = 100;
@@ -66,36 +66,36 @@ public class DatagenTaskTest {
   private Schema expectedKeyConnectSchema;
   private Map<String, Object> sourceOffsets;
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     config = new HashMap<>();
     records = new ArrayList<>();
     sourceOffsets = null;
   }
 
-  @After
-  public void tearDown() throws Exception {
+  @AfterEach
+  void tearDown() throws Exception {
     task.stop();
     task = null;
   }
 
   @Test
-  public void shouldGenerateFilesForClickstreamCodesQuickstart() throws Exception {
+  void shouldGenerateFilesForClickstreamCodesQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.CLICKSTREAM_CODES);
   }
 
   @Test
-  public void shouldGenerateFilesForClickstreamUsersQuickstart() throws Exception {
+  void shouldGenerateFilesForClickstreamUsersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.CLICKSTREAM_USERS);
   }
 
   @Test
-  public void shouldGenerateFilesForClickstreamQuickstart() throws Exception {
+  void shouldGenerateFilesForClickstreamQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.CLICKSTREAM);
   }
 
   @Test
-  public void shouldGenerateFilesForPersonQuickstart() throws Exception {
+  void shouldGenerateFilesForPersonQuickstart() throws Exception {
     String personSchema = "{\n" +
             "  \"name\": \"SimplePersonAvro\",\n" +
             "  \"type\": \"record\",\n" +
@@ -159,162 +159,162 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldGenerateFilesForOrdersQuickstart() throws Exception {
+  void shouldGenerateFilesForOrdersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.ORDERS);
   }
 
   @Test
-  public void shouldGenerateFilesForRatingsQuickstart() throws Exception {
+  void shouldGenerateFilesForRatingsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.RATINGS);
   }
 
   @Test
-  public void shouldGenerateFilesForUsersQuickstart() throws Exception {
+  void shouldGenerateFilesForUsersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.USERS);
   }
 
   @Test
-  public void shouldGenerateFilesForUsers2Quickstart() throws Exception {
+  void shouldGenerateFilesForUsers2Quickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.USERS_);
   }
 
   @Test
-  public void shouldGenerateFilesForPageviewsQuickstart() throws Exception {
+  void shouldGenerateFilesForPageviewsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PAGEVIEWS);
   }
 
   @Test
-  public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
+  void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.STOCK_TRADES);
   }
 
   @Test
-  public void shouldGenerateFilesForProductQuickstart() throws Exception {
+  void shouldGenerateFilesForProductQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PRODUCT);
   }
 
   @Test
-  public void shouldGenerateFilesForPurchaseQuickstart() throws Exception {
+  void shouldGenerateFilesForPurchaseQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PURCHASES);
   }
 
   @Test
-  public void shouldGenerateFilesForInventoryQuickstart() throws Exception {
+  void shouldGenerateFilesForInventoryQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.INVENTORY);
   }
 
   @Test
-  public void shouldGenerateFilesForCreditCardsQuickstart() throws Exception {
+  void shouldGenerateFilesForCreditCardsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.CREDIT_CARDS);
   }
 
   @Test
-  public void shouldGenerateFilesForTransactionsQuickstart() throws Exception {
+  void shouldGenerateFilesForTransactionsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.TRANSACTIONS);
   }
 
   @Test
-  public void shouldGenerateFilesForStoresQuickstart() throws Exception {
+  void shouldGenerateFilesForStoresQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.STORES);
   }
   
   @Test
-  public void shouldGenerateFilesForCampaignFinanceQuickstart() throws Exception {
+  void shouldGenerateFilesForCampaignFinanceQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.CAMPAIGN_FINANCE);
   }
 
   @Test
-  public void shouldGenerateFilesForFleetMgmtDescriptionQuickstart() throws Exception {
+  void shouldGenerateFilesForFleetMgmtDescriptionQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_DESCRIPTION);
   }
 
   @Test
-  public void shouldGenerateFilesForFleetMgmtLocationQuickstart() throws Exception {
+  void shouldGenerateFilesForFleetMgmtLocationQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_LOCATION);
   }
 
   @Test
-  public void shouldGenerateFilesForFleetMgmtSensorsQuickstart() throws Exception {
+  void shouldGenerateFilesForFleetMgmtSensorsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.FLEET_MGMT_SENSORS);
   }
 
   @Test
-  public void shouldGenerateFilesForPizzaOrdersQuickstart() throws Exception {
+  void shouldGenerateFilesForPizzaOrdersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS);
   }
 
   @Test
-  public void shouldGenerateFilesForPizzaOrdersCompletedQuickstart() throws Exception {
+  void shouldGenerateFilesForPizzaOrdersCompletedQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS_COMPLETED);
   }
 
   @Test
-  public void shouldGenerateFilesForPizzaOrdersCancelledQuickstart() throws Exception {
+  void shouldGenerateFilesForPizzaOrdersCancelledQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PIZZA_ORDERS_CANCELLED);
   }
 
   @Test
-  public void shouldGenerateFilesForInsuranceOffersQuickstart() throws Exception {
+  void shouldGenerateFilesForInsuranceOffersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.INSURANCE_OFFERS);
   }
 
   @Test
-  public void shouldGenerateFilesForInsuranceCustomersQuickstart() throws Exception {
+  void shouldGenerateFilesForInsuranceCustomersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.INSURANCE_CUSTOMERS);
   }
 
   @Test
-  public void shouldGenerateFilesForInsuranceCustomerActivityQuickstart() throws Exception {
+  void shouldGenerateFilesForInsuranceCustomerActivityQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.INSURANCE_CUSTOMER_ACTIVITY);
   }
 
   @Test
-  public void shouldGenerateFilesForGamingGamesQuickstart() throws Exception {
+  void shouldGenerateFilesForGamingGamesQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.GAMING_GAMES);
   }
 
   @Test
-  public void shouldGenerateFilesForGamingPlayersQuickstart() throws Exception {
+  void shouldGenerateFilesForGamingPlayersQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.GAMING_PLAYERS);
   }
 
   @Test
-  public void shouldGenerateFilesForGamingPlayerActivityQuickstart() throws Exception {
+  void shouldGenerateFilesForGamingPlayerActivityQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.GAMING_PLAYER_ACTIVITY);
   }
 
   @Test
-  public void shouldGenerateFilesForPayrollEmployeeQuickstart() throws Exception {
+  void shouldGenerateFilesForPayrollEmployeeQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PAYROLL_EMPLOYEE);
   }
 
   @Test
-  public void shouldGenerateFilesForPayrollEmployeeLocationQuickstart() throws Exception {
+  void shouldGenerateFilesForPayrollEmployeeLocationQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PAYROLL_EMPLOYEE_LOCATION);
   }
 
   @Test
-  public void shouldGenerateFilesForPayrollBonusQuickstart() throws Exception {
+  void shouldGenerateFilesForPayrollBonusQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.PAYROLL_BONUS);
   }
 
   @Test
-  public void shouldGenerateFilesForSysLogsLogsQuickstart() throws Exception {
+  void shouldGenerateFilesForSysLogsLogsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.SYSLOG_LOGS);
   }
 
   @Test
-  public void shouldGenerateFilesForDeviceInformationQuickstart() throws Exception {
+  void shouldGenerateFilesForDeviceInformationQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.DEVICE_INFORMATION);
   }
 
   @Test
-  public void shouldGenerateFilesForSiemLogsQuickstart() throws Exception {
+  void shouldGenerateFilesForSiemLogsQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.SIEM_LOGS);
   }
 
   @Test
-  public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
+  void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
     Quickstart quickstart = Quickstart.PAGEVIEWS;
     assertNotEquals(quickstart.getSchemaKeyField(), "pageid");
@@ -324,7 +324,7 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldRestoreFromSourceOffsets() throws Exception {
+  void shouldRestoreFromSourceOffsets() throws Exception {
     // Give the task an arbitrary source offset
     sourceOffsets = new HashMap<>();
     sourceOffsets.put(DatagenTask.RANDOM_SEED, 100L);
@@ -354,7 +354,7 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldInjectHeaders()  throws Exception {
+  void shouldInjectHeaders()  throws Exception {
     createTaskWith(Quickstart.USERS);
     generateRecords();
     for (SourceRecord record : records) {
@@ -365,7 +365,7 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldFailToGenerateMoreRecordsThanSpecified() throws Exception {
+  void shouldFailToGenerateMoreRecordsThanSpecified() throws Exception {
     // Generate the expected number of records
     createTaskWith(Quickstart.USERS);
     generateRecords();

@@ -33,7 +33,6 @@
         <commons.compress.version>1.21</commons.compress.version>
         <connect-runtime-version>2.0.0</connect-runtime-version>
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
-        <junit.version>4.12</junit.version>
         <guava.version>30.0-jre</guava.version>
         <avro.version>1.8.1</avro.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
@@ -117,12 +116,17 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.0</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.confluent.avro</groupId>
             <artifactId>avro-random-generator</artifactId>

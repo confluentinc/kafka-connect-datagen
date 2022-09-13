@@ -23,18 +23,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.kafka.common.config.Config;
-import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.config.ConfigValue;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DatagenConnectorTest {
+class DatagenConnectorTest {
 
   private static final String TOPIC = "my-topic";
   private static final int NUM_MESSAGES = 100;
@@ -43,8 +43,8 @@ public class DatagenConnectorTest {
   private Map<String, String> config;
   private DatagenConnector connector;
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     config = new HashMap<>();
     config.put(DatagenConnectorConfig.KAFKA_TOPIC_CONF, TOPIC);
     config.put(DatagenConnectorConfig.ITERATIONS_CONF, Integer.toString(NUM_MESSAGES));
@@ -53,13 +53,13 @@ public class DatagenConnectorTest {
     connector = new DatagenConnector();
   }
 
-  @After
-  public void tearDown() throws Exception {
+  @AfterEach
+  void tearDown() throws Exception {
     connector.stop();
   }
 
   @Test
-  public void shouldCreateTasks() {
+  void shouldCreateTasks() {
     connector.start(config);
 
     assertTaskConfigs(1);
@@ -72,7 +72,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldAllowSettingQuickstart() {
+  void shouldAllowSettingQuickstart() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.QUICKSTART_CONF, Quickstart.USERS.name());
     Config validated = connector.validate(config);
@@ -83,7 +83,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldAllowSettingSchema() {
+  void shouldAllowSettingSchema() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
             "{\"namespace\":\"ksql\",\"name\":\"test_schema\",\"type\":\"record\",\"fields\":" +
@@ -97,7 +97,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldAllowSettingSchemaFile() {
+  void shouldAllowSettingSchemaFile() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "product.avro");
     Config validated = connector.validate(config);
@@ -108,7 +108,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldFailValidationWithMultipleSchemaSources() {
+  void shouldFailValidationWithMultipleSchemaSources() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
             "{\"namespace\":\"ksql\",\"name\":\"test_schema\",\"type\":\"record\",\"fields\":"
@@ -128,7 +128,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldFailValidationWithNoSchemaSources() {
+  void shouldFailValidationWithNoSchemaSources() {
     clearSchemaSources();
     Config validated = connector.validate(config);
 
@@ -138,7 +138,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldFailValidationWithInvalidSchemaString() {
+  void shouldFailValidationWithInvalidSchemaString() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, "a schema");
     Config validated = connector.validate(config);
@@ -149,7 +149,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldFailValidationWithInvalidFileName() {
+  void shouldFailValidationWithInvalidFileName() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "a file name");
     Config validated = connector.validate(config);
@@ -160,7 +160,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldFailValidationWithInvalidSchemaFile() {
+  void shouldFailValidationWithInvalidSchemaFile() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "invalid_users_schema.avro");
     Config validated = connector.validate(config);
@@ -171,7 +171,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldFailValidationWithInvalidSchemaKeyField() {
+  void shouldFailValidationWithInvalidSchemaKeyField() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "product.avro");
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
@@ -183,7 +183,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldNotValidateSchemaKeyFieldWhenSchemaSourceFailsValidation() {
+  void shouldNotValidateSchemaKeyFieldWhenSchemaSourceFailsValidation() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "invalid_users_schema.avro");
     config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
@@ -199,7 +199,7 @@ public class DatagenConnectorTest {
   }
 
   @Test
-  public void shouldNotValidateSchemaKeyFieldWhenMultipleSchemaSourcesAreSet() {
+  void shouldNotValidateSchemaKeyFieldWhenMultipleSchemaSourcesAreSet() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "product.avro");
     config.put(DatagenConnectorConfig.QUICKSTART_CONF, "clickstream");
