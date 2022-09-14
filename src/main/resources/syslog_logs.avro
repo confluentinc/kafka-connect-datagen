@@ -208,9 +208,9 @@
             "type": {
                 "type": "long",
                 "arg.properties": {
-                    "range": {
-                        "min": 1609459200000,
-                        "max": 1640995199000
+                    "iteration": {
+                        "start": 1609459200000,
+                        "step": 100
                     }
                 }
             }
