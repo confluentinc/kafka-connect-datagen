@@ -9,8 +9,8 @@
                 "type": "int",
                 "arg.properties": {
                     "range": {
-                        "min": 1000,
-                        "max": 5000
+                        "min": 1001,
+                        "max": 1101
                     }
                 }
             }
