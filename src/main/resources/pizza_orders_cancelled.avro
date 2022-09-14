@@ -21,8 +21,8 @@
                 "type": "int",
                 "arg.properties": {
                     "iteration": {
-                        "start": 1000,
-                        "step": 1
+                        "start": 1001,
+                        "step": 2
                     }
                 }
             }
