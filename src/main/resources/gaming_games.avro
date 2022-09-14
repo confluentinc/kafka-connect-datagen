@@ -8,9 +8,9 @@
             "type": {
                 "type": "int",
                 "arg.properties": {
-                    "iteration": {
-                        "start": 1000,
-                        "step": 1
+                    "range": {
+                        "min": 1000,
+                        "max": 5000
                     }
                 }
             }
