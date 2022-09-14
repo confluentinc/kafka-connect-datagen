@@ -28,7 +28,7 @@
             }
         },
         {
-            "name": "timestamp",
+            "name": "ts",
             "type": {
                 "type": "long",
                 "logicalType": "timestamp-millis",
