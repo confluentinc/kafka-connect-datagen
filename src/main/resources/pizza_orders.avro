@@ -116,7 +116,7 @@
                             },
                             {
                                 "product_id": 62,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 3,
                                 "unit_price": 21.14,
                                 "net_price": 63.42
@@ -158,7 +158,7 @@
                             },
                             {
                                 "product_id": 8,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 3,
                                 "unit_price": 23.330000000000002,
                                 "net_price": 69.99000000000001
@@ -179,7 +179,7 @@
                             },
                             {
                                 "product_id": 27,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 3,
                                 "unit_price": 22.020000000000003,
                                 "net_price": 66.06
@@ -193,7 +193,7 @@
                             },
                             {
                                 "product_id": 9,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 4,
                                 "unit_price": 24.69,
                                 "net_price": 98.76
@@ -228,7 +228,7 @@
                             },
                             {
                                 "product_id": 26,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 5,
                                 "unit_price": 9.24,
                                 "net_price": 46.2
@@ -256,7 +256,7 @@
                             },
                             {
                                 "product_id": 65,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 5,
                                 "unit_price": 2.63,
                                 "net_price": 13.149999999999999
@@ -277,14 +277,14 @@
                             },
                             {
                                 "product_id": 67,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 1,
                                 "unit_price": 3.02,
                                 "net_price": 3.02
                             },
                             {
                                 "product_id": 71,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 4,
                                 "unit_price": 16.69,
                                 "net_price": 66.76
@@ -347,7 +347,7 @@
                             },
                             {
                                 "product_id": 48,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 1,
                                 "unit_price": 4.18,
                                 "net_price": 4.18
@@ -396,7 +396,7 @@
                             },
                             {
                                 "product_id": 58,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 1,
                                 "unit_price": 1.24,
                                 "net_price": 1.24
@@ -480,7 +480,7 @@
                             },
                             {
                                 "product_id": 42,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 1,
                                 "unit_price": 6.609999999999999,
                                 "net_price": 6.609999999999999
@@ -529,7 +529,7 @@
                             },
                             {
                                 "product_id": 97,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 3,
                                 "unit_price": 16.03,
                                 "net_price": 48.09
@@ -578,7 +578,7 @@
                             },
                             {
                                 "product_id": 80,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 5,
                                 "unit_price": 12.69,
                                 "net_price": 63.449999999999996
@@ -592,7 +592,7 @@
                             },
                             {
                                 "product_id": 44,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 4,
                                 "unit_price": 18.18,
                                 "net_price": 72.72
@@ -627,7 +627,7 @@
                             },
                             {
                                 "product_id": 10,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 2,
                                 "unit_price": 8.68,
                                 "net_price": 17.36
@@ -662,7 +662,7 @@
                             },
                             {
                                 "product_id": 89,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 1,
                                 "unit_price": 20.200000000000003,
                                 "net_price": 20.200000000000003
@@ -676,21 +676,21 @@
                             },
                             {
                                 "product_id": 97,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 4,
                                 "unit_price": 6.619999999999999,
                                 "net_price": 26.479999999999997
                             },
                             {
                                 "product_id": 57,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 2,
                                 "unit_price": 20.44,
                                 "net_price": 40.88
                             },
                             {
                                 "product_id": 6,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 4,
                                 "unit_price": 10.59,
                                 "net_price": 42.36
@@ -753,7 +753,7 @@
                             },
                             {
                                 "product_id": 14,
-                                "category": "desert",
+                                "category": "dessert",
                                 "quantity": 2,
                                 "unit_price": 18.32,
                                 "net_price": 36.64
