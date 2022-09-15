@@ -33,13 +33,13 @@
         <commons.compress.version>1.21</commons.compress.version>
         <connect-runtime-version>2.0.0</connect-runtime-version>
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
-        <junit.version>4.12</junit.version>
         <guava.version>30.0-jre</guava.version>
         <avro.version>1.8.1</avro.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
         <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
             See https://github.com/confluentinc/common/pull/332 for details -->
         <dependency.check.version>6.1.6</dependency.check.version>
+        <hamcrest.version>2.2</hamcrest.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
@@ -117,12 +117,16 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.confluent.avro</groupId>
             <artifactId>avro-random-generator</artifactId>

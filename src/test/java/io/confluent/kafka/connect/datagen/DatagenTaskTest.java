@@ -16,12 +16,10 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,25 +32,27 @@ import io.confluent.connect.avro.AvroData;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.kafka.connect.data.Decimal;
-import org.apache.kafka.connect.data.Field;
+
+import org.apache.kafka.connect.data.ConnectSchema;
 import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
+import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTaskContext;
 import org.apache.kafka.connect.storage.OffsetStorageReader;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class DatagenTaskTest {
+class DatagenTaskTest {
 
   private static final String TOPIC = "my-topic";
   private static final int NUM_MESSAGES = 100;
@@ -68,166 +68,94 @@ public class DatagenTaskTest {
   private Schema expectedKeyConnectSchema;
   private Map<String, Object> sourceOffsets;
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() {
     config = new HashMap<>();
     records = new ArrayList<>();
     sourceOffsets = null;
   }
 
-  @After
-  public void tearDown() throws Exception {
+  @AfterEach
+  void tearDown() {
     task.stop();
     task = null;
   }
 
-  @Test
-  public void shouldGenerateFilesForClickstreamCodesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.CLICKSTREAM_CODES);
+  @ParameterizedTest
+  @EnumSource(Quickstart.class)
+  void shouldGenerateFilesForQuickstart(Quickstart quickstart) throws Exception {
+    generateAndValidateRecordsFor(quickstart);
   }
 
   @Test
-  public void shouldGenerateFilesForClickstreamUsersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.CLICKSTREAM_USERS);
-  }
-
-  @Test
-  public void shouldGenerateFilesForClickstreamQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.CLICKSTREAM);
-  }
-
-  @Test
-  public void shouldGenerateFilesForPersonQuickstart() throws Exception {
+  void shouldGenerateFilesForPersonSchema() throws Exception {
     String personSchema = "{\n" +
-            "  \"name\": \"SimplePersonAvro\",\n" +
-            "  \"type\": \"record\",\n" +
-            "  \"namespace\": \"simple.avro\",\n" +
-            "  \"fields\": [\n" +
-            "    {\n" +
-            "      \"name\": \"person\",\n" +
-            "      \"type\": {\n" +
-            "        \"type\": \"array\",\n" +
-            "        \"items\": {\n" +
-            "          \"name\": \"Person\",\n" +
-            "          \"type\": \"record\",\n" +
-            "          \"fields\": [\n" +
-            "            {\n" +
-            "              \"name\": \"name\",\n" +
-            "              \"type\": [\n" +
-            "                \"null\",\n" +
-            "                \"string\"\n" +
-            "              ],\n" +
-            "              \"default\": null\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"name\": \"age\",\n" +
-            "              \"type\": [\n" +
-            "                \"null\",\n" +
-            "                \"string\"\n" +
-            "              ],\n" +
-            "              \"default\": null\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        }\n" +
-            "      }\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"name\": \"father\",\n" +
-            "      \"default\": null,\n" +
-            "      \"type\": [\n" +
-            "        \"null\",\n" +
-            "        {\n" +
-            "          \"name\": \"Parent\",\n" +
-            "          \"type\": \"record\",\n" +
-            "          \"fields\": [\n" +
-            "            {\n" +
-            "              \"name\": \"greatGrandParents\",\n" +
-            "              \"default\": null,\n" +
-            "              \"type\": [\n" +
-            "                \"null\",\n" +
-            "                {\n" +
-            "                  \"type\": \"array\",\n" +
-            "                  \"items\": \"simple.avro.Person\"\n" +
-            "                }\n" +
-            "              ]\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        }\n" +
-            "      ]\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+      "  \"name\": \"SimplePersonAvro\",\n" +
+      "  \"type\": \"record\",\n" +
+      "  \"namespace\": \"simple.avro\",\n" +
+      "  \"fields\": [\n" +
+      "    {\n" +
+      "      \"name\": \"person\",\n" +
+      "      \"type\": {\n" +
+      "        \"type\": \"array\",\n" +
+      "        \"items\": {\n" +
+      "          \"name\": \"Person\",\n" +
+      "          \"type\": \"record\",\n" +
+      "          \"fields\": [\n" +
+      "            {\n" +
+      "              \"name\": \"name\",\n" +
+      "              \"type\": [\n" +
+      "                \"null\",\n" +
+      "                \"string\"\n" +
+      "              ],\n" +
+      "              \"default\": null\n" +
+      "            },\n" +
+      "            {\n" +
+      "              \"name\": \"age\",\n" +
+      "              \"type\": [\n" +
+      "                \"null\",\n" +
+      "                \"string\"\n" +
+      "              ],\n" +
+      "              \"default\": null\n" +
+      "            }\n" +
+      "          ]\n" +
+      "        }\n" +
+      "      }\n" +
+      "    },\n" +
+      "    {\n" +
+      "      \"name\": \"father\",\n" +
+      "      \"default\": null,\n" +
+      "      \"type\": [\n" +
+      "        \"null\",\n" +
+      "        {\n" +
+      "          \"name\": \"Parent\",\n" +
+      "          \"type\": \"record\",\n" +
+      "          \"fields\": [\n" +
+      "            {\n" +
+      "              \"name\": \"greatGrandParents\",\n" +
+      "              \"default\": null,\n" +
+      "              \"type\": [\n" +
+      "                \"null\",\n" +
+      "                {\n" +
+      "                  \"type\": \"array\",\n" +
+      "                  \"items\": \"simple.avro.Person\"\n" +
+      "                }\n" +
+      "              ]\n" +
+      "            }\n" +
+      "          ]\n" +
+      "        }\n" +
+      "      ]\n" +
+      "    }\n" +
+      "  ]\n" +
+      "}";
     generateAndValidateRecordsForSchemaString(personSchema, "person");
   }
 
-  @Test
-  public void shouldGenerateFilesForOrdersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.ORDERS);
-  }
 
   @Test
-  public void shouldGenerateFilesForRatingsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.RATINGS);
-  }
-
-  @Test
-  public void shouldGenerateFilesForUsersQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS);
-  }
-
-  @Test
-  public void shouldGenerateFilesForUsers2Quickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.USERS_);
-  }
-
-  @Test
-  public void shouldGenerateFilesForPageviewsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.PAGEVIEWS);
-  }
-
-  @Test
-  public void shouldGenerateFilesForStockTradesQuickstart() throws Exception {
-    generateAndValidateRecordsFor(DatagenTask.Quickstart.STOCK_TRADES);
-  }
-
-  @Test
-  public void shouldGenerateFilesForProductQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PRODUCT);
-  }
-
-  @Test
-  public void shouldGenerateFilesForPurchaseQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.PURCHASES);
-  }
-
-  @Test
-  public void shouldGenerateFilesForInventoryQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.INVENTORY);
-  }
-
-  @Test
-  public void shouldGenerateFilesForCreditCardsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CREDIT_CARDS);
-  }
-
-  @Test
-  public void shouldGenerateFilesForTransactionsQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.TRANSACTIONS);
-  }
-
-  @Test
-  public void shouldGenerateFilesForStoresQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.STORES);
-  }
-  @Test
-  public void shouldGenerateFilesForCampaignFinanceQuickstart() throws Exception {
-    generateAndValidateRecordsFor(Quickstart.CAMPAIGN_FINANCE);
-  }
-
-  @Test
-  public void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
+  void shouldUseConfiguredKeyFieldForQuickstartIfProvided() throws Exception {
     // Do the same thing with schema text
-    DatagenTask.Quickstart quickstart = Quickstart.PAGEVIEWS;
+    Quickstart quickstart = Quickstart.PAGEVIEWS;
     assertNotEquals(quickstart.getSchemaKeyField(), "pageid");
     createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), "pageid");
     generateRecords();
@@ -235,7 +163,7 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldRestoreFromSourceOffsets() throws Exception {
+  void shouldRestoreFromSourceOffsets() throws Exception {
     // Give the task an arbitrary source offset
     sourceOffsets = new HashMap<>();
     sourceOffsets.put(DatagenTask.RANDOM_SEED, 100L);
@@ -265,7 +193,7 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldInjectHeaders()  throws Exception {
+  void shouldInjectHeaders()  throws Exception {
     createTaskWith(Quickstart.USERS);
     generateRecords();
     for (SourceRecord record : records) {
@@ -276,9 +204,9 @@ public class DatagenTaskTest {
   }
 
   @Test
-  public void shouldFailToGenerateMoreRecordsThanSpecified() throws Exception {
+  void shouldFailToGenerateMoreRecordsThanSpecified() throws Exception {
     // Generate the expected number of records
-    createTaskWith(DatagenTask.Quickstart.USERS);
+    createTaskWith(Quickstart.USERS);
     generateRecords();
     assertRecordsMatchSchemas();
 
@@ -291,7 +219,7 @@ public class DatagenTaskTest {
     }
   }
 
-  private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
+  private void generateAndValidateRecordsFor(Quickstart quickstart) throws Exception {
     createTaskWith(quickstart);
     generateRecords();
     assertRecordsMatchSchemas();
@@ -341,50 +269,12 @@ public class DatagenTaskTest {
   }
 
   private boolean isConnectInstance(Object value, Schema expected) {
-    if (expected.isOptional() && value == null) {
-      return true;
+    try {
+      ConnectSchema.validateValue(expected, value);
+    } catch (DataException e) {
+      return false;
     }
-    switch (expected.type()) {
-      case BOOLEAN:
-        return value instanceof Boolean;
-      case BYTES:
-        if (Decimal.LOGICAL_NAME.equals(expected.name())) {
-          return value instanceof BigDecimal;
-        }
-        return value instanceof byte[];
-      case INT8:
-        return value instanceof Byte;
-      case INT16:
-        return value instanceof Short;
-      case INT32:
-        return value instanceof Integer;
-      case INT64:
-        return value instanceof Long;
-      case FLOAT32:
-        return value instanceof Float;
-      case FLOAT64:
-        return value instanceof Double;
-      case STRING:
-        return value instanceof String;
-      case ARRAY:
-        return value instanceof List;
-      case MAP:
-        return value instanceof Map;
-      case STRUCT:
-        if (value instanceof Struct) {
-          Struct struct = (Struct) value;
-          for (Field field : expected.fields()) {
-            Object fieldValue = struct.get(field.name());
-            if (!isConnectInstance(fieldValue, field.schema())) {
-              return false;
-            }
-          }
-          return true;
-        }
-        return false;
-      default:
-        throw new IllegalArgumentException("Unexpected enum schema");
-    }
+    return true;
   }
 
   private void dropSchemaSourceConfigs() {
@@ -393,7 +283,7 @@ public class DatagenTaskTest {
     config.remove(DatagenConnectorConfig.SCHEMA_STRING_CONF);
   }
 
-  private void createTaskWith(DatagenTask.Quickstart quickstart) {
+  private void createTaskWith(Quickstart quickstart) {
     dropSchemaSourceConfigs();
     config.put(
         DatagenConnectorConfig.QUICKSTART_CONF,
