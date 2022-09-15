@@ -56,7 +56,7 @@ enum Quickstart {
   SYSLOG_LOGS("syslog_logs.avro", "host"),
   DEVICE_INFORMATION("device_information.avro", "device_ip"),
   SIEM_LOGS("siem_logs.avro", "hostname"),
-  SHOES("shoes.avro", "product_id"),
+  SHOES("shoes.avro", "id"),
   SHOE_CUSTOMERS("shoe_customers.avro", "id"),
   SHOE_ORDERS("shoe_orders.avro", "order_id"),
   SHOE_CLICKSTREAM("shoe_clickstream.avro", "product_id");

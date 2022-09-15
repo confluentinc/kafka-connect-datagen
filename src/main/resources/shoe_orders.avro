@@ -980,7 +980,7 @@
             }
         },
         {
-            "name": "purchase_timestamp",
+            "name": "ts",
             "type": {
                 "type": "long",
                 "logicalType": "timestamp-millis",
