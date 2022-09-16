@@ -1097,6 +1097,19 @@
                     ]
                 }
             }
+        },
+        {
+            "name": "ts",
+            "type": {
+                "type": "long",
+                "logicalType": "timestamp-millis",
+                "arg.properties": {
+                    "iteration": {
+                        "start": 1609457200000,
+                        "step": 10000
+                    }
+                }
+            }
         }
     ]
 }
