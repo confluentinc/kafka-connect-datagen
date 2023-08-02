@@ -17,7 +17,6 @@
 package io.confluent.kafka.connect.datagen;
 
 import com.google.common.collect.ImmutableList;
-import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.util.List;
 import java.util.Map;
 import org.apache.avro.Schema;
@@ -163,11 +162,11 @@ public class DatagenConnectorConfig extends AbstractConfig {
       if (((String) value).isEmpty()) {
         return;
       }
-      if (!Quickstart.configValues.contains(((String) value).toLowerCase())) {
+      if (!Quickstart.configValues().contains(((String) value).toLowerCase())) {
         throw new ConfigException(String.format(
                 "%s must be one out of %s",
                 name,
-                String.join(",", DatagenTask.Quickstart.configValues)
+                String.join(",", Quickstart.configValues())
         ));
       }
     }

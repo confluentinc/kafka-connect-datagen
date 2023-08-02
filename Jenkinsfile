@@ -4,5 +4,5 @@
  */
 common {
   slackChannel = '#connect-warn'
-  nodeLabel = 'docker-oraclejdk8'
+  nodeLabel = 'docker-debian-jdk8'
 }
