@@ -16,13 +16,12 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.stream.Collectors;
+import org.apache.avro.Schema;
 import org.apache.kafka.common.config.Config;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigException;
@@ -37,10 +36,6 @@ public class DatagenConnector extends SourceConnector {
   private static Logger log = LoggerFactory.getLogger(DatagenConnector.class);
   private DatagenConnectorConfig config;
   private Map<String, String> props;
-
-  @VisibleForTesting
-  static final String SCHEMA_SOURCE_ERR =
-      "Must set exactly one of " + String.join(", ", DatagenConnectorConfig.schemaSourceKeys());
 
   @Override
   public String version() {
@@ -88,23 +83,61 @@ public class DatagenConnector extends SourceConnector {
   @Override
   public Config validate(Map<String, String> connectorConfigs) {
     Config config = super.validate(connectorConfigs);
-    validateSchemaSource(config);
+    boolean isSingleSchemaSource = validateSchemaSource(config);
+
+    // skip further validations if any single config validations have failed
+    try {
+      this.config = new DatagenConnectorConfig(connectorConfigs);
+    } catch (ConfigException e) {
+      return config;
+    }
+
+    if (isSingleSchemaSource) {
+      validateSchemaKeyField(config, this.config.getSchema());
+    }
     return config;
   }
 
-  private void validateSchemaSource(Config config) {
+  private boolean validateSchemaSource(Config config) {
     List<ConfigValue> schemaSources = config.configValues().stream()
         .filter(v -> DatagenConnectorConfig.isExplicitlySetSchemaSource(v.name(), v.value()))
         .collect(Collectors.toList());
+    String schemaSourceError = "Must set exactly one of "
+            + String.join(", ", DatagenConnectorConfig.schemaSourceKeys());
     if (schemaSources.size() > 1) {
       for (ConfigValue v : schemaSources) {
-        v.addErrorMessage(SCHEMA_SOURCE_ERR);
+        v.addErrorMessage(schemaSourceError);
       }
+      return false;
     }
     if (schemaSources.size() == 0) {
       config.configValues().stream()
           .filter(v -> DatagenConnectorConfig.schemaSourceKeys().contains(v.name()))
-          .forEach(v -> v.addErrorMessage(SCHEMA_SOURCE_ERR));
+          .forEach(v -> v.addErrorMessage(schemaSourceError));
+      return false;
     }
+    return true;
+  }
+
+  private void validateSchemaKeyField(Config config, Schema schema) {
+    ConfigValue schemaKeyField = getConfigValue(
+        config,
+        DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF
+    );
+
+    if (schemaKeyField != null && !schemaKeyField.value().equals("")) {
+      if (schema.getField((String) schemaKeyField.value()) == null) {
+        schemaKeyField.addErrorMessage(
+            "The schema does not contain the field provided in '"
+              + DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF + "'"
+        );
+      }
+    }
+  }
+
+  private ConfigValue getConfigValue(Config config, String configName) {
+    return config.configValues().stream()
+            .filter(value -> value.name().equals(configName))
+            .findFirst().orElse(null);
   }
 }

@@ -25,17 +25,21 @@
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-datagen</artifactId>
-    <version>0.4.2-SNAPSHOT</version>
+    <version>0.5.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
     <properties>
+        <commons.compress.version>1.21</commons.compress.version>
         <connect-runtime-version>2.0.0</connect-runtime-version>
-        <confluent.avro.generator.version>0.3.1</confluent.avro.generator.version>
+        <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
         <guava.version>32.0.1-jre</guava.version>
         <avro.version>1.8.1</avro.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
+            See https://github.com/confluentinc/common/pull/332 for details -->
+        <dependency.check.version>6.1.6</dependency.check.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
@@ -60,7 +64,7 @@
         <connection>scm:git:git://github.com/confluentinc/kafka-connect-datagen.git</connection>
         <developerConnection>scm:git:git@github.com:confluentinc/kafka-connect-datagen.git</developerConnection>
         <url>https://github.com/confluentinc/kafka-connect-datagen</url>
-        <tag>0.4.x</tag>
+        <tag>0.5.x</tag>
     </scm>
 
     <developers>
@@ -129,6 +133,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-reload4j</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- pinning for CVEs -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${commons.compress.version}</version>
         </dependency>
     </dependencies>
 

@@ -16,31 +16,28 @@
 
 package io.confluent.kafka.connect.datagen;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.FileInputStream;
+import io.confluent.avro.random.generator.Generator;
+import io.confluent.connect.avro.AvroData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import io.confluent.avro.random.generator.Generator;
-import io.confluent.connect.avro.AvroData;
 import org.apache.avro.generic.GenericData.Record;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.kafka.common.config.ConfigException;
+import org.apache.kafka.connect.data.Field;
+import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaAndValue;
+import org.apache.kafka.connect.data.SchemaBuilder;
+import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.header.ConnectHeaders;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.SchemaBuilder;
-import org.apache.kafka.connect.data.Struct;
-import org.apache.kafka.connect.data.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,10 +57,7 @@ public class DatagenTask extends SourceTask {
   private long maxInterval;
   private int maxRecords;
   private long count = 0L;
-  private String schemaFilename;
   private String schemaKeyField;
-  private String schemaString;
-  private Quickstart quickstart;
   private Generator generator;
   private org.apache.avro.Schema avroSchema;
   private org.apache.kafka.connect.data.Schema ksqlSchema;
@@ -84,7 +78,20 @@ public class DatagenTask extends SourceTask {
     PAGEVIEWS("pageviews_schema.avro", "viewtime"),
     STOCK_TRADES("stock_trades_schema.avro", "symbol"),
     INVENTORY("inventory.avro", "id"),
-    PRODUCT("product.avro", "id");
+    PRODUCT("product.avro", "id"),
+    PURCHASES("purchase.avro", "id"),
+    TRANSACTIONS("transactions.avro", "transaction_id"),
+    STORES("stores.avro", "store_id"),
+    CREDIT_CARDS("credit_cards.avro", "card_id"),
+    CAMPAIGN_FINANCE("campaign_finance.avro", "candidate_id");
+
+    static final Set<String> configValues = new HashSet<>();
+
+    static {
+      for (Quickstart q : Quickstart.values()) {
+        configValues.add(q.name().toLowerCase());
+      }
+    }
 
     private final String schemaFilename;
     private final String keyName;
@@ -114,8 +121,6 @@ public class DatagenTask extends SourceTask {
     topic = config.getKafkaTopic();
     maxInterval = config.getMaxInterval();
     maxRecords = config.getIterations();
-    schemaFilename = config.getSchemaFilename();
-    schemaString = config.getSchemaString();
     schemaKeyField = config.getSchemaKeyfield();
     taskGeneration = 0;
     taskId = Integer.parseInt(props.get(TASK_ID));
@@ -138,56 +143,14 @@ public class DatagenTask extends SourceTask {
       random.setSeed((Long) offset.get(RANDOM_SEED));
     }
 
+    avroSchema = config.getSchema();
+
     Generator.Builder generatorBuilder = new Generator.Builder()
         .random(random)
-        .generation(count);
-    String quickstartName = config.getQuickstart();
-    if (quickstartName != "") {
-      try {
-        quickstart = Quickstart.valueOf(quickstartName.toUpperCase());
-        if (quickstart != null) {
-          schemaFilename = quickstart.getSchemaFilename();
-          schemaKeyField = schemaKeyField.equals("")
-              ? quickstart.getSchemaKeyField() : schemaKeyField;
-          try {
-            generator = generatorBuilder
-                .schemaStream(getClass().getClassLoader().getResourceAsStream(schemaFilename))
-                .build();
-          } catch (IOException e) {
-            throw new ConnectException("Unable to read the '"
-                + schemaFilename + "' schema file", e);
-          }
-        }
-      } catch (IllegalArgumentException e) {
-        log.warn("Quickstart '{}' not found: ", quickstartName, e);
-      }
-    } else if (schemaString != "") {
-      generator = generatorBuilder.schemaString(schemaString).build();
-    } else {
-      String err = "Unable to read the '" + schemaFilename + "' schema file";
-      try {
-        generator = generatorBuilder.schemaStream(new FileInputStream(schemaFilename)).build();
-      } catch (FileNotFoundException e) {
-        // also look in jars on the classpath
-        try {
-          generator = generatorBuilder
-              .schemaStream(DatagenTask.class.getClassLoader().getResourceAsStream(schemaFilename))
-              .build();
-        } catch (IOException inner) {
-          throw new ConnectException(err, e);
-        }
-      } catch (IOException e) {
-        throw new ConnectException(err, e);
-      }
-    }
+        .generation(count)
+        .schema(avroSchema);
 
-    avroSchema = generator.schema();
-
-    if (!schemaKeyField.isEmpty() && avroSchema.getField(schemaKeyField) == null) {
-      throw new ConfigException(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, schemaKeyField,
-              "Schema does not contain the specified field");
-    }
-
+    generator = generatorBuilder.build();
     avroData = new AvroData(1);
     ksqlSchema = avroData.toConnectSchema(avroSchema);
   }
@@ -325,6 +288,10 @@ public class DatagenTask extends SourceTask {
       final org.apache.kafka.connect.data.Schema schema,
       final Object value
   ) {
+    if (value == null) {
+      return null;
+    }
+
     switch (schema.type()) {
       case BOOLEAN:
       case INT32:

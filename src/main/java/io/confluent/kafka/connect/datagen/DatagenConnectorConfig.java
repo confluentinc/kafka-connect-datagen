@@ -17,13 +17,16 @@
 package io.confluent.kafka.connect.datagen;
 
 import com.google.common.collect.ImmutableList;
+import io.confluent.kafka.connect.datagen.DatagenTask.Quickstart;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.avro.Schema;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
-import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.common.config.ConfigDef.Importance;
+import org.apache.kafka.common.config.ConfigDef.Type;
+import org.apache.kafka.common.config.ConfigDef.Validator;
+import org.apache.kafka.common.config.ConfigException;
 
 public class DatagenConnectorConfig extends AbstractConfig {
 
@@ -60,10 +63,33 @@ public class DatagenConnectorConfig extends AbstractConfig {
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC)
         .define(MAXINTERVAL_CONF, Type.LONG, 500L, Importance.HIGH, MAXINTERVAL_DOC)
         .define(ITERATIONS_CONF, Type.INT, -1, Importance.HIGH, ITERATIONS_DOC)
-        .define(SCHEMA_STRING_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_STRING_DOC)
-        .define(SCHEMA_FILENAME_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_FILENAME_DOC)
-        .define(SCHEMA_KEYFIELD_CONF, Type.STRING, "", Importance.HIGH, SCHEMA_KEYFIELD_DOC)
-        .define(QUICKSTART_CONF, Type.STRING, "", Importance.HIGH, QUICKSTART_DOC)
+        .define(SCHEMA_STRING_CONF,
+          Type.STRING,
+          "",
+          new SchemaStringValidator(),
+          Importance.HIGH,
+          SCHEMA_STRING_DOC
+        )
+        .define(SCHEMA_FILENAME_CONF,
+          Type.STRING,
+          "",
+          new SchemaFileValidator(),
+          Importance.HIGH,
+          SCHEMA_FILENAME_DOC
+        )
+        .define(SCHEMA_KEYFIELD_CONF,
+          Type.STRING,
+          "",
+          Importance.HIGH,
+          SCHEMA_KEYFIELD_DOC
+        )
+        .define(QUICKSTART_CONF,
+          Type.STRING,
+          "",
+          new QuickstartValidator(),
+          Importance.HIGH,
+          QUICKSTART_DOC
+        )
         .define(RANDOM_SEED_CONF, Type.LONG, null, Importance.LOW, RANDOM_SEED_DOC);
   }
 
@@ -84,6 +110,12 @@ public class DatagenConnectorConfig extends AbstractConfig {
   }
 
   public String getSchemaKeyfield() {
+    if (this.getString(SCHEMA_KEYFIELD_CONF).isEmpty()) {
+      String quickstart = this.getString(QUICKSTART_CONF);
+      if (!quickstart.isEmpty()) {
+        return Quickstart.valueOf(quickstart.toUpperCase()).getSchemaKeyField();
+      }
+    }
     return this.getString(SCHEMA_KEYFIELD_CONF);
   }
 
@@ -99,12 +131,68 @@ public class DatagenConnectorConfig extends AbstractConfig {
     return this.getString(SCHEMA_STRING_CONF);
   }
 
+  public Schema getSchema() {
+    String quickstart = getQuickstart();
+    if (quickstart != null && !quickstart.isEmpty()) {
+      String schemaFilename = Quickstart.valueOf(quickstart.toUpperCase()).getSchemaFilename();
+      return ConfigUtils.getSchemaFromSchemaFileName(schemaFilename);
+    }
+    String schemaString = getSchemaString();
+    if (schemaString != null && !schemaString.isEmpty()) {
+      return ConfigUtils.getSchemaFromSchemaString(schemaString);
+    }
+    String schemaFileName = getSchemaFilename();
+    if (schemaFileName != null && !schemaFileName.isEmpty()) {
+      return ConfigUtils.getSchemaFromSchemaFileName(schemaFileName);
+    }
+    return null;
+  }
+
   public static List<String> schemaSourceKeys() {
     return ImmutableList.of(SCHEMA_STRING_CONF, SCHEMA_FILENAME_CONF, QUICKSTART_CONF);
   }
 
   public static boolean isExplicitlySetSchemaSource(String key, Object value) {
     return schemaSourceKeys().contains(key) && !("".equals(value));
+  }
+
+  private static class QuickstartValidator implements Validator {
+
+    @Override
+    public void ensureValid(String name, Object value) {
+      if (((String) value).isEmpty()) {
+        return;
+      }
+      if (!Quickstart.configValues.contains(((String) value).toLowerCase())) {
+        throw new ConfigException(String.format(
+                "%s must be one out of %s",
+                name,
+                String.join(",", DatagenTask.Quickstart.configValues)
+        ));
+      }
+    }
+  }
+
+  private static class SchemaStringValidator implements Validator {
+
+    @Override
+    public void ensureValid(String name, Object value) {
+      if (((String) value).isEmpty()) {
+        return;
+      }
+      ConfigUtils.getSchemaFromSchemaString((String) value);
+    }
+  }
+
+  private static class SchemaFileValidator implements Validator {
+
+    @Override
+    public void ensureValid(String name, Object value) {
+      if (((String) value).isEmpty()) {
+        return;
+      }
+      ConfigUtils.getSchemaFromSchemaFileName((String) value);
+    }
   }
 }
 

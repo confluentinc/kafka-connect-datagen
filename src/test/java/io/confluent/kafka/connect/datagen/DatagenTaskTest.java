@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,14 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
-import io.confluent.avro.random.generator.Generator;
 import io.confluent.connect.avro.AvroData;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.kafka.common.config.ConfigException;
+import org.apache.kafka.connect.data.Decimal;
 import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
@@ -98,6 +97,70 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForPersonQuickstart() throws Exception {
+    String personSchema = "{\n" +
+            "  \"name\": \"SimplePersonAvro\",\n" +
+            "  \"type\": \"record\",\n" +
+            "  \"namespace\": \"simple.avro\",\n" +
+            "  \"fields\": [\n" +
+            "    {\n" +
+            "      \"name\": \"person\",\n" +
+            "      \"type\": {\n" +
+            "        \"type\": \"array\",\n" +
+            "        \"items\": {\n" +
+            "          \"name\": \"Person\",\n" +
+            "          \"type\": \"record\",\n" +
+            "          \"fields\": [\n" +
+            "            {\n" +
+            "              \"name\": \"name\",\n" +
+            "              \"type\": [\n" +
+            "                \"null\",\n" +
+            "                \"string\"\n" +
+            "              ],\n" +
+            "              \"default\": null\n" +
+            "            },\n" +
+            "            {\n" +
+            "              \"name\": \"age\",\n" +
+            "              \"type\": [\n" +
+            "                \"null\",\n" +
+            "                \"string\"\n" +
+            "              ],\n" +
+            "              \"default\": null\n" +
+            "            }\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      }\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"name\": \"father\",\n" +
+            "      \"default\": null,\n" +
+            "      \"type\": [\n" +
+            "        \"null\",\n" +
+            "        {\n" +
+            "          \"name\": \"Parent\",\n" +
+            "          \"type\": \"record\",\n" +
+            "          \"fields\": [\n" +
+            "            {\n" +
+            "              \"name\": \"greatGrandParents\",\n" +
+            "              \"default\": null,\n" +
+            "              \"type\": [\n" +
+            "                \"null\",\n" +
+            "                {\n" +
+            "                  \"type\": \"array\",\n" +
+            "                  \"items\": \"simple.avro.Person\"\n" +
+            "                }\n" +
+            "              ]\n" +
+            "            }\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
+    generateAndValidateRecordsForSchemaString(personSchema, "person");
+  }
+
+  @Test
   public void shouldGenerateFilesForOrdersQuickstart() throws Exception {
     generateAndValidateRecordsFor(DatagenTask.Quickstart.ORDERS);
   }
@@ -133,8 +196,32 @@ public class DatagenTaskTest {
   }
 
   @Test
+  public void shouldGenerateFilesForPurchaseQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.PURCHASES);
+  }
+
+  @Test
   public void shouldGenerateFilesForInventoryQuickstart() throws Exception {
     generateAndValidateRecordsFor(Quickstart.INVENTORY);
+  }
+
+  @Test
+  public void shouldGenerateFilesForCreditCardsQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.CREDIT_CARDS);
+  }
+
+  @Test
+  public void shouldGenerateFilesForTransactionsQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.TRANSACTIONS);
+  }
+
+  @Test
+  public void shouldGenerateFilesForStoresQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.STORES);
+  }
+  @Test
+  public void shouldGenerateFilesForCampaignFinanceQuickstart() throws Exception {
+    generateAndValidateRecordsFor(Quickstart.CAMPAIGN_FINANCE);
   }
 
   @Test
@@ -204,14 +291,6 @@ public class DatagenTaskTest {
     }
   }
 
-  @Test(expected = ConfigException.class)
-  public void shouldFailIfSchemaKeyFieldNotPresentInSchema() throws Exception {
-    config.put(DatagenConnectorConfig.QUICKSTART_CONF, DatagenTask.Quickstart.USERS.name());
-    config.put(DatagenConnectorConfig.SCHEMA_KEYFIELD_CONF, "key_does_not_exist");
-    createTask();
-    generateRecords();
-  }
-
   private void generateAndValidateRecordsFor(DatagenTask.Quickstart quickstart) throws Exception {
     createTaskWith(quickstart);
     generateRecords();
@@ -224,6 +303,12 @@ public class DatagenTaskTest {
 
     // Do the same thing with schema text
     createTaskWithSchemaText(slurp(quickstart.getSchemaFilename()), quickstart.getSchemaKeyField());
+    generateRecords();
+    assertRecordsMatchSchemas();
+  }
+
+  private void generateAndValidateRecordsForSchemaString(String schemaString, String keyField) throws Exception {
+    createTaskWithSchemaText(schemaString, keyField);
     generateRecords();
     assertRecordsMatchSchemas();
   }
@@ -263,6 +348,9 @@ public class DatagenTaskTest {
       case BOOLEAN:
         return value instanceof Boolean;
       case BYTES:
+        if (Decimal.LOGICAL_NAME.equals(expected.name())) {
+          return value instanceof BigDecimal;
+        }
         return value instanceof byte[];
       case INT8:
         return value instanceof Byte;

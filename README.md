@@ -70,7 +70,7 @@ You can create a Docker image packaged with the locally built source by running 
 make build-docker-from-local CP_VERSION=5.5.0
 ```
 
-This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.4.0-6.0.1`.
+This will build the connector from source and create a local image with an aggregate version number.  The aggregate version number is the kafka-connect-datagen connector version number and the Confluent Platform version number separated with a `-`.   The local kafka-connect-datagen version number is defined in the `pom.xml` file, and the Confluent Platform version defined in the [Makefile](Makfile).  An example of the aggregate version number might be: `0.4.0-6.1.0`.
 
 Alternatively, you can install the `kafka-connect-datagen` connector from [Confluent Hub](https://www.confluent.io/connector/kafka-connect-datagen/) into a Docker image by running:
 ```bash
@@ -80,7 +80,7 @@ make build-docker-from-released CP_VERSION=5.5.0
 The [Makefile](Makefile) contains some default variables that affect the version numbers of both the installed `kafka-connect-datagen` as well as the base Confluent Platform version.  The variables are located near the top of the [Makefile](Makefile) with the following names and current default values:
 
 ```bash
-CP_VERSION ?= 6.0.1
+CP_VERSION ?= 6.1.0
 
 KAFKA_CONNECT_DATAGEN_VERSION ?= 0.4.0
 ```
@@ -99,15 +99,6 @@ Here is an example of how to run the `kafka-connect-datagen` with the provided [
 docker-compose up -d --build
 curl -X POST -H "Content-Type: application/json" --data @config/connector_pageviews.config http://localhost:8083/connectors
 docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap-server kafka:29092  --property print.key=true --max-messages 5 --from-beginning
-```
-## Building
-
-To build the `kafka-connect-datagen` connector from latest code and install it to a local Confluent Platform, you can perform the following (here we use `v0.1.6` to reference the git tag for the `0.1.6` version, but the same pattern works for all released versions).
-
-```bash
-git checkout v0.1.6
-make package
-confluent-hub install target/components/packages/confluentinc-kafka-connect-datagen-0.1.6.zip
 ```
 
 # Configuration
@@ -247,7 +238,7 @@ To release new versions of the Docker images to Dockerhub (https://hub.docker.co
 The [Makefile](Makefile) contains some default variables that affect the version numbers of both the installed `kafka-connect-datagen` as well as the base Confluent Platform version.  The variables are located near the top of the [Makefile](Makefile) with the following names and current default values:
 
 ```bash
-CP_VERSION ?= 6.0.1
+CP_VERSION ?= 6.1.0
 KAFKA_CONNECT_DATAGEN_VERSION ?= 0.4.0
 OPERATOR_VERSION ?= 0 # Operator is a 'rev' version appended at the end of the CP version, like so: 5.5.0.0
 ```
