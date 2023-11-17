@@ -20,19 +20,18 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-parent</artifactId>
-        <version>5.4.0</version>
+        <version>7.5.0</version>
     </parent>
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-datagen</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.3.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
     <properties>
         <connect-runtime-version>2.0.0</connect-runtime-version>
-        <confluent.version>5.4.0</confluent.version>
-        <confluent.avro.generator.version>0.3.0</confluent.avro.generator.version>
+        <confluent.avro.generator.version>0.3.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
         <avro.version>1.11.3</avro.version>
         <licenses.version>5.4.0</licenses.version>
@@ -61,7 +60,7 @@
         <connection>scm:git:git://github.com/confluentinc/kafka-connect-datagen.git</connection>
         <developerConnection>scm:git:git@github.com:confluentinc/kafka-connect-datagen.git</developerConnection>
         <url>https://github.com/confluentinc/kafka-connect-datagen</url>
-        <tag>0.2.x</tag>
+        <tag>0.3.x</tag>
     </scm>
 
     <developers>
@@ -76,14 +75,14 @@
     <repositories>
         <repository>
             <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
+            <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
+            <url>https://packages.confluent.io/maven/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -95,14 +94,9 @@
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
-            <artifactId>kafka-connect-avro-converter</artifactId>
-            <version>${confluent.version}</version>
+            <artifactId>kafka-connect-avro-data</artifactId>
+            <version>${confluent.version.range}</version>
             <exclusions>
-                <!-- We're only using AvroData, which doesn't use Schema Registry -->
-                <exclusion>
-                    <groupId>io.confluent</groupId>
-                    <artifactId>kafka-schema-registry-client</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>org.apache.zookeeper</groupId>
                     <artifactId>zookeeper</artifactId>
@@ -127,7 +121,7 @@
         <!-- Inherited unnecessarily, scope to test so it's not packaged -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <artifactId>slf4j-reload4j</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -207,45 +201,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>truezip-maven-plugin</artifactId>
-                <version>1.2</version>
-                <executions>
-                    <execution>
-                        <id>remove-avro-converter-plugin</id>
-                        <goals>
-                            <goal>remove</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <fileset>
-                                <directory>${project.basedir}/target/components/packages/confluentinc-kafka-connect-datagen-${project.version}/confluentinc-kafka-connect-datagen-${project.version}/lib/kafka-connect-avro-converter-${confluent.version}.jar</directory>
-                                <includes>
-                                    <include>io/confluent/connect/avro/AvroConverter.class</include>
-                                    <include>io/confluent/connect/avro/AvroConverter$*.class</include>
-                                </includes>
-                            </fileset>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>repackage-avro-converter-dependency</id>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <fileset>
-                                <directory>${project.basedir}/target/components/packages/confluentinc-kafka-connect-datagen-${project.version}</directory>
-                                <includes>
-                                    <include>confluentinc-kafka-connect-datagen-${project.version}/lib/kafka-connect-avro-converter-${confluent.version}.jar</include>
-                                </includes>
-                                <outputDirectory>${project.basedir}/target/components/packages/confluentinc-kafka-connect-datagen-${project.version}.zip</outputDirectory>
-                            </fileset>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -291,13 +246,6 @@
                                 <artifactId>licenses</artifactId>
                             </executableDependency>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>io.confluent</groupId>
-                                <artifactId>licenses</artifactId>
-                                <version>${licenses.version}</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>

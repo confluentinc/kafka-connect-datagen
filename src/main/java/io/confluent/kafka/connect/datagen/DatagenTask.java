@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2018 Confluent Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 package io.confluent.kafka.connect.datagen;
 
@@ -46,7 +46,7 @@ public class DatagenTask extends SourceTask {
 
   static final Logger log = LoggerFactory.getLogger(DatagenTask.class);
 
-  private static final Schema KEY_SCHEMA = Schema.STRING_SCHEMA;
+  private static final Schema DEFAULT_KEY_SCHEMA = Schema.OPTIONAL_STRING_SCHEMA;
   public static final String TASK_ID = "task.id";
   public static final String TASK_GENERATION = "task.generation";
   public static final String CURRENT_ITERATION = "current.iteration";
@@ -68,7 +68,7 @@ public class DatagenTask extends SourceTask {
   private int taskId;
   private Map<String, Object> sourcePartition;
   private long taskGeneration;
-  private Random random;
+  private final Random random = new Random();
 
   protected enum Quickstart {
     CLICKSTREAM_CODES("clickstream_codes_schema.avro", "code"),
@@ -79,7 +79,9 @@ public class DatagenTask extends SourceTask {
     USERS("users_schema.avro", "userid"),
     USERS_("users_array_map_schema.avro", "userid"),
     PAGEVIEWS("pageviews_schema.avro", "viewtime"),
-    STOCK_TRADES("stock_trades_schema.avro", "symbol");
+    STOCK_TRADES("stock_trades_schema.avro", "symbol"),
+    INVENTORY("inventory.avro", "id"),
+    PRODUCT("product.avro", "id");
 
     private final String schemaFilename;
     private final String keyName;
@@ -115,7 +117,6 @@ public class DatagenTask extends SourceTask {
     taskId = Integer.parseInt(props.get(TASK_ID));
     sourcePartition = Collections.singletonMap(TASK_ID, taskId);
 
-    random = new Random();
     if (config.getRandomSeed() != null) {
       random.setSeed(config.getRandomSeed());
       // Each task will now deterministically advance it's random source
@@ -207,13 +208,12 @@ public class DatagenTask extends SourceTask {
     }
 
     // Key
-    String keyString = "";
+    SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
     if (!schemaKeyField.isEmpty()) {
-      SchemaAndValue schemaAndValue = avroData.toConnectData(
+      key = avroData.toConnectData(
           randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
           randomAvroMessage.get(schemaKeyField)
       );
-      keyString = schemaAndValue.value().toString();
     }
 
     // Value
@@ -251,8 +251,8 @@ public class DatagenTask extends SourceTask {
         sourceOffset,
         topic,
         null,
-        KEY_SCHEMA,
-        keyString,
+        key.schema(),
+        key.value(),
         messageSchema,
         messageValue,
         null,
