@@ -5,4 +5,5 @@
 common {
   slackChannel = '#connect-warn'
   nodeLabel = 'docker-oraclejdk8'
+  mvnSkipDeploy = true
 }
