@@ -16,13 +16,17 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.stream.Collectors;
+import org.apache.kafka.common.config.Config;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigException;
+import org.apache.kafka.common.config.ConfigValue;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.source.SourceConnector;
 import org.slf4j.Logger;
@@ -33,6 +37,10 @@ public class DatagenConnector extends SourceConnector {
   private static Logger log = LoggerFactory.getLogger(DatagenConnector.class);
   private DatagenConnectorConfig config;
   private Map<String, String> props;
+
+  @VisibleForTesting
+  static final String SCHEMA_SOURCE_ERR =
+      "Must set exactly one of " + String.join(", ", DatagenConnectorConfig.schemaSourceKeys());
 
   @Override
   public String version() {
@@ -75,5 +83,28 @@ public class DatagenConnector extends SourceConnector {
   @Override
   public ConfigDef config() {
     return DatagenConnectorConfig.conf();
+  }
+
+  @Override
+  public Config validate(Map<String, String> connectorConfigs) {
+    Config config = super.validate(connectorConfigs);
+    validateSchemaSource(config);
+    return config;
+  }
+
+  private void validateSchemaSource(Config config) {
+    List<ConfigValue> schemaSources = config.configValues().stream()
+        .filter(v -> DatagenConnectorConfig.isExplicitlySetSchemaSource(v.name(), v.value()))
+        .collect(Collectors.toList());
+    if (schemaSources.size() > 1) {
+      for (ConfigValue v : schemaSources) {
+        v.addErrorMessage(SCHEMA_SOURCE_ERR);
+      }
+    }
+    if (schemaSources.size() == 0) {
+      config.configValues().stream()
+          .filter(v -> DatagenConnectorConfig.schemaSourceKeys().contains(v.name()))
+          .forEach(v -> v.addErrorMessage(SCHEMA_SOURCE_ERR));
+    }
   }
 }
