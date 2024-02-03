@@ -34,7 +34,7 @@
         <confluent.avro.generator.version>0.3.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
         <guava.version>32.0.1-jre</guava.version>
-        <avro.version>1.8.1</avro.version>
+        <avro.version>1.11.3</avro.version>
         <jackson.version>2.15.2</jackson.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
     </properties>
