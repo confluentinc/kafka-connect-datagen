@@ -8,6 +8,7 @@ codeowners:
 semaphore:
   enable: true
   pipeline_type: cp
-  cve_scan: true
-  extra_deploy_args: "-Dcloud -Pjenkins"
-  extra_build_args: "-Dcloud -Pjenkins"
+  extra_deploy_args: -Dcloud -Pjenkins
+  extra_build_args: -Dcloud -Pjenkins
+  generate_connect_changelogs: true
+  run_maven_cve_scan: true
