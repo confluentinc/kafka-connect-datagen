@@ -143,6 +143,11 @@ public class DatagenTask extends SourceTask {
 
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
+    if (maxRecords > 0 && count >= maxRecords) {
+      throw new ConnectException(
+              String.format("Stopping connector: generated the configured %d number of messages", count)
+      );
+    }
 
     if (maxInterval > 0) {
       try {
@@ -188,12 +193,6 @@ public class DatagenTask extends SourceTask {
     // Value
     final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
-
-    if (maxRecords > 0 && count >= maxRecords) {
-      throw new ConnectException(
-          String.format("Stopping connector: generated the configured %d number of messages", count)
-      );
-    }
 
     final List<SourceRecord> records = new ArrayList<>();
     SourceRecord record = new SourceRecord(
