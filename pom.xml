@@ -20,12 +20,12 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-parent</artifactId>
-        <version>7.5.0</version>
+        <version>7.5.2</version>
     </parent>
 
     <groupId>io.confluent.kafka.connect</groupId>
     <artifactId>kafka-connect-datagen</artifactId>
-    <version>0.5.5-SNAPSHOT</version>
+    <version>0.6.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
@@ -35,12 +35,13 @@
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
         <guava.version>32.0.1-jre</guava.version>
-        <avro.version>1.11.3</avro.version>
         <jackson.version>2.15.2</jackson.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
         <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
             See https://github.com/confluentinc/common/pull/332 for details -->
         <dependency.check.version>6.1.6</dependency.check.version>
+        <hamcrest.version>2.2</hamcrest.version>
+        <snappy.java.version>1.1.10.5</snappy.java.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
@@ -65,7 +66,7 @@
         <connection>scm:git:git://github.com/confluentinc/kafka-connect-datagen.git</connection>
         <developerConnection>scm:git:git@github.com:confluentinc/kafka-connect-datagen.git</developerConnection>
         <url>https://github.com/confluentinc/kafka-connect-datagen</url>
-        <tag>0.5.x</tag>
+        <tag>0.6.x</tag>
     </scm>
 
     <developers>
@@ -115,7 +116,7 @@
             <dependency>
                 <groupId>org.xerial.snappy</groupId>
                 <artifactId>snappy-java</artifactId>
-                <version>1.1.10.3</version>
+                <version>${snappy.java.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -142,12 +143,21 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.confluent.avro</groupId>
             <artifactId>avro-random-generator</artifactId>
