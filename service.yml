@@ -1,0 +1,15 @@
+name: kafka-connect-datagen
+lang: java
+lang_version: 8
+git:
+  enable: true
+codeowners:
+  enable: true
+semaphore:
+  enable: true
+  pipeline_type: cp
+  extra_deploy_args: -Dcloud -Pjenkins
+  extra_build_args: -Dcloud -Pjenkins
+  generate_connect_changelogs: true
+  run_maven_cve_scan: true
+  run_pint_merge: true
