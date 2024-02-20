@@ -1,4 +1,1 @@
-# See go/codeowners - automatically generated for confluentinc/kafka-connect-datagen:
 *	@confluentinc/connect
-*	@confluentinc/devx
-*	@confluentinc/integration-architecture
