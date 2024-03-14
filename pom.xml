@@ -30,7 +30,7 @@
 
 
     <properties>
-        <commons.compress.version>1.21</commons.compress.version>
+        <commons.compress.version>1.26</commons.compress.version>
         <connect-runtime-version>2.0.0</connect-runtime-version>
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
