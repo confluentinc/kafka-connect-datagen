@@ -44,10 +44,11 @@ public class DatagenTask extends SourceTask {
   public static final String CURRENT_ITERATION = "current.iteration";
   public static final String RANDOM_SEED = "random.seed";
 
-
   private DatagenConnectorConfig config;
   private String topic;
   private long maxInterval;
+  private long staticInterval;
+  private long interval;
   private int maxRecords;
   private long count = 0L;
   private String schemaKeyField;
@@ -70,6 +71,7 @@ public class DatagenTask extends SourceTask {
     config = new DatagenConnectorConfig(props);
     topic = config.getKafkaTopic();
     maxInterval = config.getMaxInterval();
+    staticInterval = config.getStaticInterval();
     maxRecords = config.getIterations();
     schemaKeyField = config.getSchemaKeyfield();
     taskGeneration = 0;
@@ -108,13 +110,16 @@ public class DatagenTask extends SourceTask {
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
 
-    if (maxInterval > 0) {
-      try {
-        Thread.sleep((long) (maxInterval * Math.random()));
-      } catch (InterruptedException e) {
-        Thread.interrupted();
-        return null;
-      }
+    if (staticInterval > 0) {
+      interval = staticInterval;
+    } else if (maxInterval > 0) {
+      interval = (long) (maxInterval * Math.random());
+    }
+    try {
+      Thread.sleep(interval);
+    } catch (InterruptedException e) {
+      Thread.interrupted();
+      return null;
     }
 
     final Object generatedObject = generator.generate();
