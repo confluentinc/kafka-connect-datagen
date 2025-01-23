@@ -36,7 +36,7 @@
         <junit.version>4.12</junit.version>
         <guava.version>32.0.1-jre</guava.version>
         <jackson.version>2.15.2</jackson.version>
-        <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <maven.release.plugin.version>3.1.1</maven.release.plugin.version>
         <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
             See https://github.com/confluentinc/common/pull/332 for details -->
         <dependency.check.version>6.1.6</dependency.check.version>
