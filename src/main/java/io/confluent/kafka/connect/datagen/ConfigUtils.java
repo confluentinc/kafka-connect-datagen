@@ -35,10 +35,10 @@ public class ConfigUtils {
     Schema schema;
     try {
       schema = schemaParser.parse(schemaString);
-    } catch (SchemaParseException e) {
+    } catch (SchemaParseException | AvroRuntimeException e) {
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
-    }
+
     return schema;
   }
 
@@ -56,11 +56,11 @@ public class ConfigUtils {
         schema = schemaParser.parse(
           DatagenTask.class.getClassLoader().getResourceAsStream(schemaFileName)
         );
-      } catch (SchemaParseException | IOException i) {
+      } catch (SchemaParseException | AvroRuntimeException | IOException i) {
         log.error("Unable to parse the provided schema", i);
         throw new ConfigException("Unable to parse the provided schema");
       }
-    } catch (SchemaParseException | IOException e) {
+    } catch (SchemaParseException | AvroRuntimeException | IOException e) {
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
     }
