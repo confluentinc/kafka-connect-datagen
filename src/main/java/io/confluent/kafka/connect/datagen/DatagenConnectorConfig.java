@@ -36,6 +36,8 @@ public class DatagenConnectorConfig extends AbstractConfig {
   public static final String ITERATIONS_CONF = "iterations";
   private static final String ITERATIONS_DOC = "Number of messages to send from each task, "
       + "or less than 1 for unlimited";
+  public static final String BATCH_SIZE_CONF = "batch.size";
+  private static final String BATCH_SIZE_DOC = "Number of messages send in one poll interval";
   public static final String SCHEMA_STRING_CONF = "schema.string";
   private static final String SCHEMA_STRING_DOC = "The literal JSON-encoded Avro schema to use";
   public static final String SCHEMA_FILENAME_CONF = "schema.filename";
@@ -62,6 +64,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC)
         .define(MAXINTERVAL_CONF, Type.LONG, 500L, Importance.HIGH, MAXINTERVAL_DOC)
         .define(ITERATIONS_CONF, Type.INT, -1, Importance.HIGH, ITERATIONS_DOC)
+        .define(BATCH_SIZE_CONF, Type.INT, 100, Importance.HIGH, BATCH_SIZE_DOC)
         .define(SCHEMA_STRING_CONF,
           Type.STRING,
           "",
@@ -102,6 +105,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public Integer getIterations() {
     return this.getInt(ITERATIONS_CONF);
+  }
+
+  public Integer getBatchSize() {
+    return this.getInt(BATCH_SIZE_CONF);
   }
 
   public String getSchemaFilename() {

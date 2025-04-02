@@ -49,6 +49,7 @@ public class DatagenTask extends SourceTask {
   private String topic;
   private long maxInterval;
   private int maxRecords;
+  private int batchSize;
   private long count = 0L;
   private String schemaKeyField;
   private Generator generator;
@@ -71,6 +72,7 @@ public class DatagenTask extends SourceTask {
     topic = config.getKafkaTopic();
     maxInterval = config.getMaxInterval();
     maxRecords = config.getIterations();
+    batchSize = config.getBatchSize();
     schemaKeyField = config.getSchemaKeyfield();
     taskGeneration = 0;
     taskId = Integer.parseInt(props.get(TASK_ID));
@@ -126,18 +128,6 @@ public class DatagenTask extends SourceTask {
     }
     final GenericRecord randomAvroMessage = (GenericRecord) generatedObject;
 
-    // Key
-    SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
-    if (!schemaKeyField.isEmpty()) {
-      key = avroData.toConnectData(
-          randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
-          randomAvroMessage.get(schemaKeyField)
-      );
-    }
-
-    // Value
-    final org.apache.kafka.connect.data.Schema messageSchema = avroData.toConnectSchema(avroSchema);
-    final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
     if (maxRecords > 0 && count >= maxRecords) {
       throw new ConnectException(
@@ -165,19 +155,39 @@ public class DatagenTask extends SourceTask {
     headers.addLong(CURRENT_ITERATION, count);
 
     final List<SourceRecord> records = new ArrayList<>();
-    SourceRecord record = new SourceRecord(
-        sourcePartition,
-        sourceOffset,
-        topic,
-        null,
-        key.schema(),
-        key.value(),
-        messageSchema,
-        messageValue,
-        null,
-        headers
-    );
-    records.add(record);
+
+    // increasing batch size default 100
+    for (int i = 0; i < batchSize; i++) {
+
+      // Key
+      SchemaAndValue key = new SchemaAndValue(DEFAULT_KEY_SCHEMA, null);
+      if (!schemaKeyField.isEmpty()) {
+        key = avroData.toConnectData(
+            randomAvroMessage.getSchema().getField(schemaKeyField).schema(),
+            randomAvroMessage.get(schemaKeyField)
+        );
+      }
+
+      // Value
+      final org.apache.kafka.connect.data.Schema messageSchema =
+          avroData.toConnectSchema(avroSchema);
+      final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
+
+      SourceRecord record = new SourceRecord(
+          sourcePartition,
+          sourceOffset,
+          topic,
+          null,
+          key.schema(),
+          key.value(),
+          messageSchema,
+          messageValue,
+          null,
+          headers
+      );
+      records.add(record);
+    }
+
     count += records.size();
     return records;
   }
