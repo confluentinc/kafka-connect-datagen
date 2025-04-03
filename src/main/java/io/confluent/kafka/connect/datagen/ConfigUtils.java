@@ -20,9 +20,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Parser;
-import org.apache.avro.SchemaParseException;
 import org.apache.kafka.common.config.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class ConfigUtils {
     Schema schema;
     try {
       schema = schemaParser.parse(schemaString);
-    } catch (SchemaParseException e) {
+    } catch (AvroRuntimeException e) {
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
     }
@@ -56,11 +56,11 @@ public class ConfigUtils {
         schema = schemaParser.parse(
           DatagenTask.class.getClassLoader().getResourceAsStream(schemaFileName)
         );
-      } catch (SchemaParseException | IOException i) {
+      } catch (AvroRuntimeException | IOException i) {
         log.error("Unable to parse the provided schema", i);
         throw new ConfigException("Unable to parse the provided schema");
       }
-    } catch (SchemaParseException | IOException e) {
+    } catch (AvroRuntimeException | IOException e) {
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
     }
