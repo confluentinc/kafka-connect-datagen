@@ -1,6 +1,6 @@
 name: kafka-connect-datagen
 lang: java
-lang_version: "8"
+lang_version: 17
 git:
   enable: true
 codeowners:

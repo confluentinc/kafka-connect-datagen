@@ -74,7 +74,7 @@ after_pipeline:
   task:
     agent:
       machine:
-        type: s1-prod-ubuntu24-04-arm64-00
+        type: s1-prod-ubuntu24-04-amd64-1
     jobs:
       - name: Metrics
         commands:
