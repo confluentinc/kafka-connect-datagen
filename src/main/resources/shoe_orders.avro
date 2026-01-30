@@ -986,7 +986,7 @@
                 "logicalType": "timestamp-millis",
                 "arg.properties": {
                     "iteration": {
-                        "start": 1609459200000,
+                        "start": 1672531200000,
                         "step": 100000
                     }
                 }
