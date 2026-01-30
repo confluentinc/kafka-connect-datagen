@@ -33,7 +33,6 @@
         <commons.compress.version>1.28.0</commons.compress.version>
         <connect-runtime-version>2.0.0</connect-runtime-version>
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
-        <junit.version>4.12</junit.version>
         <guava.version>32.0.1-jre</guava.version>
         <jackson.version>2.15.2</jackson.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
