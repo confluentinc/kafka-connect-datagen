@@ -127,7 +127,7 @@ See the [config](https://github.com/confluentinc/kafka-connect-datagen/tree/mast
 
 Kafka Connect supports [Converters](https://docs.confluent.io/current/connect/userguide.html#connect-configuring-converters) which can be used to convert record key and value formats when reading from and writing to Kafka. As of the 5.5 release, Confluent Platform packages Avro, JSON, and Protobuf converters (earlier versions package just Avro converters).
 
-For an example of using the the Protobuf converter with kafka-connect-datagen, see this [example configuration](config/connector_users_protobuf.config). Take note of the required use of the `SetSchemaMetadata` [Transformation](https://docs.confluent.io/current/connect/transforms/index.html) which addresses a compatibility issue between schema names used by kafka-connect-datagen and Protobuf. See the [Schema names are not compatible with Protobuf issue](https://github.com/confluentinc/kafka-connect-datagen/issues/62) for details.
+For an example of using the Protobuf converter with kafka-connect-datagen, see this [example configuration](config/connector_users_protobuf.config). Take note of the required use of the `SetSchemaMetadata` [Transformation](https://docs.confluent.io/current/connect/transforms/index.html) which addresses a compatibility issue between schema names used by kafka-connect-datagen and Protobuf. See the [Schema names are not compatible with Protobuf issue](https://github.com/confluentinc/kafka-connect-datagen/issues/62) for details.
 
 ## Use a bundled schema specification
 
