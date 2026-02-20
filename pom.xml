@@ -42,6 +42,7 @@
         <dependency.check.version>6.1.6</dependency.check.version>
         <hamcrest.version>2.2</hamcrest.version>
         <snappy.java.version>1.1.10.5</snappy.java.version>
+        <jcustenborder.connect.utils.version>1.1.1-SNAPSHOT</jcustenborder.connect.utils.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
@@ -174,6 +175,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
             <version>${commons.compress.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jcustenborder.kafka.connect</groupId>
+            <artifactId>connect-utils</artifactId>
+            <version>${jcustenborder.connect.utils.version}</version>
         </dependency>
     </dependencies>
 
