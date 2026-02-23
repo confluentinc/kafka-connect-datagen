@@ -142,9 +142,10 @@ public class DatagenTask extends SourceTask {
     if (maxRecords > 0 && count >= maxRecords) {
       throw new UserActionableException(
           String.format(
-              "Connector generated the configured %d messages and is now stopping. "
+              "Connector generated the configured %d messages and is now stopping.\n"
                   + "To continue producing data, increase the message count configuration "
-                  + "or remove it to generate messages indefinitely.",
+                  + "or remove it to generate messages indefinitely."
+                  + "\nThis is a test message.",
               count
           )
       );
