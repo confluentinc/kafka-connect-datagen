@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import org.apache.kafka.connect.data.ConnectSchema;
 import org.apache.kafka.connect.data.Schema;
+import com.github.jcustenborder.kafka.connect.utils.errors.UserActionableException;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -215,7 +216,11 @@ class DatagenTaskTest {
       task.poll();
       fail("Expected poll to fail");
     } catch (ConnectException e) {
-      // expected
+      // Wrapped case: outer ConnectException, cause is UserActionableException
+      assertTrue(
+          e.getCause() instanceof UserActionableException,
+          "Expected cause to be UserActionableException, got " + e.getCause()
+      );
     }
   }
 
