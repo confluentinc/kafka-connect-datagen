@@ -215,8 +215,12 @@ class DatagenTaskTest {
     try {
       task.poll();
       fail("Expected poll to fail");
-    } catch (UserActionableException e) {
-      // expected - connector throws UserActionableException when message count is reached
+    } catch (ConnectException e) {
+      // Wrapped case: outer ConnectException, cause is UserActionableException
+      assertTrue(
+          e.getCause() instanceof UserActionableException,
+          "Expected cause to be UserActionableException, got " + e.getCause()
+      );
     }
   }
 
