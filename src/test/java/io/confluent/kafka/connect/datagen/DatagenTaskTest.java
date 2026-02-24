@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import org.apache.kafka.connect.data.ConnectSchema;
 import org.apache.kafka.connect.data.Schema;
+import com.github.jcustenborder.kafka.connect.utils.errors.UserActionableException;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -214,8 +215,8 @@ class DatagenTaskTest {
     try {
       task.poll();
       fail("Expected poll to fail");
-    } catch (ConnectException e) {
-      // expected
+    } catch (UserActionableException e) {
+      // expected - connector throws UserActionableException when message count is reached
     }
   }
 

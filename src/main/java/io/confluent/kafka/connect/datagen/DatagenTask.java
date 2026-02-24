@@ -27,6 +27,7 @@ import java.util.Random;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaAndValue;
+import com.github.jcustenborder.kafka.connect.utils.errors.UserActionableException;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.header.ConnectHeaders;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -140,8 +141,19 @@ public class DatagenTask extends SourceTask {
     final Object messageValue = avroData.toConnectData(avroSchema, randomAvroMessage).value();
 
     if (maxRecords > 0 && count >= maxRecords) {
+      UserActionableException cause = new UserActionableException(
+          String.format(
+              "Connector generated the configured %d messages and is now stopping.\n"
+                  + "To continue producing data, increase the message count configuration "
+                  + "or remove it to generate messages indefinitely."
+                  + "\nThis is a test message.",
+              count
+          )
+      );
+      // Wrapped exception: outer ConnectException, inner UserActionableException
       throw new ConnectException(
-          String.format("Stopping connector: generated the configured %d number of messages", count)
+          "Datagen hit configured message limit (wrapped trace case)",
+          cause
       );
     }
 
