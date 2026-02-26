@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.confluent.connect.avro.AvroData;
+import io.confluent.kafka.connect.errors.UserActionableException;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -215,7 +216,11 @@ class DatagenTaskTest {
       task.poll();
       fail("Expected poll to fail");
     } catch (ConnectException e) {
-      // expected
+      // Wrapped case: outer ConnectException, cause is UserActionableException
+      assertTrue(
+          e.getCause() instanceof UserActionableException,
+          "Expected cause to be UserActionableException, got " + e.getCause()
+      );
     }
   }
 
