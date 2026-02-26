@@ -29,13 +29,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.confluent.connect.avro.AvroData;
+import io.confluent.kafka.connect.errors.UserActionableException;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.kafka.connect.data.ConnectSchema;
 import org.apache.kafka.connect.data.Schema;
-import com.github.jcustenborder.kafka.connect.utils.errors.UserActionableException;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.source.SourceRecord;
