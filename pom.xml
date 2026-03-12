@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-parent</artifactId>
-        <version>8.0.1-108</version>
+        <version>8.0.4-135</version>
     </parent>
 
     <groupId>io.confluent.kafka.connect</groupId>
@@ -35,7 +35,7 @@
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
         <guava.version>32.0.1-jre</guava.version>
-        <jackson.version>2.15.2</jackson.version>
+        <jackson.version>2.18.6</jackson.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
         <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
             See https://github.com/confluentinc/common/pull/332 for details -->
