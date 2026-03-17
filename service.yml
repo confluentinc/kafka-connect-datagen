@@ -1,6 +1,6 @@
 name: kafka-connect-datagen
 lang: java
-lang_version: 17
+lang_version: "17"
 git:
   enable: true
 codeowners:
@@ -13,3 +13,5 @@ semaphore:
   generate_connect_changelogs: true
   run_maven_cve_scan: true
   run_pint_merge: true
+  github_write_targets:
+    - confluentinc/docs-kafka-connect-datagen
