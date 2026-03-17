@@ -8,10 +8,12 @@ SHELL=/bin/bash -o pipefail
 
 check-dependency = $(if $(shell command -v $(1)),,$(error Make sure $(1) is installed))
 
-CP_VERSION ?= 6.1.0
+BUILD_PLATFORM ?= linux/amd64
+
+CP_VERSION ?= 7.2.1
 OPERATOR_VERSION ?= 0
 
-KAFKA_CONNECT_DATAGEN_VERSION ?= 0.4.0
+KAFKA_CONNECT_DATAGEN_VERSION ?= 0.6.0
 AGGREGATE_VERSION = $(KAFKA_CONNECT_DATAGEN_VERSION)-$(CP_VERSION)
 OPERATOR_AGGREGATE_VERSION = $(AGGREGATE_VERSION).$(OPERATOR_VERSION)
 
@@ -31,53 +33,40 @@ package: ## Creates the assembly jar
 	@mvn clean package
 
 build-docker-from-local: package ## Build the Docker image using the locally mvn built kafka-connect-datagen package
-	@docker build -t kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-local .
+	@docker buildx build --load --platform $(BUILD_PLATFORM) -t kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-local .
 
 build-docker-from-released: ## Build a Docker image using a released version of the kafka-connect-datagen connector 
-	@docker build -t kafka-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
+	@docker buildx build --load --platform $(BUILD_PLATFORM) -t kafka-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
 
 build-cp-server-connect-from-local: package ## Build the Docker image based on cp-server-connect from locally mvn built kafka-connect-datagen package
-	@docker build -t cp-server-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect -f Dockerfile-local .
+	@docker buildx build --load --platform $(BUILD_PLATFORM) -t cp-server-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect -f Dockerfile-local .
 
 build-cp-server-connect-from-released: ## Build a Docker image using a released version of the kafka-connect-datagen connector 
-	@docker build -t cp-server-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect -f Dockerfile-confluenthub .
+	@docker buildx build --load --platform $(BUILD_PLATFORM) -t cp-server-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect -f Dockerfile-confluenthub .
 
 # In the case of Operator based images, there is an additional REV version appended to the end of the CP Version
 # which allows Operator images to rev independently
 
 build-cp-server-connect-operator-from-local: package ## Build the Docker image based on cp-server-connect from locally mvn built kafka-connect-datagen package
-	@docker build -t cp-server-connect-operator-datagen:$(AGGREGATE_LOCAL_VERSION).$(OPERATOR_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION).$(OPERATOR_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect-operator -f Dockerfile-local .
+	@docker buildx build --load --platform $(BUILD_PLATFORM) -t cp-server-connect-operator-datagen:$(AGGREGATE_LOCAL_VERSION).$(OPERATOR_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION).$(OPERATOR_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect-operator -f Dockerfile-local .
 
 build-cp-server-connect-operator-from-released: ## Build a Docker image using a released version of the kafka-connect-datagen connector 
-	@docker build -t cp-server-connect-operator-datagen:$(AGGREGATE_VERSION).$(OPERATOR_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION).$(OPERATOR_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect-operator -f Dockerfile-confluenthub .
+	@docker buildx build --load --platform $(BUILD_PLATFORM) -t cp-server-connect-operator-datagen:$(AGGREGATE_VERSION).$(OPERATOR_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION).$(OPERATOR_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect-operator -f Dockerfile-confluenthub .
 
-push-from-local:
-	@make --no-print-directory build-docker-from-local
-	@docker tag kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION) $(PUSH_PREFIX)/kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION)
-	@docker push $(PUSH_PREFIX)/kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION)
+push-from-local: package
+	@docker buildx build --push --platform linux/amd64,linux/arm64 -t $(PUSH_PREFIX)/kafka-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-local .
 
 push-from-released:
-	@make --no-print-directory build-docker-from-released
-	@docker tag kafka-connect-datagen:$(AGGREGATE_VERSION) $(PUSH_PREFIX)/kafka-connect-datagen:$(AGGREGATE_VERSION)
-	@docker push $(PUSH_PREFIX)/kafka-connect-datagen:$(AGGREGATE_VERSION)
+	@docker buildx build --push --platform linux/amd64,linux/arm64 -t $(PUSH_PREFIX)/kafka-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) -f Dockerfile-confluenthub .
 
-push-cp-server-connect-from-local:
-	@make --no-print-directory build-cp-server-connect-from-local
-	@docker tag cp-server-connect-datagen:$(AGGREGATE_LOCAL_VERSION) $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_LOCAL_VERSION)
-	@docker push $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_LOCAL_VERSION)
+push-cp-server-connect-from-local: package
+	@docker buildx build --push --platform linux/amd64,linux/arm64 -t $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_LOCAL_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect -f Dockerfile-local .
 
 push-cp-server-connect-from-released:
-	@make --no-print-directory build-cp-server-connect-from-released
-	@docker tag cp-server-connect-datagen:$(AGGREGATE_VERSION) $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_VERSION)
-	@docker push $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_VERSION)
+	@docker buildx build --push --platform linux/amd64,linux/arm64 -t $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect -f Dockerfile-confluenthub .
 
-push-cp-server-connect-operator-from-local:
-	@make --no-print-directory build-cp-server-connect-operator-from-local
-	@docker tag cp-server-connect-operator-datagen:$(AGGREGATE_LOCAL_VERSION).$(OPERATOR_VERSION) $(PUSH_PREFIX)/cp-server-connect-operator-datagen:$(AGGREGATE_LOCAL_VERSION).$(OPERATOR_VERSION)
-	@docker push $(PUSH_PREFIX)/cp-server-connect-operator-datagen:$(AGGREGATE_LOCAL_VERSION).$(OPERATOR_VERSION)
+push-cp-server-connect-operator-from-local: package
+	@docker buildx build --push --platform linux/amd64,linux/arm64 -t $(PUSH_PREFIX)/cp-server-connect-operator-datagen:$(AGGREGATE_LOCAL_VERSION).$(OPERATOR_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_LOCAL_VERSION) --build-arg CP_VERSION=$(CP_VERSION).$(OPERATOR_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect-operator -f Dockerfile-local .
 
 push-cp-server-connect-operator-from-released:
-	@make --no-print-directory build-cp-server-connect-operator-from-released
-	@docker tag cp-server-connect-operator-datagen:$(AGGREGATE_VERSION).$(OPERATOR_VERSION) $(PUSH_PREFIX)/cp-server-connect-operator-datagen:$(AGGREGATE_VERSION).$(OPERATOR_VERSION)
-	@docker push $(PUSH_PREFIX)/cp-server-connect-operator-datagen:$(AGGREGATE_VERSION).$(OPERATOR_VERSION)
-
+	@docker buildx build --push --platform linux/amd64,linux/arm64 -t $(PUSH_PREFIX)/cp-server-connect-datagen:$(AGGREGATE_VERSION) --build-arg BASE_PREFIX=$(BASE_PREFIX) --build-arg KAFKA_CONNECT_DATAGEN_VERSION=$(KAFKA_CONNECT_DATAGEN_VERSION) --build-arg CP_VERSION=$(CP_VERSION) --build-arg CONNECT_IMAGE=cp-server-connect-operator -f Dockerfile-confluenthub .

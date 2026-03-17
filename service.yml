@@ -15,3 +15,7 @@ semaphore:
   run_pint_merge: true
   github_write_targets:
     - confluentinc/docs-kafka-connect-datagen
+code_artifact:
+  enable: true
+  package_paths:
+    - maven-snapshots/maven/io.confluent.kafka.connect/kafka-connect-datagen
