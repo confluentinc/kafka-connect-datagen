@@ -131,6 +131,7 @@
             <groupId>io.confluent</groupId>
             <artifactId>kafka-connect-avro-data</artifactId>
             <version>${confluent.version.range}</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.zookeeper</groupId>
@@ -140,15 +141,31 @@
                     <groupId>com.101tec</groupId>
                     <artifactId>zkclient</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>io.confluent</groupId>
-                    <artifactId>kafka-avro-serializer</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+<!--        Marking SR related dependencies as provided-->
+        <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
+            <version>${confluent.version.range}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-schema-serializer</artifactId>
+            <version>${confluent.version.range}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-schema-registry-client</artifactId>
             <version>${confluent.version.range}</version>
             <scope>provided</scope>
         </dependency>
