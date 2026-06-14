@@ -20,7 +20,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Parser;
 import org.apache.kafka.common.config.ConfigException;
@@ -35,7 +34,12 @@ public class ConfigUtils {
     Schema schema;
     try {
       schema = schemaParser.parse(schemaString);
-    } catch (AvroRuntimeException e) {
+    } catch (RuntimeException e) {
+      // Defensive catch of RuntimeException (not just AvroRuntimeException): the Avro
+      // parser can surface invalid schemas as other RuntimeExceptions (e.g. a raw
+      // NullPointerException for an unresolved named reference). Catching the broader
+      // type ensures any parse failure is reported as a ConfigException during config
+      // validation instead of leaking out and breaking the validation response.
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
     }
@@ -56,11 +60,11 @@ public class ConfigUtils {
         schema = schemaParser.parse(
           DatagenTask.class.getClassLoader().getResourceAsStream(schemaFileName)
         );
-      } catch (AvroRuntimeException | IOException i) {
+      } catch (RuntimeException | IOException i) {
         log.error("Unable to parse the provided schema", i);
         throw new ConfigException("Unable to parse the provided schema");
       }
-    } catch (AvroRuntimeException | IOException e) {
+    } catch (RuntimeException | IOException e) {
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
     }
