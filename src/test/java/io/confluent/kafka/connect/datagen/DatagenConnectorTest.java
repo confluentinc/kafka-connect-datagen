@@ -150,11 +150,6 @@ class DatagenConnectorTest {
 
   @Test
   void shouldFailValidationWithUnresolvedSchemaReference() {
-    // A syntactically valid schema that is a bare reference to an undefined named
-    // type. The Avro parser surfaces this as a raw RuntimeException
-    // (NullPointerException: "Unknown schema: ...UnresolvedSchema_N") rather than an
-    // AvroRuntimeException; validation must still report it as a config error instead
-    // of letting it escape and break the validation response.
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, "{\"type\":\"Address\"}");
     Config validated = connector.validate(config);

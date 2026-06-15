@@ -35,11 +35,6 @@ public class ConfigUtils {
     try {
       schema = schemaParser.parse(schemaString);
     } catch (RuntimeException e) {
-      // Defensive catch of RuntimeException (not just AvroRuntimeException): the Avro
-      // parser can surface invalid schemas as other RuntimeExceptions (e.g. a raw
-      // NullPointerException for an unresolved named reference). Catching the broader
-      // type ensures any parse failure is reported as a ConfigException during config
-      // validation instead of leaking out and breaking the validation response.
       log.error("Unable to parse the provided schema", e);
       throw new ConfigException("Unable to parse the provided schema");
     }
