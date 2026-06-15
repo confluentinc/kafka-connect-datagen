@@ -149,6 +149,17 @@ class DatagenConnectorTest {
   }
 
   @Test
+  void shouldFailValidationWithUnresolvedSchemaReference() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, "{\"type\":\"Address\"}");
+    Config validated = connector.validate(config);
+    assertThat(
+      validated,
+      hasValidationError(DatagenConnectorConfig.SCHEMA_STRING_CONF, 1)
+    );
+  }
+
+  @Test
   void shouldFailValidationWithInvalidFileName() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_FILENAME_CONF, "a file name");
