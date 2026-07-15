@@ -50,6 +50,32 @@ blocks:
             - artifact push workflow target/test-results
             - artifact push workflow target
 
+  # This is auto-managed by connect-ci-cd-pipelines semaphore task, to disable please reach out on slack #connect-testability
+  - name: Connector Kafka Docker Playground Test
+    dependencies: []
+    run:
+      # Run this block only for pull requests
+      when: "pull_request =~ '.+'"
+    task:
+      jobs:
+        - name: Trigger Kafka Docker Playground Test
+          commands:
+            # SEMAPHORE_GIT_BRANCH is the PR's target branch on pull request builds
+            # (see https://docs.semaphore.io/reference/env-vars), not the PR's source branch.
+            # Don't run this block if that target branch is not master or a release branch (x.y.x)
+            - |
+              if [[ "$SEMAPHORE_GIT_BRANCH" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$SEMAPHORE_GIT_BRANCH" == "master" ]]; then
+                echo "PR is targeted to ${SEMAPHORE_GIT_BRANCH} branch which is master or a release branch. Triggering run-kdp-matrix-on-pr-builds task."
+                sem-trigger -p connect-ci-cd-pipelines \
+                  -t run-kdp-matrix-on-pr-builds \
+                  -b master \
+                  -i "REPO_NAME:$(basename "$SEMAPHORE_GIT_REPO_SLUG")" \
+                  -i "BRANCH_NAME:${SEMAPHORE_GIT_PR_BRANCH}" \
+                  -w
+              else
+                echo "PR is targeted to ${SEMAPHORE_GIT_BRANCH} branch which is not master or a release branch. Skipping Kafka Docker Playground Test Task."
+              fi
+
   - name: Release
     dependencies: ["Test"]
     run:
