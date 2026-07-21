@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.confluent.connect.avro.AvroData;
+import io.confluent.kafka.connect.errors.UserActionableException;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -214,8 +215,8 @@ class DatagenTaskTest {
     try {
       task.poll();
       fail("Expected poll to fail");
-    } catch (ConnectException e) {
-      // expected
+    } catch (UserActionableException e) {
+      // expected - connector throws UserActionableException when message count is reached
     }
   }
 
