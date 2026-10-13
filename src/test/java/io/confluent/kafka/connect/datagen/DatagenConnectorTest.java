@@ -149,6 +149,62 @@ class DatagenConnectorTest {
   }
 
   @Test
+  void shouldFailValidationWithOversizedBytesLength() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
+        "{\"namespace\":\"ksql\",\"name\":\"evil\",\"type\":\"record\",\"fields\":"
+            + "[{\"name\":\"payload\",\"type\":{\"type\":\"bytes\",\"arg.properties\":"
+            + "{\"length\":{\"min\":2000000000,\"max\":2000000001}}}}]}");
+    Config validated = connector.validate(config);
+    assertThat(
+        validated,
+        hasValidationError(DatagenConnectorConfig.SCHEMA_STRING_CONF, 1)
+    );
+  }
+
+  @Test
+  void shouldFailValidationWithOversizedArrayLength() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
+        "{\"namespace\":\"ksql\",\"name\":\"evil\",\"type\":\"record\",\"fields\":"
+            + "[{\"name\":\"payload\",\"type\":{\"type\":\"array\",\"items\":\"string\","
+            + "\"arg.properties\":{\"length\":{\"min\":2000000000}}}}]}");
+    Config validated = connector.validate(config);
+    assertThat(
+        validated,
+        hasValidationError(DatagenConnectorConfig.SCHEMA_STRING_CONF, 1)
+    );
+  }
+
+  @Test
+  void shouldFailValidationWithOversizedMapKeysLength() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
+        "{\"namespace\":\"ksql\",\"name\":\"evil\",\"type\":\"record\",\"fields\":"
+            + "[{\"name\":\"payload\",\"type\":{\"type\":\"map\",\"values\":\"string\","
+            + "\"arg.properties\":{\"keys\":{\"length\":2000000000}}}}]}");
+    Config validated = connector.validate(config);
+    assertThat(
+        validated,
+        hasValidationError(DatagenConnectorConfig.SCHEMA_STRING_CONF, 1)
+    );
+  }
+
+  @Test
+  void shouldAllowSettingSchemaWithLengthWithinBounds() {
+    clearSchemaSources();
+    config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF,
+        "{\"namespace\":\"ksql\",\"name\":\"fine\",\"type\":\"record\",\"fields\":"
+            + "[{\"name\":\"payload\",\"type\":{\"type\":\"bytes\",\"arg.properties\":"
+            + "{\"length\":{\"min\":0,\"max\":1000}}}}]}");
+    Config validated = connector.validate(config);
+    assertThat(
+        validated,
+        hasNoValidationErrorsFor(DatagenConnectorConfig.SCHEMA_STRING_CONF)
+    );
+  }
+
+  @Test
   void shouldFailValidationWithUnresolvedSchemaReference() {
     clearSchemaSources();
     config.put(DatagenConnectorConfig.SCHEMA_STRING_CONF, "{\"type\":\"Address\"}");
