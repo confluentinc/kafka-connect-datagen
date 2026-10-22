@@ -16,9 +16,29 @@
 
 package io.confluent.kafka.connect.datagen;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 class VersionUtil {
+  // Filtered by Maven at build time to ${connector.plugin.version}.
+  private static final String VERSION_RESOURCE =
+      "/io/confluent/kafka/connect/datagen/version.properties";
+  private static final String VERSION = loadVersion();
+
   public static String getVersion() {
-    try {
+    return VERSION;
+  }
+
+  private static String loadVersion() {
+    try (InputStream in = VersionUtil.class.getResourceAsStream(VERSION_RESOURCE)) {
+      if (in != null) {
+        Properties props = new Properties();
+        props.load(in);
+        String version = props.getProperty("version");
+        if (version != null && !version.isEmpty() && !version.startsWith("${")) {
+          return version;
+        }
+      }
       return VersionUtil.class.getPackage().getImplementationVersion();
     } catch (Exception ex) {
       return "0.0.0.0";
