@@ -34,7 +34,7 @@
         <connect-runtime-version>2.0.0</connect-runtime-version>
         <confluent.avro.generator.version>0.4.1</confluent.avro.generator.version>
         <junit.version>4.12</junit.version>
-        <guava.version>32.0.1-jre</guava.version>
+        <guava.version>33.7.2-jre</guava.version>
         <jackson.version>2.18.9</jackson.version>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
         <!-- temporary fix by pinning the version until we upgrade to a version of common that contains this or newer version.
@@ -42,6 +42,10 @@
         <dependency.check.version>6.1.6</dependency.check.version>
         <hamcrest.version>2.2</hamcrest.version>
         <snappy.java.version>1.1.10.5</snappy.java.version>
+        <!-- Reported by DatagenConnector/DatagenTask version() via VersionUtil. Defaults to this
+             project's version; the Confluent Cloud wrapper build overrides it with
+             -Dconnector.plugin.version so the connector reports the cloud wrapper version. -->
+        <connector.plugin.version>${project.version}</connector.plugin.version>
     </properties>
 
     <name>kafka-connect-datagen</name>
@@ -205,6 +209,25 @@
     </dependencies>
 
     <build>
+        <resources>
+            <!-- Filter only the version file so Maven substitutes ${connector.plugin.version}
+                 at build time. -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>io/confluent/kafka/connect/datagen/version.properties</include>
+                </includes>
+            </resource>
+            <!-- Copy everything else (bundled .avro schemas, etc.) unfiltered. -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>io/confluent/kafka/connect/datagen/version.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
