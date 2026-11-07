@@ -33,6 +33,9 @@ public class DatagenConnectorConfig extends AbstractConfig {
   private static final String KAFKA_TOPIC_DOC = "Topic to write to";
   public static final String MAXINTERVAL_CONF = "max.interval";
   private static final String MAXINTERVAL_DOC = "Max interval between messages (ms)";
+  private static final String STATICINTERVAL_CONF = "static.interval";
+  private static final String STATICINTERVAL_DOC = "Static interval between messages (ms), "
+      + "when set ignores max.interval setting";
   public static final String ITERATIONS_CONF = "iterations";
   private static final String ITERATIONS_DOC = "Number of messages to send from each task, "
       + "or less than 1 for unlimited";
@@ -61,6 +64,7 @@ public class DatagenConnectorConfig extends AbstractConfig {
     return new ConfigDef()
         .define(KAFKA_TOPIC_CONF, Type.STRING, Importance.HIGH, KAFKA_TOPIC_DOC)
         .define(MAXINTERVAL_CONF, Type.LONG, 500L, Importance.HIGH, MAXINTERVAL_DOC)
+        .define(STATICINTERVAL_CONF, Type.LONG, 0L, Importance.HIGH, STATICINTERVAL_DOC)
         .define(ITERATIONS_CONF, Type.INT, -1, Importance.HIGH, ITERATIONS_DOC)
         .define(SCHEMA_STRING_CONF,
           Type.STRING,
@@ -98,6 +102,10 @@ public class DatagenConnectorConfig extends AbstractConfig {
 
   public Long getMaxInterval() {
     return this.getLong(MAXINTERVAL_CONF);
+  }
+
+  public Long getStaticInterval() {
+    return this.getLong(STATICINTERVAL_CONF);
   }
 
   public Integer getIterations() {
@@ -194,4 +202,3 @@ public class DatagenConnectorConfig extends AbstractConfig {
     }
   }
 }
-
